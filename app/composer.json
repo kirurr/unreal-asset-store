@@ -1,0 +1,19 @@
+{
+  "name": "kirur/unreal-asset-store",
+  "autoload": {
+    "psr-4": {
+      "Controllers\\": "src/Controllers",
+      "Database\\": "src/Database",
+      "Entities\\": "src/Entities",
+      "Repositories\\": "src/Repositories",
+      "UseCases\\": "src/UseCases"
+    }
+  },
+  "authors": [
+    {
+      "name": "kirurr",
+      "email": "timon09df@gmail.com"
+    }
+  ],
+  "require": {}
+}
