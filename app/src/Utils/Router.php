@@ -6,9 +6,29 @@ class Router
 {
 	public function __construct(private DIContainer $container) {}
 	private $routes = [];
+
 	public function get(string $uri, callable $cb): void
 	{
-		$this->set($uri, $cb, "GET");
+		$this->add($uri, $cb, "GET");
+	}
+	public function post(string $uri, callable $cb): void
+	{
+		$this->add($uri, $cb, "POST");
+	}
+
+	public function put(string $uri, callable $cb)
+	{
+		$this->add($uri, $cb, "PUT");
+	}
+
+	public function patch(string $uri, callable $cb)
+	{
+		$this->add($uri, $cb, "PATCH");
+	}
+
+	public function delete(string $uri, callable $cb)
+	{
+		$this->add($uri, $cb, "DELETE");
 	}
 
 	public function route(string $uri, string $method)
@@ -26,7 +46,7 @@ class Router
 		}
 	}
 
-	private function set(string $uri, callable $cb, string $method): void
+	private function add(string $uri, callable $cb, string $method): void
 	{
 		$this->routes[] = [
 			'uri' => $uri,
