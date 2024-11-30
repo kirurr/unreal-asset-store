@@ -1,12 +1,12 @@
 <?php
 
-namespace Database;
+namespace Repositories;
 
-use Repositories\TestRepository;
 use PDO;
 use Entities\Test;
+use Repositories\TestRepositoryInterface;
 
-class SQLiteTestDatabase implements TestRepository
+class SQLiteTestRepository implements TestRepositoryInterface
 {
 	private PDO $pdo;
 

@@ -4,6 +4,6 @@ namespace Repositories;
 
 use Entities\Test;
 
-interface TestRepository {
+interface TestRepositoryInterface {
 	public function getByid(int $id): Test;
 }
