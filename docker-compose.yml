@@ -7,7 +7,12 @@ services:
       - "8080:80"
     volumes:
       - ./app:/var/www/html
+      - ./public:/var/www/html/public
+      - ./apache-vhost.conf:/etc/apache2/sites-available/000-default.conf
       - ./storage:/var/www/storage
+    environment:
+      - APACHE_RUN_USER=www-data
+      - APACHE_RUN_GROUP=www-data
     container_name: unreal-asset-store
 volumes:
   storage:

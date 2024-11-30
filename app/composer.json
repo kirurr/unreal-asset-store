@@ -3,10 +3,10 @@
   "autoload": {
     "psr-4": {
       "Controllers\\": "src/Controllers",
-      "Database\\": "src/Database",
       "Entities\\": "src/Entities",
       "Repositories\\": "src/Repositories",
-      "UseCases\\": "src/UseCases"
+      "UseCases\\": "src/UseCases",
+      "Utils\\": "src/Utils"
     }
   },
   "authors": [

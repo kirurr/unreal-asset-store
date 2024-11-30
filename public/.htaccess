@@ -1,6 +1,5 @@
 RewriteEngine On
 
-# Если файл или папка существует, отдать их напрямую
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
