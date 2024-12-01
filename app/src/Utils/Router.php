@@ -33,17 +33,36 @@ class Router
 
 	public function route(string $uri, string $method)
 	{
+		[$handler, $params] = $this->matchRoute($uri, $method);
+
+		if ($handler) {
+			$handler($this->container, $params);
+		} else {
+			http_response_code(404);
+			echo 'error finding controller' . PHP_EOL;
+		}
+	}
+
+	private function matchRoute(string $uri, string $method)
+	{
 		foreach ($this->routes as $route) {
-			if (
-				$route['uri'] === $uri
-				&& $route['method'] === strtoupper($method)
-			) {
-				$route['cb']($this->container);
-			} else {
-				echo 'error finding controller' . PHP_EOL;
-				die();
+			$pattern = preg_replace('/\{(\w+)\}/', '(?P<\1>[^/]+)', $route['uri']);
+			$pattern = '#^' . $pattern . '$#';
+
+			if (preg_match($pattern, $uri, $matches) && $route['method'] === strtoupper($method)) {
+
+				$params = [];
+
+				foreach ($matches as $key => $value) {
+					if (is_string($key)) {
+						$params[$key] = $value;
+					}
+				}
+
+				return [$route['cb'], $params];
 			}
 		}
+		return [null, null];
 	}
 
 	private function add(string $uri, callable $cb, string $method): void
