@@ -1,8 +1,9 @@
 <?php
 
-use Utils\DIContainer;
 use Controllers\AuthController;
+use Controllers\MainPageController;
 use Controllers\TestController;
+use Core\ServiceContainer;
 use Repositories\User\SQLiteUserRepository;
 use Repositories\SQLiteTestRepository;
 use UseCases\User\SignInUserUseCase;
@@ -10,26 +11,35 @@ use UseCases\User\SignOutUserUseCase;
 use UseCases\User\SignUpUserUseCase;
 use UseCases\GetTestUseCase;
 
-$container = new DIContainer();
+$container = new ServiceContainer();
 
 try {
-	$container->set('PDO', function (DIContainer $container) {
-		$dbPath = '/var/www/storage/test.db';
-		$pdo = new PDO('sqlite:' . $dbPath);
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		return $pdo;
-	});
+    $container->set('PDO', function (ServiceContainer $container) {
+        $dbPath = '/var/www/storage/test.db';
+        $pdo = new PDO('sqlite:' . $dbPath);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
+    });
 } catch (Exception $e) {
-	echo $e->getMessage();
-	die();
+    echo $e->getMessage();
+    die();
 }
 
-$container->set('SQLiteTestRepository', function (DIContainer $container) {
-	return new SQLiteTestRepository($container->get('PDO'));
+$container->set('SQLiteTestRepository', function (ServiceContainer $container) {
+    return new SQLiteTestRepository($container->get('PDO'));
 });
 
-$container->set('GetTestUseCase', function (DIContainer $container) {
-	return new GetTestUseCase($container->get('SQLiteTestRepository'));
+$container->set('GetTestUseCase', function (ServiceContainer $container) {
+    return new GetTestUseCase($container->get('SQLiteTestRepository'));
+});
+
+$container->set('TestController', function (ServiceContainer $container) {
+    return new TestController($container->get('GetTestUseCase'));
+});
+
+$container->set('MainPageController', function () {
+    return new MainPageController();
+});
 
 $container->set('SQLiteUserRepository', function (ServiceContainer $container) {
     return new SQLiteUserRepository($container->get('PDO'));
@@ -39,8 +49,6 @@ $container->set('SignInUserUseCase', function (ServiceContainer $container) {
     return new SignInUserUseCase($container->get('SQLiteUserRepository'));
 });
 
-$container->set('TestController', function (DIContainer $container) {
-	return new TestController($container->get('GetTestUseCase'));
 $container->set('SignUpUserUseCase', function (ServiceContainer $container) {
     return new SignUpUserUseCase($container->get('SQLiteUserRepository'));
 });

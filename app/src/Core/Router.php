@@ -1,10 +1,10 @@
 <?php
 
-namespace Utils;
+namespace Core;
 
 class Router
 {
-	public function __construct(private DIContainer $container) {}
+	public function __construct(private ServiceContainer $container) {}
 	private $routes = [];
 
 	public function get(string $uri, callable $cb): void
@@ -43,7 +43,7 @@ class Router
 		}
 	}
 
-	private function matchRoute(string $uri, string $method)
+	private function matchRoute(string $uri, string $method): mixed
 	{
 		foreach ($this->routes as $route) {
 			$pattern = preg_replace('/\{(\w+)\}/', '(?P<\1>[^/]+)', $route['uri']);

@@ -1,10 +1,10 @@
 <?php
 
-namespace Utils;
+namespace Core;
 
 use Exception;
 
-class DIContainer
+class ServiceContainer
 {
 	private array $definitions = [];
 
@@ -13,7 +13,7 @@ class DIContainer
 		$this->definitions[$key] = $factory;
 	}
 
-	public function get(string $key)
+	public function get(string $key): mixed
 	{
 		if (!isset($this->definitions[$key])) {
 			throw new Exception("No definition found for {$key}");

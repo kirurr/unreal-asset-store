@@ -1,13 +1,20 @@
 <?php
-require __DIR__ . "/../vendor/autoload.php";
+const BASE_PATH = __DIR__ . '/../html/';
 
-use Utils\Router;
+require BASE_PATH . 'vendor/autoload.php';
+require BASE_PATH . 'src/functions.php';
 
-$container = require __DIR__ . "/../src/dependencies.php";
+session_start();
+
+use Core\Router;
+use Core\Routes\MainRoutes;
+
+$container = require BASE_PATH . 'src/dependencies.php';
 
 $router = new Router($container);
 
-$routes = require __DIR__ . "/../src/routes.php";
+$routes = new MainRoutes($router);
+$routes->defineRoutes();
 
 $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
 $method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];

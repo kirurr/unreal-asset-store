@@ -7,7 +7,7 @@ services:
       - "8080:80"
     volumes:
       - ./app:/var/www/html
-      - ./public:/var/www/html/public
+      - ./public:/var/www/public
       - ./apache-vhost.conf:/etc/apache2/sites-available/000-default.conf
       - ./storage:/var/www/storage
     environment:
@@ -16,3 +16,4 @@ services:
     container_name: unreal-asset-store
 volumes:
   storage:
+  public:

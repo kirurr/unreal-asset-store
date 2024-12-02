@@ -6,7 +6,7 @@
       "Entities\\": "src/Entities",
       "Repositories\\": "src/Repositories",
       "UseCases\\": "src/UseCases",
-      "Utils\\": "src/Utils"
+      "Core\\": "src/Core"
     }
   },
   "authors": [
