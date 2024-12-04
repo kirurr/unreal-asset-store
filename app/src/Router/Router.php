@@ -22,27 +22,27 @@ class Router
         $this->add($uri, $cb, 'POST');
     }
 
-    public function put(string $uri, callable $cb)
+    public function put(string $uri, callable $cb): void
     {
         $this->add($uri, $cb, 'PUT');
     }
 
-    public function patch(string $uri, callable $cb)
+    public function patch(string $uri, callable $cb): void
     {
         $this->add($uri, $cb, 'PATCH');
     }
 
-    public function delete(string $uri, callable $cb)
+    public function delete(string $uri, callable $cb): void
     {
         $this->add($uri, $cb, 'DELETE');
     }
 
-    public function route(string $uri, string $method)
+    public function route(string $uri, string $method): void
     {
-        [$handler, $params] = $this->matchRoute($uri, $method);
+        [$handler, $slug] = $this->matchRoute($uri, $method);
 
         if ($handler) {
-            $handler($this->container, $params);
+            $handler($this->container, $slug);
         } else {
             http_response_code(404);
             echo 'error finding controller' . PHP_EOL;
@@ -56,15 +56,15 @@ class Router
             $pattern = '#^' . $pattern . '$#';
 
             if (preg_match($pattern, $uri, $matches) && $route['method'] === strtoupper($method)) {
-                $params = [];
+                $slug = [];
 
                 foreach ($matches as $key => $value) {
                     if (is_string($key)) {
-                        $params[$key] = $value;
+                        $slug[$key] = $value;
                     }
                 }
 
-                return [$route['cb'], $params];
+                return [$route['cb'], $slug];
             }
         }
         return [null, null];

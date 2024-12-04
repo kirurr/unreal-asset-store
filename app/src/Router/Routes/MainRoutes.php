@@ -17,8 +17,8 @@ class MainRoutes implements RoutesInterface
             $container->get('MainPageController')->show();
         });
 
-        $this->router->get('/{id}', function (ServiceContainer $container, array $params) {
-            var_dump($params);
+        $this->router->get('/{id}', function (ServiceContainer $container, array $slug) {
+            var_dump($slug);
         });
 
         $this->router->post('/api/signin', function (ServiceContainer $container) {
