@@ -2,26 +2,34 @@
 
 namespace Services\Session;
 
-use Core\Errors\Error;
-use Core\Errors\ErrorCode;
 use Entities\User;
 
 class SessionService implements SessionInterface
 {
-    public function __construct() {}
+    public function __construct()
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+    }
 
     public function setUser(User $user): void
     {
         $_SESSION['user'] = ['id' => $user->id, 'name' => $user->name, 'email' => $user->email];
     }
 
-    public function getUser(): array|Error
+    public function getUser(): ?array
     {
-        return $_SESSION['user'] ?? new Error('No user found', ErrorCode::USER_NOT_FOUND);
+        return $_SESSION['user'] ?? null;
     }
 
     public function deleteUser(): void
     {
         unset($_SESSION['user']);
+    }
+
+    public function hasUser(): bool
+    {
+        return isset($_SESSION['user']);
     }
 }

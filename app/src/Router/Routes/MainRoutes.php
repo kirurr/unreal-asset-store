@@ -26,6 +26,42 @@ class MainRoutes implements RoutesInterface
             $container->get(MainPageController::class)->show();
         });
 
+        $this->router->get('/signin', function (ServiceContainer $container, array $slug, ?Error $middlewareError) {
+            if ($middlewareError) {
+                $container->get(AuthController::class)->showSignInPage();
+            } else {
+                header('Location: /');
+            }
+        }, [new IsUserMiddleware($this->container->get(SessionService::class))]);
+
+        $this->router->get('/signup', function (ServiceContainer $container, array $slug, ?Error $middlewareError) {
+            if ($middlewareError) {
+                $container->get(AuthController::class)->showSignUpPage();
+            } else {
+                header('Location: /');
+            }
+        }, [new IsUserMiddleware($this->container->get(SessionService::class))]);
+
+
+        $this->router->post('/signin', function (ServiceContainer $container) {
+            $email = htmlspecialchars($_POST['email'] ?? '');
+            $password = htmlspecialchars($_POST['password'] ?? '');
+
+            $container->get(AuthController::class)->signIn($email, $password);
+        });
+
+        $this->router->post('/signup', function (ServiceContainer $container) {
+            $name = htmlspecialchars($_POST['name'] ?? '');
+            $email = htmlspecialchars($_POST['email'] ?? '');
+            $password = htmlspecialchars($_POST['password'] ?? '');
+
+            $container->get(AuthController::class)->signUp($name, $email, $password);
+        });
+
+        $this->router->get('/signout', function (ServiceContainer $container) {
+            $container->get(AuthController::class)->signOut();
+        });
+
         $this->router->get('/{id}', function (ServiceContainer $container, array $slug, ?Error $middlewareError) {
             if ($middlewareError) {
                 http_response_code(401);
@@ -34,24 +70,5 @@ class MainRoutes implements RoutesInterface
             }
             var_dump($slug);
         }, [new IsUserMiddleware($this->container->get(SessionService::class))]);
-
-        $this->router->post('/api/signin', function (ServiceContainer $container) {
-            $email = $_POST['email'] ?? '';
-            $password = $_POST['password'] ?? '';
-
-            $container->get(AuthController::class)->signIn($email, $password);
-        });
-
-        $this->router->post('/api/signup', function (ServiceContainer $container) {
-            $name = $_POST['name'] ?? '';
-            $email = $_POST['email'] ?? '';
-            $password = $_POST['password'] ?? '';
-
-            $container->get(AuthController::class)->signUp($name, $email, $password);
-        });
-
-        $this->router->get('/api/signout', function (ServiceContainer $container) {
-            $container->get(AuthController::class)->signOut();
-        });
     }
 }

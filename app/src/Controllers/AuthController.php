@@ -3,7 +3,7 @@
 namespace Controllers;
 
 use Core\Errors\Error;
-use Core\Errors\UserError;
+use Core\Errors\ErrorCode;
 use UseCases\User\SignInUserUseCase;
 use UseCases\User\SignOutUserUseCase;
 use UseCases\User\SignUpUserUseCase;
@@ -16,17 +16,34 @@ class AuthController
         private SignOutUserUseCase $signOutUseCase
     ) {}
 
+    public function showSignInPage(): void
+    {
+        renderView('auth/signin', []);
+    }
+
+    public function showSignUpPage(): void
+    {
+        renderView('auth/signup', []);
+    }
+
     public function signIn(string $email, string $password): void
     {
         $result = $this->signInUseCase->execute($email, $password);
 
-        if ($result instanceof Error) {
-            $error = new UserError($result->message, $result->code, ['email', 'password']);
+        if ($result instanceof Error && $result->code === ErrorCode::INVALID_CREDENTIALS) {
             http_response_code(400);
-            echo json_encode($error->getData());
+            renderView('auth/signin', [
+                'errorMessage' => $result->message,
+                'previousData' => [
+                    'email' => $email,
+                    'password' => $password
+                ],
+                'fields' => ['email', 'password']
+            ]);
             die();
         }
 
+        header('Location: /');
         die();
     }
 
@@ -34,13 +51,21 @@ class AuthController
     {
         $result = $this->signUpUseCase->execute($name, $email, $password);
 
-        if ($result instanceof Error) {
-            $error = new UserError($result->message, $result->code, ['email']);
+        if ($result instanceof Error && $result->code === ErrorCode::USER_ALREADY_EXISTS) {
             http_response_code(400);
-            echo json_encode($error->getData());
+            renderView('auth/signup', [
+                'errorMessage' => $result->message,
+                'previousData' => [
+                    'email' => $email,
+                    'password' => $password,
+                    'name' => $name
+                ],
+                'fields' => ['email']
+            ]);
             die();
         }
 
+        header('Location: /');
         die();
     }
 

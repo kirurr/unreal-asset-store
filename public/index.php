@@ -4,8 +4,6 @@ const BASE_PATH = __DIR__ . '/../html/';
 require BASE_PATH . 'vendor/autoload.php';
 require BASE_PATH . 'src/functions.php';
 
-session_start();
-
 use Router\Routes\MainRoutes;
 use Router\Router;
 

@@ -40,7 +40,7 @@ class SQLiteUserRepository implements UserRepositoryInterface
     public function create(string $name, string $email, string $password): User|Error
     {
         $user = $this->getByEmail($email);
-        if ($user) {
+        if ($user instanceof User) {
             return new Error('User already exists', ErrorCode::USER_ALREADY_EXISTS);
         }
 

@@ -14,7 +14,7 @@ class IsUserMiddleware extends Middleware
 
     public function __invoke(): ?Error
     {
-        if ($this->session->getUser() instanceof Error) {
+        if (!$this->session->hasUser()) {
             return new Error('User is not logged in', ErrorCode::NOT_AUTHORIZED);
         }
         return null;

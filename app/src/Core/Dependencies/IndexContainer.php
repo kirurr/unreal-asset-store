@@ -26,12 +26,12 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
             die();
         }
 
-        $this->set(MainPageController::class, function () {
-            return new MainPageController();
-        });
-
         $this->set(SessionService::class, function () {
             return new SessionService();
+        });
+
+        $this->set(MainPageController::class, function () {
+            return new MainPageController($this->get(SessionService::class));
         });
 
         $this->set(PasswordHasherService::class, function () {

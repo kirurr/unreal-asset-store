@@ -9,7 +9,9 @@ interface SessionInterface
 {
     public function setUser(User $user): void;
 
-    public function getUser(): array|Error;
+    public function getUser(): ?array;
 
     public function deleteUser(): void;
+
+	public function hasUser(): bool;
 }
