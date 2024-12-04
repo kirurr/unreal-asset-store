@@ -2,51 +2,85 @@
 
 namespace Router;
 
+use Core\Errors\Error;
 use Core\ServiceContainer;
+use Router\Middlewares\Middleware;
 
 class Router
 {
     public function __construct(
-        private ServiceContainer $container
+        public ServiceContainer $container
     ) {}
 
     private $routes = [];
 
-    public function get(string $uri, callable $cb): void
+    /**
+     * @param callable(): mixed $cb
+     * @param array<Middleware> $middlewares
+     */
+    public function get(string $uri, callable $cb, array $middlewares = []): void
     {
-        $this->add($uri, $cb, 'GET');
+        $this->add($uri, $cb, 'GET', $middlewares);
     }
 
-    public function post(string $uri, callable $cb): void
+    /**
+     * @param callable(): mixed $cb
+     * @param array<Middleware> $middlewares
+     */
+    public function post(string $uri, callable $cb, array $middlewares = []): void
     {
-        $this->add($uri, $cb, 'POST');
+        $this->add($uri, $cb, 'POST', $middlewares);
     }
 
-    public function put(string $uri, callable $cb): void
+    /**
+     * @param callable(): mixed $cb
+     * @param array<Middleware> $middlewares
+     */
+    public function put(string $uri, callable $cb, array $middlewares = []): void
     {
-        $this->add($uri, $cb, 'PUT');
+        $this->add($uri, $cb, 'PUT', $middlewares);
     }
 
-    public function patch(string $uri, callable $cb): void
+    /**
+     * @param callable(): mixed $cb
+     * @param array<Middleware> $middlewares
+     */
+    public function patch(string $uri, callable $cb, array $middlewares = []): void
     {
-        $this->add($uri, $cb, 'PATCH');
+        $this->add($uri, $cb, 'PATCH', $middlewares);
     }
 
-    public function delete(string $uri, callable $cb): void
+    /**
+     * @param callable(): mixed $cb
+     * @param array<Middleware> $middlewares
+     */
+    public function delete(string $uri, callable $cb, array $middlewares = []): void
     {
-        $this->add($uri, $cb, 'DELETE');
+        $this->add($uri, $cb, 'DELETE', $middlewares);
     }
 
     public function route(string $uri, string $method): void
     {
-        [$handler, $slug] = $this->matchRoute($uri, $method);
+        [$route, $slug] = $this->matchRoute($uri, $method);
 
-        if ($handler) {
-            $handler($this->container, $slug);
+        if ($route) {
+            $middlewareError = $this->handleMiddlewares(...$route['middlewares']);
+            $route['cb']($this->container, $slug, $middlewareError);
         } else {
             http_response_code(404);
             echo 'error finding controller' . PHP_EOL;
         }
+    }
+
+    private function handleMiddlewares(Middleware ...$middlewares): ?Error
+    {
+        foreach ($middlewares as $middleware) {
+            $result = $middleware();
+            if ($result instanceof Error) {
+                return $result;
+            }
+        }
+        return null;
     }
 
     private function matchRoute(string $uri, string $method): mixed
@@ -64,18 +98,23 @@ class Router
                     }
                 }
 
-                return [$route['cb'], $slug];
+                return [$route, $slug];
             }
         }
         return [null, null];
     }
 
-    private function add(string $uri, callable $cb, string $method): void
+    /**
+     * @param callable(): mixed $cb
+     * @param array<Middleware> $middlewares
+     */
+    private function add(string $uri, callable $cb, string $method, array $middlewares = []): void
     {
         $this->routes[] = [
             'uri' => $uri,
             'cb' => $cb,
-            'method' => $method
+            'method' => $method,
+            'middlewares' => $middlewares
         ];
     }
 }

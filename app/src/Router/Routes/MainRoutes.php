@@ -2,14 +2,20 @@
 
 namespace Router\Routes;
 
+use Core\Errors\Error;
 use Core\ServiceContainer;
+use Router\Middlewares\IsUserMiddleware;
 use Router\Router;
 
 class MainRoutes implements RoutesInterface
 {
+    private ServiceContainer $container;
+
     public function __construct(
         private Router $router
-    ) {}
+    ) {
+        $this->container = $router->container;
+    }
 
     public function defineRoutes(): void
     {
@@ -17,9 +23,14 @@ class MainRoutes implements RoutesInterface
             $container->get('MainPageController')->show();
         });
 
-        $this->router->get('/{id}', function (ServiceContainer $container, array $slug) {
+        $this->router->get('/{id}', function (ServiceContainer $container, array $slug, ?Error $middlewareError) {
+            if ($middlewareError) {
+                http_response_code(401);
+                echo json_encode($middlewareError->getData());
+                die();
+            }
             var_dump($slug);
-        });
+        }, [new IsUserMiddleware($this->container->get('SessionService'))]);
 
         $this->router->post('/api/signin', function (ServiceContainer $container) {
             $email = $_POST['email'] ?? '';
