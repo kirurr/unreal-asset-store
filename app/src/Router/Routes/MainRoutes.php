@@ -2,10 +2,13 @@
 
 namespace Router\Routes;
 
+use Controllers\AuthController;
+use Controllers\MainPageController;
 use Core\Errors\Error;
 use Core\ServiceContainer;
 use Router\Middlewares\IsUserMiddleware;
 use Router\Router;
+use Services\Session\SessionService;
 
 class MainRoutes implements RoutesInterface
 {
@@ -20,7 +23,7 @@ class MainRoutes implements RoutesInterface
     public function defineRoutes(): void
     {
         $this->router->get('/', function (ServiceContainer $container) {
-            $container->get('MainPageController')->show();
+            $container->get(MainPageController::class)->show();
         });
 
         $this->router->get('/{id}', function (ServiceContainer $container, array $slug, ?Error $middlewareError) {
@@ -30,13 +33,13 @@ class MainRoutes implements RoutesInterface
                 die();
             }
             var_dump($slug);
-        }, [new IsUserMiddleware($this->container->get('SessionService'))]);
+        }, [new IsUserMiddleware($this->container->get(SessionService::class))]);
 
         $this->router->post('/api/signin', function (ServiceContainer $container) {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
 
-            $container->get('AuthController')->signIn($email, $password);
+            $container->get(AuthController::class)->signIn($email, $password);
         });
 
         $this->router->post('/api/signup', function (ServiceContainer $container) {
@@ -44,11 +47,11 @@ class MainRoutes implements RoutesInterface
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
 
-            $container->get('AuthController')->signUp($name, $email, $password);
+            $container->get(AuthController::class)->signUp($name, $email, $password);
         });
 
         $this->router->get('/api/signout', function (ServiceContainer $container) {
-            $container->get('AuthController')->signOut();
+            $container->get(AuthController::class)->signOut();
         });
     }
 }

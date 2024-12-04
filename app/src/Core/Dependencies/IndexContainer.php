@@ -15,7 +15,7 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
     public function initDependencies(): void
     {
         try {
-            $this->set('PDO', function () {
+            $this->set(PDO::class, function () {
                 $dbPath = '/var/www/storage/test.db';
                 $pdo = new PDO('sqlite:' . $dbPath);
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -26,15 +26,15 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
             die();
         }
 
-        $this->set('MainPageController', function () {
+        $this->set(MainPageController::class, function () {
             return new MainPageController();
         });
 
-        $this->set('SessionService', function () {
+        $this->set(SessionService::class, function () {
             return new SessionService();
         });
 
-        $this->set('PasswordHasherService', function () {
+        $this->set(PasswordHasherService::class, function () {
             return new PasswordHasherService();
         });
     }
