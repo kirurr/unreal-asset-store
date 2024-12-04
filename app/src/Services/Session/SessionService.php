@@ -15,7 +15,7 @@ class SessionService implements SessionInterface
         $_SESSION['user'] = ['id' => $user->id, 'name' => $user->name, 'email' => $user->email];
     }
 
-    public function getUser(): User|Error
+    public function getUser(): array|Error
     {
         return $_SESSION['user'] ?? new Error('No user found', ErrorCode::USER_NOT_FOUND);
     }
