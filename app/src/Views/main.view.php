@@ -26,8 +26,6 @@
 			<input hidden type="text" name="_method" value="POST">
 			<button type="submit">sign up</button>
 		</form>
-
-
 		<script src="main.js"></script>
 	</body>	
 </html>

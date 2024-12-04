@@ -2,6 +2,8 @@
 
 namespace Controllers;
 
+use Core\Errors\Error;
+use Core\Errors\UserError;
 use UseCases\User\SignInUserUseCase;
 use UseCases\User\SignOutUserUseCase;
 use UseCases\User\SignUpUserUseCase;
@@ -16,55 +18,35 @@ class AuthController
 
     public function signIn(string $email, string $password): void
     {
-        [$error, $user] = $this->signInUseCase->execute($email, $password);
+        $result = $this->signInUseCase->execute($email, $password);
 
-        if ($error) {
-            $message = [
-                'data' => $error,
-                'type' => 'error'
-            ];
+        if ($result instanceof Error) {
+            $error = new UserError($result->message, $result->code, ['email', 'password']);
             http_response_code(400);
-            echo json_encode($message);
+            echo json_encode($error->getData());
             die();
         }
 
-        $_SESSION['user'] = $user->get();
-
-        $message = [
-            'type' => 'success'
-        ];
-        echo json_encode($message);
         die();
     }
 
     public function signUp(string $name, string $email, string $password): void
     {
-        [$error, $user] = $this->signUpUseCase->execute($name, $email, $password);
+        $result = $this->signUpUseCase->execute($name, $email, $password);
 
-        if ($error) {
-            $message = [
-                'data' => $error,
-                'type' => 'error'
-            ];
+        if ($result instanceof Error) {
+            $error = new UserError($result->message, $result->code, ['email']);
             http_response_code(400);
-            echo json_encode($message);
+            echo json_encode($error->getData());
             die();
         }
 
-        $_SESSION['user'] = $user->get();
-
-        $message = [
-            'type' => 'success'
-        ];
-
-        echo json_encode($message);
         die();
     }
 
     public function signOut(): void
     {
-        /* $this->signOutUseCase->execute(); */
-        unset($_SESSION['user']);
+        $this->signOutUseCase->execute();
 
         header('Location: /');
     }

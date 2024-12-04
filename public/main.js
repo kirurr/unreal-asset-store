@@ -10,10 +10,9 @@ signInForm.addEventListener("submit", async (e) => {
   });
 
   if (response.ok) {
-    await response.json().then((data) => console.log(data));
     window.location.href = "/";
   } else {
-    console.log("error");
+    response.json().then((data) => console.log(data));
   }
 });
 const signUpForm = document.getElementById("sign-up-form");
@@ -28,9 +27,8 @@ signUpForm.addEventListener("submit", async (e) => {
   });
 
   if (response.ok) {
-    await response.json().then((data) => console.log(data));
     window.location.href = "/";
   } else {
-    console.log("error");
+    response.json().then((data) => console.log(data));
   }
 });

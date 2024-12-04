@@ -1,9 +1,9 @@
 <?php
 
-namespace Core\Routes;
+namespace Router\Routes;
 
-use Core\Router;
 use Core\ServiceContainer;
+use Router\Router;
 
 class MainRoutes implements RoutesInterface
 {

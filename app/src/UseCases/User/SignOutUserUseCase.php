@@ -2,11 +2,16 @@
 
 namespace UseCases\User;
 
-use Repositories\User\UserRepositoryInterface;
+use Services\Session\SessionInterface;
 
 class SignOutUserUseCase
 {
-	public function __construct(private UserRepositoryInterface $repository) {}
+    public function __construct(
+        private SessionInterface $session
+    ) {}
 
-	public function execute(): void { }
+    public function execute(): void
+    {
+        $this->session->deleteUser();
+    }
 }

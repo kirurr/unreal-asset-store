@@ -6,7 +6,9 @@
       "Entities\\": "src/Entities",
       "Repositories\\": "src/Repositories",
       "UseCases\\": "src/UseCases",
-      "Core\\": "src/Core"
+      "Core\\": "src/Core",
+      "Router\\": "src/Router",
+      "Services\\": "src/Services"
     }
   },
   "authors": [

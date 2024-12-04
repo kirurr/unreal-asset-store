@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Routes;
+namespace Router\Routes;
 
 interface RoutesInterface {
 	public function defineRoutes(): void;

@@ -4,20 +4,37 @@ namespace Core;
 
 use Exception;
 
-class ServiceContainer
+interface ContainerInterface
 {
-	private array $definitions = [];
+    public function set(string $key, callable $factory): void;
+    public function get(string $key): mixed;
+    public function initDependencies(): void;
+}
 
-	public function set(string $key, callable $factory): void
-	{
-		$this->definitions[$key] = $factory;
-	}
+class Container
+{
+    protected static array $definitions = [];
+}
 
-	public function get(string $key): mixed
-	{
-		if (!isset($this->definitions[$key])) {
-			throw new Exception("No definition found for {$key}");
-		}
-		return $this->definitions[$key]($this);
-	}
+class ServiceContainer extends Container
+{
+    private Container $container;
+
+    public function __construct()
+    {
+        $this->container = new Container();
+    }
+
+    public function set(string $key, callable $factory): void
+    {
+        parent::$definitions[$key] = $factory;
+    }
+
+    public function get(string $key): mixed
+    {
+        if (!isset(parent::$definitions[$key])) {
+            throw new Exception("No definition found for {$key}");
+        }
+        return parent::$definitions[$key]($this);
+    }
 }
