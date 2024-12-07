@@ -71,11 +71,16 @@ class CategorySQLiteRepository implements CategoryRepositoryInterface
         }
     }
 
-    public function update(int $id, string $name, string $description, string $image): void
+    public function update(Category $category): void
     {
         try {
             $stmt = $this->pdo->prepare('UPDATE category SET name = :name, description = :description, image = :image WHERE id = :id');
-            $stmt->execute(['name' => $name, 'description' => $description, 'image' => $image, 'id' => $id]);
+            $stmt->execute([
+                'name' => $category->name,
+                'description' => $category->description,
+                'image' => $category->image,
+                'id' => $category->id
+            ]);
         } catch (PDOException $e) {
             throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
         }

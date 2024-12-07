@@ -14,7 +14,7 @@ class IsUserAdminMiddleware extends Middleware
     public function __invoke(): void
     {
         $user = $this->session->getUser();
-        if (!user) {
+        if (!$user) {
             throw new MiddlewareException('User is not logged in');
         }
         if ($user['role'] !== 'admin') {
