@@ -7,7 +7,7 @@ use Core\Errors\ErrorCode;
 use Entities\User;
 use PDO;
 
-class SQLiteUserRepository implements UserRepositoryInterface
+class UserSQLiteRepository implements UserRepositoryInterface
 {
     public function __construct(
         private PDO $pdo
@@ -20,7 +20,7 @@ class SQLiteUserRepository implements UserRepositoryInterface
         $result = $stmt->fetch();
 
         if ($result) {
-            return new User((int) $result['id'], $result['name'], $result['email'], $result['password']);
+            return new User((int) $result['id'], $result['name'], $result['email'], $result['password'], $result['role']);
         }
         return new Error('User not found', ErrorCode::USER_NOT_FOUND);
     }
@@ -32,7 +32,7 @@ class SQLiteUserRepository implements UserRepositoryInterface
         $result = $stmt->fetch();
 
         if ($result) {
-            return new User((int) $result['id'], $result['name'], $result['email'], $result['password']);
+            return new User((int) $result['id'], $result['name'], $result['email'], $result['password'], $result['role']);
         }
         return new Error('User not found', ErrorCode::USER_NOT_FOUND);
     }
@@ -49,6 +49,6 @@ class SQLiteUserRepository implements UserRepositoryInterface
         $stmt = $this->pdo->prepare('INSERT INTO user (name, email, password) VALUES (:name, :email, :password)');
         $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password_hash]);
 
-        return new User($this->pdo->lastInsertId(), $name, $email, $password_hash);
+        return new User($this->pdo->lastInsertId(), $name, $email, $password_hash, 'user');
     }
 }

@@ -5,7 +5,7 @@ namespace Core\Dependencies;
 use Controllers\AuthController;
 use Core\ContainerInterface;
 use Core\ServiceContainer;
-use Repositories\User\SQLiteUserRepository;
+use Repositories\User\UserSQLiteRepository;
 use Services\Auth\AuthService;
 use Services\PasswordHasher\PasswordHasherService;
 use Services\Session\SessionService;
@@ -18,7 +18,7 @@ class AuthorizationContainer extends ServiceContainer implements ContainerInterf
     public function initDependencies(): void
     {
         $this->set(AuthService::class, function () {
-            return new AuthService($this->get(SQLiteUserRepository::class), $this->get(PasswordHasherService::class));
+            return new AuthService($this->get(UserSQLiteRepository::class), $this->get(PasswordHasherService::class));
         });
 
         $this->set(SignInUserUseCase::class, function () {
@@ -26,7 +26,7 @@ class AuthorizationContainer extends ServiceContainer implements ContainerInterf
         });
 
         $this->set(SignUpUserUseCase::class, function () {
-            return new SignUpUserUseCase($this->get(SQLiteUserRepository::class), $this->get(SessionService::class));
+            return new SignUpUserUseCase($this->get(UserSQLiteRepository::class), $this->get(SessionService::class));
         });
 
         $this->set(SignOutUserUseCase::class, function () {

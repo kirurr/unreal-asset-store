@@ -2,7 +2,6 @@
 
 namespace Services\Session;
 
-use Core\Errors\Error;
 use Entities\User;
 
 interface SessionInterface

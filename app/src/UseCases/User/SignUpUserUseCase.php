@@ -4,13 +4,13 @@ namespace UseCases\User;
 
 use Core\Errors\Error;
 use Entities\User;
-use Repositories\User\UserRepositoryInterface;
+use Repositories\User\UserSQLiteRepository;
 use Services\Session\SessionInterface;
 
 class SignUpUserUseCase
 {
     public function __construct(
-        private UserRepositoryInterface $repository,
+        private UserSQLiteRepository $repository,
         private SessionInterface $session
     ) {}
 

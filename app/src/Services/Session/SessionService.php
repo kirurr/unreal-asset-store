@@ -15,7 +15,7 @@ class SessionService implements SessionInterface
 
     public function setUser(User $user): void
     {
-        $_SESSION['user'] = ['id' => $user->id, 'name' => $user->name, 'email' => $user->email];
+        $_SESSION['user'] = ['id' => $user->id, 'name' => $user->name, 'email' => $user->email, 'role' => $user->role];
     }
 
     public function getUser(): ?array

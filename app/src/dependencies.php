@@ -1,5 +1,6 @@
 <?php
 
+use Core\Dependencies\AdminContainer;
 use Core\Dependencies\AuthorizationContainer;
 use Core\Dependencies\IndexContainer;
 use Core\Dependencies\UserContainer;
@@ -15,5 +16,7 @@ $user->initDependencies();
 
 $authorization = new AuthorizationContainer();
 $authorization->initDependencies();
+
+(new AdminContainer())->initDependencies();
 
 return $container;

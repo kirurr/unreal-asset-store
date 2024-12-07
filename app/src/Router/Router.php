@@ -3,15 +3,10 @@
 namespace Router;
 
 use Core\Errors\Error;
-use Core\ServiceContainer;
 use Router\Middlewares\Middleware;
 
 class Router
 {
-    public function __construct(
-        public ServiceContainer $container
-    ) {}
-
     private $routes = [];
 
     /**
@@ -65,10 +60,10 @@ class Router
 
         if ($route) {
             $middlewareError = $this->handleMiddlewares(...$route['middlewares']);
-            $route['cb']($this->container, $slug, $middlewareError);
+            $route['cb']($slug, $middlewareError);
         } else {
             http_response_code(404);
-            echo 'error finding controller' . PHP_EOL;
+            echo 'error finding controller: ' . $uri;
         }
     }
 

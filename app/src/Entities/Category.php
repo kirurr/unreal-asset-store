@@ -2,13 +2,12 @@
 
 namespace Entities;
 
-class User
+class Category
 {
     public function __construct(
         public int $id,
         public string $name,
-        public string $email,
-        public string $password,
-        public string $role
+        public string $description,
+        public string $image
     ) {}
 }
