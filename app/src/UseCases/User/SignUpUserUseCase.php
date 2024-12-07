@@ -2,10 +2,10 @@
 
 namespace UseCases\User;
 
-use Core\Errors\Error;
-use Entities\User;
 use Repositories\User\UserSQLiteRepository;
 use Services\Session\SessionInterface;
+use DomainException;
+use RuntimeException;
 
 class SignUpUserUseCase
 {
@@ -14,15 +14,18 @@ class SignUpUserUseCase
         private SessionInterface $session
     ) {}
 
-    public function execute(string $name, string $email, string $password): User|Error
+    public function execute(string $name, string $email, string $password): void
     {
-        $result = $this->repository->create($name, $email, $password);
+        try {
+            $prevUser = $this->repository->getByEmail($email);
+            if ($prevUser) {
+                throw new DomainException('User already exists');
+            }
+            $user = $this->repository->create($name, $email, $password);
 
-        if ($result instanceof Error) {
-            return $result;
+            $this->session->setUser($user);
+        } catch (RuntimeException $e) {
+            throw new RuntimeException('Unable to sign up user: ' . $e->getMessage(), 500, $e);
         }
-
-        $this->session->setUser($result);
-        return $result;
     }
 }

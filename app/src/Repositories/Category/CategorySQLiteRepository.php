@@ -2,6 +2,7 @@
 
 namespace Repositories\Category;
 
+use Entities\Category;
 use DomainException;
 use PDO;
 use PDOException;
@@ -13,25 +14,29 @@ class CategorySQLiteRepository implements CategoryRepositoryInterface
         private PDO $pdo
     ) {}
 
-    public function getByName(string $name): array|false
+    public function getByName(string $name): ?Category
     {
         try {
             $stmt = $this->pdo->prepare('SELECT * FROM category WHERE name = :name');
             $stmt->execute(['name' => $name]);
             $category = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $category;
+            return $category
+                ? new Category($category['id'], $category['name'], $category['description'], $category['image'])
+                : null;
         } catch (PDOException $e) {
             throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
         }
     }
 
-    public function getById(int $id): ?array
+    public function getById(int $id): ?Category
     {
         try {
             $stmt = $this->pdo->prepare('SELECT * FROM category WHERE id = :id');
             $stmt->execute(['id' => $id]);
             $category = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $category ?? null;
+            return $category
+                ? new Category($category['id'], $category['name'], $category['description'], $category['image'])
+                : null;
         } catch (PDOException $e) {
             throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
         }
@@ -43,7 +48,14 @@ class CategorySQLiteRepository implements CategoryRepositoryInterface
             $stmt = $this->pdo->prepare('SELECT * FROM category');
             $stmt->execute();
             $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $categories ?? null;
+            if (!$categories) {
+                return [];
+            }
+            $result = [];
+            foreach ($categories as $category) {
+                $result[] = new Category($category['id'], $category['name'], $category['description'], $category['image']);
+            }
+            return $result;
         } catch (PDOException $e) {
             throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
         }

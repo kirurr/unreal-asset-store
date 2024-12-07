@@ -3,7 +3,9 @@
 namespace Router;
 
 use Core\Errors\Error;
+use Core\Errors\MiddlewareException;
 use Router\Middlewares\Middleware;
+use DomainException;
 
 class Router
 {
@@ -59,11 +61,15 @@ class Router
         [$route, $slug] = $this->matchRoute($uri, $method);
 
         if ($route) {
-            $middlewareError = $this->handleMiddlewares(...$route['middlewares']);
+            $middlewareError = null;
+            try {
+                $this->handleMiddlewares(...$route['middlewares']);
+            } catch (MiddlewareException $e) {
+                $middlewareError = $e->getMessage();
+            }
             $route['cb']($slug, $middlewareError);
         } else {
-            http_response_code(404);
-            echo 'error finding controller: ' . $uri;
+            throw new DomainException('Error finding controller for uri: ' . $uri);
         }
     }
 

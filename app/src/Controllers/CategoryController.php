@@ -18,7 +18,6 @@ class CategoryController
     {
         $categories = $this->getAllUseCase->execute();
         renderView('admin/categories/index', ['categories' => $categories]);
-        // # TODO: handle all errors
     }
 
     public function showCreate(): void
@@ -28,27 +27,25 @@ class CategoryController
         );
     }
 
-    public function create(): void
+    public function create(string $name, string $description, string $image): void
     {
-        $name = htmlspecialchars($_POST['name'] ?? '');
-        $description = htmlspecialchars($_POST['description'] ?? '');
-        $image = htmlspecialchars($_POST['image'] ?? '');
-
         try {
             $this->createUseCase->execute($name, $description, $image);
-            http_response_code(201);
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo 'internal server error';
-            die();
         } catch (DomainException $e) {
             http_response_code(400);
-            echo 'invalid request';
-            die();
+            renderView('admin/categories/create', [
+                'errorMessage' => $e->getMessage(),
+                'previousData' => [
+                    'name' => $name,
+                    'description' => $description,
+                    'image' => $image
+                ]
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            renderView('error', ['error' => $e->getMessage()]);
         }
-
-        echo 'category created';
-        die();
-        header('Location: /');
+        http_response_code(201);
+        header('Location: /admin/categories', true, 303);
     }
 }

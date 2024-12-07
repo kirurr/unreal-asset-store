@@ -10,4 +10,5 @@ class Category
         public string $description,
         public string $image
     ) {}
+
 }

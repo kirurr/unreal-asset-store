@@ -18,5 +18,5 @@ try {
     $router->route($uri, $method);
 } catch (Exception $e) {
     http_response_code(500);
-    echo $e->getMessage();
+    renderView('error', ['error' => $e->getMessage()]);
 }

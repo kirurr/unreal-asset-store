@@ -11,7 +11,7 @@
 
 	<?php if (count($categories) > 0): ?>
     <?php foreach ($categories as $category): ?>
-        <a href="/admin/categories/<?= $category['id'] ?>"><?= $category['name'] ?></a>
+        <a href="/admin/categories/<?= $category->id ?>"><?= $category->name ?></a>
     <?php endforeach; ?>
 	<?php else: ?>
 		<p>No categories</p>

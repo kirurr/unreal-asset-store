@@ -10,7 +10,9 @@
 		<? if($user): ?>
 			<h2>welcome <?= $user['name'] ?? '' ?></h2>
 			<a href="/signout">sign out</a>
-			<a href="/admin/">admin</a>
+			<? if($user['role'] === 'admin'): ?>
+				<a href="/admin/">admin</a>
+			<? endif ?>
 		<? else:?>
 			<a href="/signin">sign in</a>
 			<a href="/signup">sign up</a>

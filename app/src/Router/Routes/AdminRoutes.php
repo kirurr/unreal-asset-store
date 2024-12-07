@@ -19,7 +19,11 @@ class AdminRoutes extends Routes implements RoutesInterface
             ServiceContainer::get(CategoryController::class)->showCreate();
         });
         $this->router->post($prefix . '/categories/create/', function () {
-            ServiceContainer::get(CategoryController::class)->create();
+            $name = htmlspecialchars($_POST['name'] ?? '');
+            $description = htmlspecialchars($_POST['description'] ?? '');
+            $image = htmlspecialchars($_POST['image'] ?? '');
+
+            ServiceContainer::get(CategoryController::class)->create($name, $description, $image);
         });
     }
 }

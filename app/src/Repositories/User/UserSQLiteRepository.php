@@ -2,10 +2,10 @@
 
 namespace Repositories\User;
 
-use Core\Errors\Error;
-use Core\Errors\ErrorCode;
 use Entities\User;
 use PDO;
+use PDOException;
+use RuntimeException;
 
 class UserSQLiteRepository implements UserRepositoryInterface
 {
@@ -13,42 +13,55 @@ class UserSQLiteRepository implements UserRepositoryInterface
         private PDO $pdo
     ) {}
 
-    public function getByEmail(string $email): User|Error
+    public function getByEmail(string $email): ?User
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM user WHERE email = :email');
-        $stmt->execute(['email' => $email]);
-        $result = $stmt->fetch();
+        try {
+            $stmt = $this->pdo->prepare('SELECT * FROM user WHERE email = :email');
+            $stmt->execute(['email' => $email]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($result) {
-            return new User((int) $result['id'], $result['name'], $result['email'], $result['password'], $result['role']);
+            return $user ? new User(
+                (int) $user['id'],
+                $user['name'],
+                $user['email'],
+                $user['password'],
+                $user['role']
+            ) : null;
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error: ' . $e->getMessage(), 500, $e);
         }
-        return new Error('User not found', ErrorCode::USER_NOT_FOUND);
     }
 
-    public function getById(int $id): User|Error
+    public function getById(int $id): ?User
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM user WHERE id = :id');
-        $stmt->execute(['id' => $id]);
-        $result = $stmt->fetch();
+        try {
+            $stmt = $this->pdo->prepare('SELECT * FROM user WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+            $result = $stmt->fetch();
 
-        if ($result) {
-            return new User((int) $result['id'], $result['name'], $result['email'], $result['password'], $result['role']);
+            return $result ? new User(
+                (int) $result['id'],
+                $result['name'],
+                $result['email'],
+                $result['password'],
+                $result['role']
+            ) : null;
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error: ' . $e->getMessage(), 500, $e);
         }
-        return new Error('User not found', ErrorCode::USER_NOT_FOUND);
     }
 
-    public function create(string $name, string $email, string $password): User|Error
+    public function create(string $name, string $email, string $password): User
     {
-        $user = $this->getByEmail($email);
-        if ($user instanceof User) {
-            return new Error('User already exists', ErrorCode::USER_ALREADY_EXISTS);
+        try {
+            $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+            $stmt = $this->pdo->prepare('INSERT INTO user (name, email, password) VALUES (:name, :email, :password)');
+            $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password_hash]);
+
+            return new User($this->pdo->lastInsertId(), $name, $email, $password_hash, 'user');
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error: ' . $e->getMessage(), 500, $e);
         }
-
-        $password_hash = password_hash($password, PASSWORD_DEFAULT);
-
-        $stmt = $this->pdo->prepare('INSERT INTO user (name, email, password) VALUES (:name, :email, :password)');
-        $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password_hash]);
-
-        return new User($this->pdo->lastInsertId(), $name, $email, $password_hash, 'user');
     }
 }

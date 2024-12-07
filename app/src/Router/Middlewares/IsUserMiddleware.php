@@ -2,8 +2,7 @@
 
 namespace Router\Middlewares;
 
-use Core\Errors\Error;
-use Core\Errors\ErrorCode;
+use Core\Errors\MiddlewareException;
 use Services\Session\SessionInterface;
 
 class IsUserMiddleware extends Middleware
@@ -12,11 +11,11 @@ class IsUserMiddleware extends Middleware
         private SessionInterface $session
     ) {}
 
-    public function __invoke(): ?Error
+    public function __invoke(): void
     {
-        if (!$this->session->hasUser()) {
-            return new Error('User is not logged in', ErrorCode::NOT_AUTHORIZED);
-        }
-        return null;
+		if($this->session->hasUser()) {
+			return;
+		};
+		throw new MiddlewareException('User is not logged in');
     }
 }

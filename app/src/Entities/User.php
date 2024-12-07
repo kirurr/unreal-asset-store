@@ -8,7 +8,12 @@ class User
         public int $id,
         public string $name,
         public string $email,
-        public string $password,
+        private string $password,
         public string $role
     ) {}
+
+    public function checkPassword(string $password): bool
+    {
+        return password_verify($password, $this->password);
+    }
 }

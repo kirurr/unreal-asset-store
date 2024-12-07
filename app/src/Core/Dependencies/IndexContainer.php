@@ -5,7 +5,6 @@ namespace Core\Dependencies;
 use Controllers\MainPageController;
 use Core\ContainerInterface;
 use Core\ServiceContainer;
-use Services\PasswordHasher\PasswordHasherService;
 use Services\Session\SessionService;
 use Exception;
 use PDO;
@@ -34,8 +33,5 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
             return new MainPageController($this->get(SessionService::class));
         });
 
-        $this->set(PasswordHasherService::class, function () {
-            return new PasswordHasherService();
-        });
     }
 }

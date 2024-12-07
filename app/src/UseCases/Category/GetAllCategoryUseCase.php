@@ -3,7 +3,6 @@
 namespace UseCases\Category;
 
 use Repositories\Category\CategoryRepositoryInterface;
-use DomainException;
 use Exception;
 use RuntimeException;
 
@@ -13,6 +12,10 @@ class GetAllCategoryUseCase
         private CategoryRepositoryInterface $repository
     ) {}
 
+
+    /**
+     * @return Category[]
+     */
     public function execute(): array
     {
         try {
