@@ -2,6 +2,7 @@
 
 namespace Router\Routes;
 
+use Controllers\AssetController;
 use Controllers\CategoryController;
 use Core\ServiceContainer;
 use Router\Middlewares\IsUserAdminMiddleware;
@@ -11,45 +12,124 @@ class AdminRoutes extends Routes implements RoutesInterface
 {
     public function defineRoutes(string $prefix = ''): void
     {
-        $this->router->get($prefix . '/', function () {
-            ServiceContainer::get(CategoryController::class)->show();
-        });
-        $this->router->get($prefix . '/categories/', function () {
-            ServiceContainer::get(CategoryController::class)->show();
-        });
-        $this->router->get($prefix . '/categories/create/', function () {
-            ServiceContainer::get(CategoryController::class)->showCreate();
-        });
-        $this->router->post($prefix . '/categories/create/', function () {
-            $name = htmlspecialchars($_POST['name'] ?? '');
-            $description = htmlspecialchars($_POST['description'] ?? '');
+        $this->router->get(
+            $prefix . '/', function () {
+                ServiceContainer::get(CategoryController::class)->show();
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+        $this->router->get(
+            $prefix . '/categories/', function () {
+                ServiceContainer::get(CategoryController::class)->show();
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+        $this->router->get(
+            $prefix . '/categories/create/', function () {
+                ServiceContainer::get(CategoryController::class)->showCreate();
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+        $this->router->post(
+            $prefix . '/categories/create/', function () {
+                $name = htmlspecialchars($_POST['name'] ?? '');
+                $description = htmlspecialchars($_POST['description'] ?? '');
 
-            ServiceContainer::get(CategoryController::class)->create($name, $description);
-        });
-        $this->router->get($prefix . '/categories/{id}/', function (array $slug, ?string $middlewareError) {
-            if (!$middlewareError) {
-                ServiceContainer::get(CategoryController::class)->showEdit($slug['id']);
-            } else {
-                header('Location: /admin/categories', true);
-            }
-        }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]);
+                ServiceContainer::get(CategoryController::class)->create($name, $description);
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+        $this->router->get(
+            $prefix . '/categories/{id}/', function (array $slug, ?string $middlewareError) {
+                if (!$middlewareError) {
+                    ServiceContainer::get(CategoryController::class)->showEdit($slug['id']);
+                } else {
+                    header('Location: /admin/categories', true);
+                }
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
 
-        $this->router->put($prefix . '/categories/{id}/', function (array $slug, ?string $middlewareError) {
-            $name = htmlspecialchars($_POST['name'] ?? '');
-            $description = htmlspecialchars($_POST['description'] ?? '');
-            if (!$middlewareError) {
-                ServiceContainer::get(CategoryController::class)->edit($slug['id'], $name, $description);
-            } else {
-                header('Location: /admin/categories', true);
-            }
-        }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]);
+        $this->router->put(
+            $prefix . '/categories/{id}/', function (array $slug, ?string $middlewareError) {
+                $name = htmlspecialchars($_POST['name'] ?? '');
+                $description = htmlspecialchars($_POST['description'] ?? '');
+                if (!$middlewareError) {
+                    ServiceContainer::get(CategoryController::class)->edit($slug['id'], $name, $description);
+                } else {
+                    header('Location: /admin/categories', true);
+                }
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
 
-        $this->router->delete($prefix . '/categories/{id}/', function (array $slug, ?string $middlewareError) {
-            if (!$middlewareError) {
-                ServiceContainer::get(CategoryController::class)->delete($slug['id']);
-            } else {
-                header('Location: /admin/categories', true);
+        $this->router->delete(
+            $prefix . '/categories/{id}/', function (array $slug, ?string $middlewareError) {
+                if (!$middlewareError) {
+                    ServiceContainer::get(CategoryController::class)->delete($slug['id']);
+                } else {
+                    header('Location: /admin/categories', true);
+                }
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+
+        $this->router->get(
+            $prefix . '/assets/', function () {
+                ServiceContainer::get(AssetController::class)->show();
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+        $this->router->get(
+            $prefix . '/assets/create/', function () {
+                ServiceContainer::get(AssetController::class)->showCreate();
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+        $this->router->post(
+            $prefix . '/assets/create/', function () {
+                $name = htmlspecialchars($_POST['name'] ?? '');
+                $info = htmlspecialchars($_POST['info'] ?? '');
+                $description = htmlspecialchars($_POST['description'] ?? '');
+				$images = $_POST['images'] ? explode(';', $_POST['images']) : [];
+                $price = intval($_POST['price'] ?? 0);
+                $engine_version = intval($_POST['engine_version'] ?? 0);
+                $category_id = intval($_POST['category_id'] ?? 0);
+
+                ServiceContainer::get(AssetController::class)->create(
+                    $name, $info, $description, $images, $price, $engine_version, $category_id
+                );
             }
-        }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]);
+        );
+        $this->router->get(
+            $prefix . '/assets/{id}/', function (array $slug, ?string $middlewareError) {
+                if (!$middlewareError) {
+                    ServiceContainer::get(AssetController::class)->showEdit($slug['id']);
+                } else {
+                    header('Location: /admin/assets', true);
+                }
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+
+        $this->router->put(
+            $prefix . '/assets/{id}/', function (array $slug, ?string $middlewareError) {
+                $name = htmlspecialchars($_POST['name'] ?? '');
+                $info = htmlspecialchars($_POST['info'] ?? '');
+                $description = htmlspecialchars($_POST['description'] ?? '');
+				$images = $_POST['images'] ? explode(';', $_POST['images']) : [];
+                $price = intval($_POST['price'] ?? 0);
+                $engine_version = intval($_POST['engine_version'] ?? 0);
+                $category_id = intval($_POST['category_id'] ?? 0);
+
+                if (!$middlewareError) {
+                    ServiceContainer::get(AssetController::class)->edit(
+                        $slug['id'], $name, $info, $description, $images, $price, $engine_version, $category_id
+                    );
+                } else {
+                    header('Location: /admin/assets', true);
+                }
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+
+        $this->router->delete(
+            $prefix . '/assets/{id}/', function (array $slug, ?string $middlewareError) {
+                if (!$middlewareError) {
+                    ServiceContainer::get(AssetController::class)->delete($slug['id']);
+                } else {
+                    header('Location: /admin/assets', true);
+                }
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
     }
 }

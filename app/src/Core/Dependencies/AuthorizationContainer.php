@@ -16,22 +16,22 @@ class AuthorizationContainer extends ServiceContainer implements ContainerInterf
     public function initDependencies(): void
     {
         $this->set(SignInUserUseCase::class, function () {
-            return new SignInUserUseCase($this->get(UserSQLiteRepository::class), $this->get(SessionService::class));
+            return new SignInUserUseCase($this::get(UserSQLiteRepository::class), $this->get(SessionService::class));
         });
 
         $this->set(SignUpUserUseCase::class, function () {
-            return new SignUpUserUseCase($this->get(UserSQLiteRepository::class), $this->get(SessionService::class));
+            return new SignUpUserUseCase($this::get(UserSQLiteRepository::class), $this->get(SessionService::class));
         });
 
         $this->set(SignOutUserUseCase::class, function () {
-            return new SignOutUserUseCase($this->get(SessionService::class));
+            return new SignOutUserUseCase($this::get(SessionService::class));
         });
 
         $this->set(AuthController::class, function () {
             return new AuthController(
-                $this->get(SignInUserUseCase::class),
-                $this->get(SignUpUserUseCase::class),
-                $this->get(SignOutUserUseCase::class)
+                $this::get(SignInUserUseCase::class),
+                $this::get(SignUpUserUseCase::class),
+                $this::get(SignOutUserUseCase::class)
             );
         });
     }

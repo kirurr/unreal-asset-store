@@ -12,7 +12,7 @@ class UserContainer extends ServiceContainer implements ContainerInterface
     public function initDependencies(): void
     {
         $this->set(UserSQLiteRepository::class, function () {
-            return new UserSQLiteRepository($this->get(PDO::class));
+            return new UserSQLiteRepository($this::get(PDO::class));
         });
     }
 }

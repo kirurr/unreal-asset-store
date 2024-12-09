@@ -30,7 +30,7 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
         });
 
         $this->set(MainPageController::class, function () {
-            return new MainPageController($this->get(SessionService::class));
+            return new MainPageController($this::get(SessionService::class));
         });
 
     }
