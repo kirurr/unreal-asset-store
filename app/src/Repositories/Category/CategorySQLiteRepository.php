@@ -3,7 +3,6 @@
 namespace Repositories\Category;
 
 use Entities\Category;
-use DomainException;
 use PDO;
 use PDOException;
 use RuntimeException;
@@ -21,7 +20,7 @@ class CategorySQLiteRepository implements CategoryRepositoryInterface
             $stmt->execute(['name' => $name]);
             $category = $stmt->fetch(PDO::FETCH_ASSOC);
             return $category
-                ? new Category($category['id'], $category['name'], $category['description'], $category['image'])
+                ? new Category($category['id'], $category['name'], $category['description'], $category['asset_count'])
                 : null;
         } catch (PDOException $e) {
             throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
@@ -35,7 +34,7 @@ class CategorySQLiteRepository implements CategoryRepositoryInterface
             $stmt->execute(['id' => $id]);
             $category = $stmt->fetch(PDO::FETCH_ASSOC);
             return $category
-                ? new Category($category['id'], $category['name'], $category['description'], $category['image'])
+                ? new Category($category['id'], $category['name'], $category['description'], $category['asset_count'])
                 : null;
         } catch (PDOException $e) {
             throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
@@ -53,7 +52,7 @@ class CategorySQLiteRepository implements CategoryRepositoryInterface
             }
             $result = [];
             foreach ($categories as $category) {
-                $result[] = new Category($category['id'], $category['name'], $category['description'], $category['image']);
+                $result[] = new Category($category['id'], $category['name'], $category['description'], $category['asset_count']);
             }
             return $result;
         } catch (PDOException $e) {
@@ -61,11 +60,11 @@ class CategorySQLiteRepository implements CategoryRepositoryInterface
         }
     }
 
-    public function create(string $name, string $description, string $image): void
+    public function create(string $name, string $description): void
     {
         try {
-            $stmt = $this->pdo->prepare('INSERT INTO category (name, description, image) VALUES (:name, :description, :image)');
-            $stmt->execute(['name' => $name, 'description' => $description, 'image' => $image]);
+            $stmt = $this->pdo->prepare('INSERT INTO category (name, description) VALUES (:name, :description)');
+            $stmt->execute(['name' => $name, 'description' => $description]);
         } catch (PDOException $e) {
             throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
         }
@@ -74,11 +73,10 @@ class CategorySQLiteRepository implements CategoryRepositoryInterface
     public function update(Category $category): void
     {
         try {
-            $stmt = $this->pdo->prepare('UPDATE category SET name = :name, description = :description, image = :image WHERE id = :id');
+            $stmt = $this->pdo->prepare('UPDATE category SET name = :name, description = :description WHERE id = :id');
             $stmt->execute([
                 'name' => $category->name,
                 'description' => $category->description,
-                'image' => $category->image,
                 'id' => $category->id
             ]);
         } catch (PDOException $e) {

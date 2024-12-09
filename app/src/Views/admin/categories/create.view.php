@@ -10,7 +10,6 @@
         <h2>Create Category</h2>
         <input type="text" name="name" placeholder="name" value="<?= $previousData['name'] ?? '' ?>">
         <input type="text" name="description" placeholder="description" value="<?= $previousData['description'] ?? '' ?>">
-        <input type="text" name="image" placeholder="image" value="<?= $previousData['image'] ?? '' ?>">
         <input hidden type="text" name="_method" value="POST">
         <button type="submit">create category</button>
 		<p> <?= $errorMessage ?? '' ?></p>

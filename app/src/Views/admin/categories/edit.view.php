@@ -14,8 +14,6 @@
 			<input type="text" name="name" value="<?= $category->name ?>">
 			<label for="description">description</label>
 			<textarea name="description"><?= $category->description ?></textarea>
-			<label for="image">image</label>
-			<input type="text" name="image" value="<?= $category->image ?>">
 			<button type="submit">save</button>
 		</form>
 		<a href="/admin/categories">back</a>

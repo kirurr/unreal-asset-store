@@ -23,9 +23,8 @@ class AdminRoutes extends Routes implements RoutesInterface
         $this->router->post($prefix . '/categories/create/', function () {
             $name = htmlspecialchars($_POST['name'] ?? '');
             $description = htmlspecialchars($_POST['description'] ?? '');
-            $image = htmlspecialchars($_POST['image'] ?? '');
 
-            ServiceContainer::get(CategoryController::class)->create($name, $description, $image);
+            ServiceContainer::get(CategoryController::class)->create($name, $description);
         });
         $this->router->get($prefix . '/categories/{id}/', function (array $slug, ?string $middlewareError) {
             if (!$middlewareError) {
@@ -38,9 +37,8 @@ class AdminRoutes extends Routes implements RoutesInterface
         $this->router->put($prefix . '/categories/{id}/', function (array $slug, ?string $middlewareError) {
             $name = htmlspecialchars($_POST['name'] ?? '');
             $description = htmlspecialchars($_POST['description'] ?? '');
-            $image = htmlspecialchars($_POST['image'] ?? '');
             if (!$middlewareError) {
-                ServiceContainer::get(CategoryController::class)->edit($slug['id'], $name, $description, $image);
+                ServiceContainer::get(CategoryController::class)->edit($slug['id'], $name, $description);
             } else {
                 header('Location: /admin/categories', true);
             }

@@ -13,7 +13,7 @@ class EditCategoryUseCase
         private CategoryRepositoryInterface $repository
     ) {}
 
-    public function execute(int $id, string $name, string $description, string $image): void
+    public function execute(int $id, string $name, string $description): void
     {
         try {
             $category = $this->repository->getById($id);
@@ -22,7 +22,6 @@ class EditCategoryUseCase
             }
             $category->name = $name;
             $category->description = $description;
-            $category->image = $image;
 
             $this->repository->update($category);
         } catch (RuntimeException $e) {
