@@ -22,8 +22,8 @@ class Asset
     ) {
     }
 
-    public function getImagesString(): string 
+    public static function getImagesString(array $images): string 
     {
-        return implode(';', $this->images);
+        return implode(';', $images);
     }
 }

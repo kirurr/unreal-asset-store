@@ -65,7 +65,7 @@ class Router
             try {
                 $this->handleMiddlewares(...$route['middlewares']);
             } catch (MiddlewareException $e) {
-                $middlewareError = $e->getMessage();
+                $middlewareError = $e;
             }
             $route['cb']($slug, $middlewareError);
         } else {
@@ -73,15 +73,11 @@ class Router
         }
     }
 
-    private function handleMiddlewares(Middleware ...$middlewares): ?Error
+    private function handleMiddlewares(Middleware ...$middlewares): void
     {
         foreach ($middlewares as $middleware) {
             $result = $middleware();
-            if ($result instanceof Error) {
-                return $result;
-            }
         }
-        return null;
     }
 
     private function matchRoute(string $uri, string $method): mixed

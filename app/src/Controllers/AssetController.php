@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Entities\Asset;
 use UseCases\Asset\CreateAssetUseCase;
 use UseCases\Asset\DeleteAssetUseCase;
 use UseCases\Asset\EditAssetUseCase;
@@ -40,9 +41,9 @@ class AssetController
     public function showEdit(int $id): void
     {
         try {
-			$categories = $this->getAllCategoryUseCase->execute();
+            $categories = $this->getAllCategoryUseCase->execute();
             $asset = $this->getUseCase->execute($id);
-			renderView('admin/assets/edit', ['asset' => $asset, 'categories' => $categories]);
+            renderView('admin/assets/edit', ['asset' => $asset, 'categories' => $categories]);
         } catch (DomainException $e) {
             http_response_code(404);
             header('Location: /admin/assets', true);
@@ -116,14 +117,14 @@ class AssetController
                 'admin/assets/create', [
                 'errorMessage' => $e->getMessage(),
                 'previousData' => [
-                'name' => $name,
-                'info' => $info,
-                'description' => $description,
-                'images' => $images,
-                'price' => $price,
-                'engine_version' => $engine_version,
-                'category_id' => $category_id,
-                ]
+					'name' => $name,
+					'info' => $info,
+					'description' => $description,
+					'images' => Asset::getImagesString($images),
+					'price' => $price,
+					'engine_version' => $engine_version,
+					'category_id' => $category_id,
+					]
                 ]
             );
         } catch (Exception $e) {

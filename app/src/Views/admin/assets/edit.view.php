@@ -17,7 +17,7 @@
             <label for="description">description</label>
             <textarea name="description"><?php echo $asset->description ?></textarea>
             <label for="images">images</label>
-            <textarea name="images"><?= $asset->getImagesString() ?></textarea>
+            <textarea name="images"><?= $asset::getImagesString($asset->images) ?></textarea>
             <label for="price">price</label>
             <input type="number" name="price" value="<?php echo $asset->price ?>">
             <label for="engine_version">engine_version</label>
