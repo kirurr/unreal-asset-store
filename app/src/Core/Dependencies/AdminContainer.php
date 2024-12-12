@@ -8,6 +8,8 @@ use Core\ContainerInterface;
 use Core\ServiceContainer;
 use Repositories\Asset\AssetSQLiteRepository;
 use Repositories\Category\CategorySQLiteRepository;
+use Repositories\Image\SQLiteImageRepository;
+use Services\Files\FilesystemFilesService;
 use Services\Session\SessionService;
 use UseCases\Asset\CreateAssetUseCase;
 use UseCases\Category\CreateCategoryUseCase;
@@ -20,6 +22,10 @@ use UseCases\Asset\GetAssetUseCase;
 use UseCases\Category\GetAllCategoryUseCase;
 use UseCases\Category\GetCategoryUseCase;
 use PDO;
+use UseCases\Image\CreateImageUseCase;
+use UseCases\Image\DeleteImageUseCase;
+use UseCases\Image\UpdateImageUseCase;
+use UseCases\Image\GetImagesForAssetUseCase;
 
 class AdminContainer extends ServiceContainer implements ContainerInterface
 {
@@ -95,6 +101,40 @@ class AdminContainer extends ServiceContainer implements ContainerInterface
         );
 
         $this->set(
+            SQLiteImageRepository::class, function () {
+                return new SQLiteImageRepository($this::get(PDO::class));
+            }
+        );
+
+        $this->set(
+            FilesystemFilesService::class, function () {
+                return new FilesystemFilesService();
+            }
+        );
+
+        $this->set(
+            GetImagesForAssetUseCase::class, function () {
+                return new GetImagesForAssetUseCase($this::get(SQLiteImageRepository::class), $this::get(FilesystemFilesService::class));
+            }
+        );
+
+        $this->set(
+            CreateImageUseCase::class, function () {
+                return new CreateImageUseCase($this::get(SQLiteImageRepository::class), $this::get(FilesystemFilesService::class));
+            }
+        );
+        $this->set(
+            UpdateImageUseCase::class, function () {
+                return new UpdateImageUseCase($this::get(SQLiteImageRepository::class), $this::get(FilesystemFilesService::class));
+            }
+        );
+        $this->set(
+            DeleteImageUseCase::class, function () {
+                return new DeleteImageUseCase($this::get(SQLiteImageRepository::class), $this::get(FilesystemFilesService::class));
+            }
+        );
+
+        $this->set(
             AssetController::class, function () {
                 return new AssetController(
                     $this::get(CreateAssetUseCase::class),
@@ -102,7 +142,11 @@ class AdminContainer extends ServiceContainer implements ContainerInterface
                     $this::get(EditAssetUseCase::class),
                     $this::get(GetAssetUseCase::class),
                     $this::get(DeleteAssetUseCase::class),
-                    $this::get(GetAllCategoryUseCase::class)
+                    $this::get(GetAllCategoryUseCase::class),
+                    $this::get(CreateImageUseCase::class),
+                    $this::get(UpdateImageUseCase::class),
+                    $this::get(DeleteImageUseCase::class),
+                    $this::get(GetImagesForAssetUseCase::class)
                 );
             }
         );
@@ -119,4 +163,5 @@ class AdminContainer extends ServiceContainer implements ContainerInterface
             }
         );
     }
+	// TODO: refactor it to multiple containers
 }

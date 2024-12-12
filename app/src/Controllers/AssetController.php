@@ -11,6 +11,10 @@ use UseCases\Asset\GetAssetUseCase;
 use DomainException;
 use Exception;
 use UseCases\Category\GetAllCategoryUseCase;
+use UseCases\Image\CreateImageUseCase;
+use UseCases\Image\GetImagesForAssetUseCase;
+use UseCases\Image\DeleteImageUseCase;
+use UseCases\Image\UpdateImageUseCase;
 
 class AssetController
 {
@@ -20,7 +24,11 @@ class AssetController
         private EditAssetUseCase $editUseCase,
         private GetAssetUseCase $getUseCase,
         private DeleteAssetUseCase $deleteUseCase,
-        private GetAllCategoryUseCase $getAllCategoryUseCase
+        private GetAllCategoryUseCase $getAllCategoryUseCase,
+        private CreateImageUseCase $createImageUseCase,
+        private UpdateImageUseCase $updateImageUseCase,
+        private DeleteImageUseCase $deleteImageUseCase,
+        private GetImagesForAssetUseCase $getImagesForAssetUseCase
     ) {
     }
 
@@ -117,14 +125,14 @@ class AssetController
                 'admin/assets/create', [
                 'errorMessage' => $e->getMessage(),
                 'previousData' => [
-					'name' => $name,
-					'info' => $info,
-					'description' => $description,
-					'images' => Asset::getImagesString($images),
-					'price' => $price,
-					'engine_version' => $engine_version,
-					'category_id' => $category_id,
-					]
+                'name' => $name,
+                'info' => $info,
+                'description' => $description,
+                'images' => Asset::getImagesString($images),
+                'price' => $price,
+                'engine_version' => $engine_version,
+                'category_id' => $category_id,
+                ]
                 ]
             );
         } catch (Exception $e) {

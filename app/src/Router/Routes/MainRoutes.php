@@ -9,17 +9,31 @@ class MainRoutes extends Routes implements RoutesInterface
 {
     public function defineRoutes(string $prefix = ''): void
     {
-        $this->router->get($prefix . '/', function () {
-            ServiceContainer::get(MainPageController::class)->show();
-        });
+        $this->router->get(
+            $prefix . '/', function () {
+                ServiceContainer::get(MainPageController::class)->show();
+            }
+        );
 
-        /* $this->router->get('/{id}', function (ServiceContainer $container, array $slug, ?Error $middlewareError) { */
-        /* if ($middlewareError) { */
-        /* http_response_code(401); */
-        /* echo json_encode($middlewareError->getData()); */
-        /* die(); */
-        /* } */
-        /* var_dump($slug); */
-        /* }, [new IsUserMiddleware($this->container->get(SessionService::class))]); */
+
+		// TODO: test download logic
+		// encapsulate to a service/controller
+		// check for user auth
+        $this->router->get(
+            '/download/', function () {
+                renderView('test');
+            }
+        );
+
+        $this->router->get(
+            '/download/1/', function () {
+                $file = __DIR__ . '/../storage/test.css';
+
+                header('Content-Type: text/css');
+                header('Content-Length: ' . filesize($file));
+                header('Content-Disposition: inline; filename="test.css"');
+                readfile($file);
+            }
+        );
     }
 }

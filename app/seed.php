@@ -52,6 +52,15 @@ try {
 
 	echo "Created assets table\n";
 
+	$pdo->exec("CREATE TABLE IF NOT EXISTS image (
+		id INTEGER PRIMARY KEY,
+		asset_id INTEGER NOT NULL,
+		image_order INTEGER NOT NULL,
+		path TEXT NOT NULL
+	)");
+
+	echo "Created images table\n";
+
 
 } catch (Exception $e) {
     echo $e->getMessage();
