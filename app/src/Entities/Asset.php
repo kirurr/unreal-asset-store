@@ -5,14 +5,15 @@ namespace Entities;
 class Asset
 {
     /**
-     * @param array<string> $images
+     * @param array<Image> $images
      */
     public function __construct(
-        public int $id,
+        public string $id,
         public string $name,
         public string $info,
         public string $description,
         public array $images,
+		public string $preview_image,
         public int $price,
         public int $engine_version,
         public int $category_id,
@@ -20,10 +21,5 @@ class Asset
         public int $created_at,
         public int $purchase_count = 0
     ) {
-    }
-
-    public static function getImagesString(array $images): string 
-    {
-        return implode(';', $images);
     }
 }

@@ -15,11 +15,12 @@ class CreateImageUseCase
     ) {
     }
 
-    public function execute(string $path, int $asset_id, int $image_order, array $file): void
+    public function execute(string $name, string $tmp_name, string $asset_id, int $image_order): string
     {
         try {
-            $newPath = $this->filesService->saveImage($path, $file, $asset_id);
-            $this->imageRepository->create($newPath, $asset_id, $image_order);
+            $path = $this->filesService->saveImage($name, $tmp_name, $asset_id);
+            $this->imageRepository->create($path, $asset_id, $image_order);
+			return $path;
         } catch (RuntimeException $e) {
             throw new Exception('Error creating image' . $e->getMessage(), 500, $e);
         }

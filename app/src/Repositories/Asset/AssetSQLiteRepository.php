@@ -14,7 +14,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
     ) {
     }
 
-    public function getByCategoryId(int $category_id): array
+    public function getByCategoryId(string $category_id): array
     {
         try {
             $stmt = $this->pdo->prepare('SELECT * FROM asset WHERE category_id = :category_id');
@@ -46,7 +46,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         }
     }
 
-    public function getById(int $id): ?Asset
+    public function getById(string $id): ?Asset
     {
         try {
             $stmt = $this->pdo->prepare('SELECT * FROM asset WHERE id = :id');
@@ -55,13 +55,13 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
             if (!$asset) {
                 return null;
             }
-            $images = json_decode($asset['images']);
             return new Asset(
                 $asset['id'],
                 $asset['name'],
                 $asset['info'],
                 $asset['description'],
-                $images,
+                [],
+				$asset['preview_image'],
                 $asset['price'],
                 $asset['engine_version'],
                 $asset['category_id'],
@@ -85,13 +85,13 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
             }
             $result = [];
             foreach ($assets as $asset) {
-                $images = json_decode($asset['images']);
                 $result[] = new Asset(
                     $asset['id'],
                     $asset['name'],
                     $asset['info'],
                     $asset['description'],
-                    $images,
+                    [],
+					$asset['preview_image'],
                     $asset['price'],
                     $asset['engine_version'],
                     $asset['category_id'],
@@ -106,19 +106,20 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         }
     }
 
-    public function create(string $name, string $info, string $description, array $images, int $price, int $engine_version, int $category_id, int $user_id): void
+    public function create(string $id, string $name, string $info, string $description, string $preview_image, int $price, int $engine_version, int $category_id, int $user_id): void
     {
         try {
             $stmt = $this->pdo->prepare(
-                'INSERT INTO asset (name, info, description, images, price, engine_version, category_id, user_id)
-				VALUES (:name, :info, :description, :images, :price, :engine_version, :category_id, :user_id)'
+                'INSERT INTO asset (id, name, info, description, preview_image, price, engine_version, category_id, user_id)
+				VALUES (:id, :name, :info, :description, :preview_image, :price, :engine_version, :category_id, :user_id)'
             );
             $stmt->execute(
                 [
+                'id' => $id,
                 'name' => $name,
                 'info' => $info,
                 'description' => $description,
-                'images' => json_encode($images),
+                'preview_image' => $preview_image,
                 'price' => $price,
                 'engine_version' => $engine_version,
                 'category_id' => $category_id,
@@ -155,7 +156,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         }
     }
 
-    public function delete(int $id): void
+    public function delete(string $id): void
     {
         try {
             $stmt = $this->pdo->prepare('DELETE FROM asset WHERE id = :id');

@@ -17,7 +17,7 @@ class GetImagesForAssetUseCase
     /**
      * @return array<string> - return paths to images
      */
-    public function execute(int $asset_id): array
+    public function execute(string $asset_id): array
     {
         try {
             $images = $this->imageRepository->getForAsset($asset_id);

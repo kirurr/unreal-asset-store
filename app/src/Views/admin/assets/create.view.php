@@ -6,7 +6,7 @@
 </head>
     <body>
         <h1>Create Asset</h1>
-        <form action="/admin/assets/create" method="post">
+        <form action="/admin/assets/create" method="post" enctype="multipart/form-data">
             <label for="name">Name</label>
             <input type="text" name="name" id="name" value="<?php echo htmlspecialchars($previousData['name'] ?? '') ?>">
             <label for="info">Info</label>
@@ -14,7 +14,7 @@
             <label for="description">Description</label>
             <textarea name="description" id="description"><?php echo htmlspecialchars($previousData['description'] ?? '') ?></textarea>
             <label for="images">Images</label>
-            <textarea name="images" id="images"><?php echo htmlspecialchars($previousData['images'] ?? '') ?></textarea>
+			<input type="file" name="images[]" id="images" multiple>
             <label for="price">Price</label>
             <input type="number" name="price" id="price" value="<?php echo htmlspecialchars($previousData['price'] ?? '') ?>">
             <label for="engine_version">Engine Version</label>

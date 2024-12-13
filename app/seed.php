@@ -7,6 +7,8 @@ try {
 
 	echo "Successfully connected to database\n";
 
+	$pdo->exec("DROP TABLE IF EXISTS user");
+
 	$pdo->exec("CREATE TABLE IF NOT EXISTS user (
 		id INTEGER PRIMARY KEY,
 		name TEXT NOT NULL,
@@ -28,6 +30,8 @@ try {
 
 	echo "Created admin user\n";
 
+	$pdo->exec("DROP TABLE IF EXISTS category");
+
 	$pdo->exec("CREATE TABLE IF NOT EXISTS category (
 		id INTEGER PRIMARY KEY,
 		name TEXT NOT NULL,
@@ -36,13 +40,15 @@ try {
 	)");
 	echo "Created categories table\n";
 
+	$pdo->exec("DROP TABLE IF EXISTS asset");
+
 	$pdo->exec("CREATE TABLE IF NOT EXISTS asset (
-		id INTEGER PRIMARY KEY,
+		id TEXT PRIMARY KEY,
 		name TEXT NOT NULL,
 		info TEXT NOT NULL,
 		description TEXT NOT NULL,
-		images TEXT NOT NULL,
 		price INTEGER NOT NULL,
+		preview_image TEXT NOT NULL,
 		engine_version INTEGER NOT NULL,
 		category_id INTEGER NOT NULL,
 		user_id INTEGER NOT NULL,
@@ -52,9 +58,11 @@ try {
 
 	echo "Created assets table\n";
 
+	$pdo->exec("DROP TABLE IF EXISTS image");
+
 	$pdo->exec("CREATE TABLE IF NOT EXISTS image (
 		id INTEGER PRIMARY KEY,
-		asset_id INTEGER NOT NULL,
+		asset_id TEXT NOT NULL,
 		image_order INTEGER NOT NULL,
 		path TEXT NOT NULL
 	)");

@@ -38,6 +38,12 @@ class AdminContainer extends ServiceContainer implements ContainerInterface
         );
 
         $this->set(
+            SQLiteImageRepository::class, function () {
+                return new SQLiteImageRepository($this::get(PDO::class));
+            }
+        );
+
+        $this->set(
             AssetSQLiteRepository::class, function () {
                 return new AssetSQLiteRepository($this::get(PDO::class));
             }
@@ -60,7 +66,7 @@ class AdminContainer extends ServiceContainer implements ContainerInterface
         );
         $this->set(
             GetAssetUseCase::class, function () {
-                return new GetAssetUseCase($this::get(AssetSQLiteRepository::class));
+                return new GetAssetUseCase($this::get(AssetSQLiteRepository::class), $this::get(SQLiteImageRepository::class));
             }
         );
         $this->set(
@@ -100,11 +106,6 @@ class AdminContainer extends ServiceContainer implements ContainerInterface
             }
         );
 
-        $this->set(
-            SQLiteImageRepository::class, function () {
-                return new SQLiteImageRepository($this::get(PDO::class));
-            }
-        );
 
         $this->set(
             FilesystemFilesService::class, function () {

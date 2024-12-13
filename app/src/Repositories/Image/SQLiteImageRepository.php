@@ -14,7 +14,7 @@ class SQLiteImageRepository implements ImageRepositoryInterface
     ) {
     }
 
-    public function create(string $path, int $asset_id, int $image_order): void
+    public function create(string $path, string $asset_id, int $image_order): void
     {
         try {
 
@@ -47,17 +47,17 @@ class SQLiteImageRepository implements ImageRepositoryInterface
         }
     }
 
-    public function delete(Image $image): void
+    public function delete(int $id): void
     {
         try {
             $stmt = $this->pdo->prepare('DELETE FROM image WHERE id = :id');
-            $stmt->execute(['id' => $image->id]);
+            $stmt->execute(['id' => $id]);
         } catch (PDOException $e) {
             throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
         }
     }
 
-    public function getForAsset(int $asset_id): array
+    public function getForAsset(string $asset_id): array
     {
         try {
             $stmt = $this->pdo->prepare('SELECT * FROM image WHERE asset_id = :asset_id ORDER BY image_order ASC');

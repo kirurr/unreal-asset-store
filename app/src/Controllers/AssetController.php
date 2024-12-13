@@ -46,7 +46,7 @@ class AssetController
         );
     }
 
-    public function showEdit(int $id): void
+    public function showEdit(string $id): void
     {
         try {
             $categories = $this->getAllCategoryUseCase->execute();
@@ -84,10 +84,10 @@ class AssetController
     /**
      * @param array<string> $images
      */
-    public function edit(int $id, string $name, string $info, string $description, array $images, int $price, int $engine_version, int $category_id): void
+    public function edit(int $id, string $name, string $info, string $description, array $images, string $preview_image, int $price, int $engine_version, int $category_id): void
     {
         try {
-            $this->editUseCase->execute($id, $name, $info, $description, $images, $price, $engine_version, $category_id);
+            $this->editUseCase->execute($id, $name, $info, $description, $images, $preview_image, $price, $engine_version, $category_id);
         } catch (DomainException $e) {
             http_response_code(400);
             renderView(
@@ -112,27 +112,41 @@ class AssetController
         http_response_code(200);
         header('Location: /admin/assets', true, 303);
     }
-    /**
-     * @param array<string> $images
-     */
     public function create(string $name, string $info, string $description, array $images, int $price, int $engine_version, int $category_id): void
     {
         try {
-            $this->createUseCase->execute($name, $info, $description, $images, $price, $engine_version, $category_id);
+
+			$asset_id = uniqid();
+
+			if(!$images) {
+				throw new DomainException('No images');
+			}
+			$images_path = [];
+			for ($i = 0; $i < count($images['name']); $i++) {
+				$path = $this->createImageUseCase->execute(
+					$images['name'][$i], $images['tmp_name'][$i], $asset_id, $i
+				);
+				$images_path[] = $path;
+			}
+			$preview_image = $images_path[0];
+			$this->createUseCase->execute(
+				$asset_id, $name, $info, $description, $preview_image, $price, $engine_version, $category_id
+			);
         } catch (DomainException $e) {
+			$categories = $this->getAllCategoryUseCase->execute();
             http_response_code(400);
             renderView(
                 'admin/assets/create', [
                 'errorMessage' => $e->getMessage(),
+				'categories' => $categories,
                 'previousData' => [
-                'name' => $name,
-                'info' => $info,
-                'description' => $description,
-                'images' => Asset::getImagesString($images),
-                'price' => $price,
-                'engine_version' => $engine_version,
-                'category_id' => $category_id,
-                ]
+					'name' => $name,
+					'info' => $info,
+					'description' => $description,
+					'price' => $price,
+					'engine_version' => $engine_version,
+					'category_id' => $category_id,
+					]
                 ]
             );
         } catch (Exception $e) {

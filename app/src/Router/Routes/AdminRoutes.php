@@ -110,10 +110,15 @@ class AdminRoutes extends Routes implements RoutesInterface
                     header('Location: /', true);
 					die();
                 }
+
+				if (strlen($_FILES['images']['name']['0']) === 0) {
+					$images = [];
+				} else {
+					$images = $_FILES['images'];
+				}
                 $name = htmlspecialchars($_POST['name'] ?? '');
                 $info = htmlspecialchars($_POST['info'] ?? '');
                 $description = htmlspecialchars($_POST['description'] ?? '');
-                $images = $_POST['images'] ? explode(';', $_POST['images']) : [];
                 $price = intval($_POST['price'] ?? 0);
                 $engine_version = intval($_POST['engine_version'] ?? 0);
                 $category_id = intval($_POST['category_id'] ?? 0);

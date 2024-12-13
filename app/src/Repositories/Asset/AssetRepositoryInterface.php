@@ -6,16 +6,13 @@ use Entities\Asset;
 
 interface AssetRepositoryInterface
 {
-    public function getById(int $id): ?Asset;
+    public function getById(string $id): ?Asset;
     /**
      * @return ?Asset[]
      */
     public function getAll(): array;
-    public function getByCategoryId(int $category_id): array;
-    /**
-     * @param array<string> $images
-     */
-    public function create(string $name, string $info, string $description, array $images, int $price, int $engine_version, int $category_id, int $user_id): void;
+    public function getByCategoryId(string $category_id): array;
+    public function create(string $id, string $name, string $info, string $description, string $preview_image, int $price, int $engine_version, int $category_id, int $user_id): void;
     public function update(Asset $asset): void;
-    public function delete(int $id): void;
+    public function delete(string $id): void;
 }
