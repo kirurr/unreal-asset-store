@@ -8,6 +8,7 @@
     </head>
     <body>
         <h1>edit asset</h1>
+        <a href="/admin/assets/<?php echo $asset->id ?>/images/">images</a>
         <form action="/admin/assets/<?php echo $asset->id ?>" method="post">
             <input type="hidden" name="_method" value="put">
             <label for="name">name</label>
@@ -16,13 +17,6 @@
             <input type="text" name="info" value="<?php echo $asset->info ?>">
             <label for="description">description</label>
             <textarea name="description"><?php echo $asset->description ?></textarea>
-            <label for="images">images</label>
-            <div>
-                <?php foreach ($asset->images as $image): ?>
-                <!--TODO: add form to change images-->
-                    <img src="<?php echo $image->path ?>" alt="<?php echo $image->id ?>">
-                <?php endforeach; ?>
-            </div>
             <label for="price">price</label>
             <input type="number" name="price" value="<?php echo $asset->price ?>">
             <label for="engine_version">engine_version</label>
@@ -32,9 +26,16 @@
                     <option value="<?php echo $category->id ?>"><?php echo $category->name ?></option>
                 <?php endforeach; ?>
             </select>
-                <!--TODO: add form to upload additional images-->
             <button type="submit">save</button>
         </form>
+		<div>
+			<span>preview image</span>
+			<img src="<?php echo $asset->preview_image ?>" alt="preview image">
+		</div>
+
+		<?php if (isset($errorMessage)) : ?>
+			<p><?php echo $errorMessage ?></p>
+		<?php endif; ?>
         <a href="/admin/assets">back</a>
         <form action="/admin/assets/<?php echo $asset->id ?>/" method="post">
             <input type="hidden" name="_method" value="delete">

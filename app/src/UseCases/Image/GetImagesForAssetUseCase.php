@@ -15,7 +15,7 @@ class GetImagesForAssetUseCase
     ) {
     }
     /**
-     * @return array<string> - return paths to images
+     * @return array<Image> - return paths to images
      */
     public function execute(string $asset_id): array
     {
@@ -24,11 +24,10 @@ class GetImagesForAssetUseCase
             $result = [];
             foreach ($images as $image) {
                 $image->path = $this->filesService->getImage($image->path);
-                $result[] = $image->path;
             }
-            return $result;
+            return $images;
         } catch (RuntimeException $e) {
-            throw new Exception('Error getting images for asset' . $e->getMessage(), 500, $e);
+            throw new Exception('Error getting images for asset: ' . $e->getMessage(), 500, $e);
         }
     }
 }

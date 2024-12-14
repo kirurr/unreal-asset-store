@@ -2,7 +2,6 @@
 
 namespace Controllers;
 
-use Entities\Asset;
 use UseCases\Asset\CreateAssetUseCase;
 use UseCases\Asset\DeleteAssetUseCase;
 use UseCases\Asset\EditAssetUseCase;
@@ -12,6 +11,7 @@ use DomainException;
 use Exception;
 use UseCases\Category\GetAllCategoryUseCase;
 use UseCases\Image\CreateImageUseCase;
+use UseCases\Image\GetImageUseCase;
 use UseCases\Image\GetImagesForAssetUseCase;
 use UseCases\Image\DeleteImageUseCase;
 use UseCases\Image\UpdateImageUseCase;
@@ -28,7 +28,7 @@ class AssetController
         private CreateImageUseCase $createImageUseCase,
         private UpdateImageUseCase $updateImageUseCase,
         private DeleteImageUseCase $deleteImageUseCase,
-        private GetImagesForAssetUseCase $getImagesForAssetUseCase
+        private GetImagesForAssetUseCase $getImagesForAssetUseCase,
     ) {
     }
 
@@ -115,7 +115,6 @@ class AssetController
     public function create(string $name, string $info, string $description, array $images, int $price, int $engine_version, int $category_id): void
     {
         try {
-
 			$asset_id = uniqid();
 
 			if(!$images) {

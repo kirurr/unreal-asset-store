@@ -16,7 +16,7 @@ class EditAssetUseCase
     /**
      * @param array<string> $images
      */
-    public function execute(int $id, string $name, string $info, string $description, array $images, int $price, int $engine_version, int $category_id): void
+    public function execute(string $id, string $name = null, string $info = null, string $description = null, string $preview_image = null, int $price = null, int $engine_version = null, int $category_id = null): void
     {
         try {
             $asset = $this->repository->getById($id);
@@ -24,13 +24,13 @@ class EditAssetUseCase
                 throw new DomainException('Asset not found');
             }
             
-            $asset->name = $name;
-            $asset->info = $info;
-            $asset->description = $description;
-            $asset->images = $images;
-            $asset->price = $price;
-            $asset->engine_version = $engine_version;
-            $asset->category_id = $category_id;
+            $asset->name = $name ?? $asset->name;
+            $asset->info = $info ?? $asset->info;
+            $asset->description = $description ?? $asset->description;
+            $asset->preview_image = $preview_image ?? $asset->preview_image;
+            $asset->price = $price ?? $asset->price;
+            $asset->engine_version = $engine_version ?? $asset->engine_version;
+            $asset->category_id = $category_id ?? $asset->category_id;
 
             $this->repository->update($asset);
         } catch (RuntimeException $e) {

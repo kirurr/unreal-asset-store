@@ -4,6 +4,7 @@ namespace Router\Routes;
 
 use Controllers\AssetController;
 use Controllers\CategoryController;
+use Controllers\ImageController;
 use Core\Errors\MiddlewareException;
 use Core\ServiceContainer;
 use Router\Middlewares\IsUserAdminMiddleware;
@@ -17,7 +18,7 @@ class AdminRoutes extends Routes implements RoutesInterface
             $prefix . '/', function (array $slug, ?MiddlewareException $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
-					die();
+                    die();
                 }
                 ServiceContainer::get(CategoryController::class)->show();
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
@@ -26,7 +27,7 @@ class AdminRoutes extends Routes implements RoutesInterface
             $prefix . '/categories/', function (array $slug, ?MiddlewareException $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
-					die();
+                    die();
                 }
                 ServiceContainer::get(CategoryController::class)->show();
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
@@ -35,7 +36,7 @@ class AdminRoutes extends Routes implements RoutesInterface
             $prefix . '/categories/create/', function (array $slug, ?MiddlewareException $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
-					die();
+                    die();
                 }
                 ServiceContainer::get(CategoryController::class)->showCreate();
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
@@ -44,7 +45,7 @@ class AdminRoutes extends Routes implements RoutesInterface
             $prefix . '/categories/create/', function (array $slug, ?MiddlewareException $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
-					die();
+                    die();
                 }
 
                 $name = htmlspecialchars($_POST['name'] ?? '');
@@ -57,9 +58,9 @@ class AdminRoutes extends Routes implements RoutesInterface
             $prefix . '/categories/{id}/', function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
-					die();
+                    die();
                 }
-				ServiceContainer::get(CategoryController::class)->showEdit($slug['id']);
+                ServiceContainer::get(CategoryController::class)->showEdit($slug['id']);
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
 
@@ -67,12 +68,12 @@ class AdminRoutes extends Routes implements RoutesInterface
             $prefix . '/categories/{id}/', function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
-					die();
+                    die();
                 }
                 $name = htmlspecialchars($_POST['name'] ?? '');
                 $description = htmlspecialchars($_POST['description'] ?? '');
 
-				ServiceContainer::get(CategoryController::class)->edit($slug['id'], $name, $description);
+                ServiceContainer::get(CategoryController::class)->edit($slug['id'], $name, $description);
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
 
@@ -80,7 +81,7 @@ class AdminRoutes extends Routes implements RoutesInterface
             $prefix . '/categories/{id}/', function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
-					die();
+                    die();
                 }
                 ServiceContainer::get(CategoryController::class)->delete($slug['id']);
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
@@ -90,7 +91,7 @@ class AdminRoutes extends Routes implements RoutesInterface
             $prefix . '/assets/', function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
-					die();
+                    die();
                 }
                 ServiceContainer::get(AssetController::class)->show();
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
@@ -99,7 +100,7 @@ class AdminRoutes extends Routes implements RoutesInterface
             $prefix . '/assets/create/', function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
-					die();
+                    die();
                 }
                 ServiceContainer::get(AssetController::class)->showCreate();
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
@@ -108,14 +109,14 @@ class AdminRoutes extends Routes implements RoutesInterface
             $prefix . '/assets/create/', function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
-					die();
+                    die();
                 }
 
-				if (strlen($_FILES['images']['name']['0']) === 0) {
-					$images = [];
-				} else {
-					$images = $_FILES['images'];
-				}
+                if (strlen($_FILES['images']['name']['0']) === 0) {
+                    $images = [];
+                } else {
+                    $images = $_FILES['images'];
+                }
                 $name = htmlspecialchars($_POST['name'] ?? '');
                 $info = htmlspecialchars($_POST['info'] ?? '');
                 $description = htmlspecialchars($_POST['description'] ?? '');
@@ -132,7 +133,7 @@ class AdminRoutes extends Routes implements RoutesInterface
             $prefix . '/assets/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
-					die();
+                    die();
                 }
                 ServiceContainer::get(AssetController::class)->showEdit($slug['id']);
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
@@ -142,7 +143,7 @@ class AdminRoutes extends Routes implements RoutesInterface
             $prefix . '/assets/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
-					die();
+                    die();
                 }
                 $name = htmlspecialchars($_POST['name'] ?? '');
                 $info = htmlspecialchars($_POST['info'] ?? '');
@@ -158,13 +159,72 @@ class AdminRoutes extends Routes implements RoutesInterface
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
 
+
         $this->router->delete(
             $prefix . '/assets/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
-					die();
+                    die();
                 } 
                 ServiceContainer::get(AssetController::class)->delete($slug['id']);
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+        
+        $this->router->get(
+            $prefix . '/assets/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
+                if ($middleware) {
+                    header('Location: /', true);
+                    die();
+                } 
+                ServiceContainer::get(ImageController::class)->show($slug['id']);
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+
+        $this->router->post(
+            $prefix . '/assets/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
+                if ($middleware) {
+                    header('Location: /', true);
+                    die();
+                } 
+                if (strlen($_FILES['images']['name']['0']) === 0) {
+                    $images = [];
+                } else {
+                    $images = $_FILES['images'];
+                }
+                $previous_image_order = intval($_POST['last_order'] ?? 0);
+
+                ServiceContainer::get(ImageController::class)->create($slug['id'], $images, $previous_image_order);
+            }
+        );
+        
+
+        $this->router->patch(
+            $prefix . '/assets/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
+                if ($middleware) {
+                    header('Location: /', true);
+                    die();
+                } 
+                $image_id = intval($_POST['id'] ?? 0);
+
+                ServiceContainer::get(ImageController::class)->updatePreviewImage($slug['id'], $image_id);
+            }
+        );
+
+        $this->router->put(
+            $prefix . '/assets/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
+                if ($middleware) {
+                    header('Location: /', true);
+                    die();
+                } 
+                $image_id = intval($_POST['id'] ?? 0);
+                $image_order = intval($_POST['image_order'] ?? 0);
+                $image_name = $_FILES['images']['name'] ?? '';
+                $tmp_name = $_FILES['images']['tmp_name']?? '';
+                $old_image_path = htmlspecialchars($_POST['path'] ?? '');
+
+                ServiceContainer::get(ImageController::class)->update(
+                    $slug['id'], $image_id, $image_name, $tmp_name, $image_order, $old_image_path
+                );
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
     }

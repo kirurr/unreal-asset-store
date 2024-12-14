@@ -135,7 +135,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
     {
         try {
             $stmt = $this->pdo->prepare(
-                'UPDATE asset SET name = :name, info = :info, description = :description, images = :images, price = :price, engine_version = :engine_version, category_id = :category_id
+                'UPDATE asset SET name = :name, info = :info, description = :description, preview_image = :preview_image, price = :price, engine_version = :engine_version, category_id = :category_id
 				WHERE id = :id'
             );
             $stmt->execute(
@@ -143,7 +143,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                 'name' => $asset->name,
                 'info' => $asset->info,
                 'description' => $asset->description,
-                'images' => json_encode($asset->images),
+				'preview_image' => $asset->preview_image,
                 'price' => $asset->price,
                 'engine_version' => $asset->engine_version,
                 'category_id' => $asset->category_id,
