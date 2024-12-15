@@ -1,94 +1,22 @@
 <?php
 
-namespace Router\Routes;
+namespace Router\Routes\Admin;
 
 use Controllers\AssetController;
-use Controllers\CategoryController;
 use Controllers\ImageController;
 use Core\Errors\MiddlewareException;
-use Core\ServiceContainer;
 use Router\Middlewares\IsUserAdminMiddleware;
+use Core\ServiceContainer;
+use Router\Routes\Routes;
 use Services\Session\SessionService;
+use Router\Routes\RoutesInterface;
 
-class AdminRoutes extends Routes implements RoutesInterface
+class AssetsRoutes extends Routes implements RoutesInterface
 {
     public function defineRoutes(string $prefix = ''): void
     {
         $this->router->get(
-            $prefix . '/', function (array $slug, ?MiddlewareException $middleware) {
-                if ($middleware) {
-                    header('Location: /', true);
-                    die();
-                }
-                ServiceContainer::get(CategoryController::class)->show();
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
-        );
-        $this->router->get(
-            $prefix . '/categories/', function (array $slug, ?MiddlewareException $middleware) {
-                if ($middleware) {
-                    header('Location: /', true);
-                    die();
-                }
-                ServiceContainer::get(CategoryController::class)->show();
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
-        );
-        $this->router->get(
-            $prefix . '/categories/create/', function (array $slug, ?MiddlewareException $middleware) {
-                if ($middleware) {
-                    header('Location: /', true);
-                    die();
-                }
-                ServiceContainer::get(CategoryController::class)->showCreate();
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
-        );
-        $this->router->post(
-            $prefix . '/categories/create/', function (array $slug, ?MiddlewareException $middleware) {
-                if ($middleware) {
-                    header('Location: /', true);
-                    die();
-                }
-
-                $name = htmlspecialchars($_POST['name'] ?? '');
-                $description = htmlspecialchars($_POST['description'] ?? '');
-
-                ServiceContainer::get(CategoryController::class)->create($name, $description);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
-        );
-        $this->router->get(
-            $prefix . '/categories/{id}/', function (array $slug, ?MiddlewareException  $middleware) {
-                if ($middleware) {
-                    header('Location: /', true);
-                    die();
-                }
-                ServiceContainer::get(CategoryController::class)->showEdit($slug['id']);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
-        );
-
-        $this->router->put(
-            $prefix . '/categories/{id}/', function (array $slug, ?MiddlewareException  $middleware) {
-                if ($middleware) {
-                    header('Location: /', true);
-                    die();
-                }
-                $name = htmlspecialchars($_POST['name'] ?? '');
-                $description = htmlspecialchars($_POST['description'] ?? '');
-
-                ServiceContainer::get(CategoryController::class)->edit($slug['id'], $name, $description);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
-        );
-
-        $this->router->delete(
-            $prefix . '/categories/{id}/', function (array $slug, ?MiddlewareException  $middleware) {
-                if ($middleware) {
-                    header('Location: /', true);
-                    die();
-                }
-                ServiceContainer::get(CategoryController::class)->delete($slug['id']);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
-        );
-
-        $this->router->get(
-            $prefix . '/assets/', function (array $slug, ?MiddlewareException  $middleware) {
+            $prefix . '/', function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
                     die();
@@ -97,7 +25,7 @@ class AdminRoutes extends Routes implements RoutesInterface
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
         $this->router->get(
-            $prefix . '/assets/create/', function (array $slug, ?MiddlewareException  $middleware) {
+            $prefix . '/create/', function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
                     die();
@@ -106,7 +34,7 @@ class AdminRoutes extends Routes implements RoutesInterface
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
         $this->router->post(
-            $prefix . '/assets/create/', function (array $slug, ?MiddlewareException  $middleware) {
+            $prefix . '/create/', function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
                     die();
@@ -130,7 +58,7 @@ class AdminRoutes extends Routes implements RoutesInterface
             }
         );
         $this->router->get(
-            $prefix . '/assets/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
+            $prefix . '/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
                     die();
@@ -140,7 +68,7 @@ class AdminRoutes extends Routes implements RoutesInterface
         );
 
         $this->router->put(
-            $prefix . '/assets/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
+            $prefix . '/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
                     die();
@@ -161,7 +89,7 @@ class AdminRoutes extends Routes implements RoutesInterface
 
 
         $this->router->delete(
-            $prefix . '/assets/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
+            $prefix . '/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
                     die();
@@ -171,7 +99,7 @@ class AdminRoutes extends Routes implements RoutesInterface
         );
         
         $this->router->get(
-            $prefix . '/assets/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
+            $prefix . '/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
                     die();
@@ -181,7 +109,7 @@ class AdminRoutes extends Routes implements RoutesInterface
         );
 
         $this->router->post(
-            $prefix . '/assets/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
+            $prefix . '/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
                     die();
@@ -199,7 +127,7 @@ class AdminRoutes extends Routes implements RoutesInterface
         
 
         $this->router->patch(
-            $prefix . '/assets/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
+            $prefix . '/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
                     die();
@@ -211,7 +139,7 @@ class AdminRoutes extends Routes implements RoutesInterface
         );
 
         $this->router->put(
-            $prefix . '/assets/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
+            $prefix . '/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
                     header('Location: /', true);
                     die();
@@ -229,3 +157,4 @@ class AdminRoutes extends Routes implements RoutesInterface
         );
     }
 }
+

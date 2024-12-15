@@ -1,44 +1,32 @@
 <?php
 
-namespace Core\Dependencies;
-
+namespace Core\Dependencies\Admin;
 use Controllers\AssetController;
-use Controllers\CategoryController;
 use Controllers\ImageController;
 use Core\ContainerInterface;
-use Core\ServiceContainer;
+
 use Repositories\Asset\AssetSQLiteRepository;
-use Repositories\Category\CategorySQLiteRepository;
 use Repositories\Image\SQLiteImageRepository;
+use PDO;
+use Core\ServiceContainer;
 use Services\Files\FilesystemFilesService;
 use Services\Session\SessionService;
 use UseCases\Asset\CreateAssetUseCase;
-use UseCases\Category\CreateCategoryUseCase;
 use UseCases\Asset\DeleteAssetUseCase;
-use UseCases\Category\DeleteCategoryUseCase;
 use UseCases\Asset\EditAssetUseCase;
-use UseCases\Category\EditCategoryUseCase;
-use UseCases\Asset\GetAllAssetUseCase;
-use UseCases\Asset\GetAssetUseCase;
 use UseCases\Category\GetAllCategoryUseCase;
-use UseCases\Category\GetCategoryUseCase;
-use PDO;
+use UseCases\Asset\GetAllAssetUseCase;
 use UseCases\Image\CreateImageUseCase;
-use UseCases\Image\DeleteImageUseCase;
+use UseCases\Asset\GetAssetUseCase;
 use UseCases\Image\GetImageUseCase;
+use UseCases\Image\DeleteImageUseCase;
 use UseCases\Image\UpdateImageUseCase;
 use UseCases\Image\GetImagesForAssetUseCase;
 
-class AdminContainer extends ServiceContainer implements ContainerInterface
+class AssetContainer extends ServiceContainer implements ContainerInterface
 {
     public function initDependencies(): void
     {
-        $this->set(
-            CategorySQLiteRepository::class, function () {
-                return new CategorySQLiteRepository($this::get(PDO::class));
-            }
-        );
-
         $this->set(
             SQLiteImageRepository::class, function () {
                 return new SQLiteImageRepository($this::get(PDO::class));
@@ -74,44 +62,6 @@ class AdminContainer extends ServiceContainer implements ContainerInterface
         $this->set(
             DeleteAssetUseCase::class, function () {
                 return new DeleteAssetUseCase($this::get(AssetSQLiteRepository::class));
-            }
-        );
-
-
-        $this->set(
-            CreateCategoryUseCase::class, function () {
-                return new CreateCategoryUseCase($this::get(CategorySQLiteRepository::class));
-            }
-        );
-        $this->set(
-            GetAllCategoryUseCase::class, function () {
-                return new GetAllCategoryUseCase($this::get(CategorySQLiteRepository::class));
-            }
-        );
-        $this->set(
-            EditCategoryUseCase::class, function () {
-                return new EditCategoryUseCase($this::get(CategorySQLiteRepository::class));
-            }
-        );
-        $this->set(
-            GetCategoryUseCase::class, function () {
-                return new GetCategoryUseCase($this::get(CategorySQLiteRepository::class));
-            }
-        );
-
-        $this->set(
-            DeleteCategoryUseCase::class, function () {
-                return new DeleteCategoryUseCase(
-                    $this::get(CategorySQLiteRepository::class),
-                    $this::get(AssetSQLiteRepository::class)
-                );
-            }
-        );
-
-
-        $this->set(
-            FilesystemFilesService::class, function () {
-                return new FilesystemFilesService();
             }
         );
 
@@ -159,18 +109,6 @@ class AdminContainer extends ServiceContainer implements ContainerInterface
             }
         );
 
-        $this->set(
-            CategoryController::class, function () {
-                return new CategoryController(
-                    $this::get(CreateCategoryUseCase::class),
-                    $this::get(GetAllCategoryUseCase::class),
-                    $this::get(EditCategoryUseCase::class),
-                    $this::get(GetCategoryUseCase::class),
-                    $this::get(DeleteCategoryUseCase::class)
-                );
-            }
-        );
-
 		$this->set(
 			ImageController::class, function () {
 				return new ImageController(
@@ -184,6 +122,5 @@ class AdminContainer extends ServiceContainer implements ContainerInterface
 				);
 			}
 		);
-    }
-	// TODO: refactor it to multiple containers
+	}
 }
