@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>Categories</h1>
+	<?= renderComponent('admin/navbar') ?>
     <a href="/admin/categories/create">Create Category</a>
 
 	<?php if (count($categories) > 0): ?>

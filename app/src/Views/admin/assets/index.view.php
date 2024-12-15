@@ -6,6 +6,7 @@
 </head>
     <body>
     <h1>Assets</h1>
+	<?= renderComponent('admin/navbar') ?>
     <a href="/admin/assets/create">Create Asset</a>
 
 	<?php if (count($assets) > 0): ?>
