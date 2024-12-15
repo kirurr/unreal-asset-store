@@ -105,4 +105,26 @@ class ImageController
 
     }
 
+	public function delete(string $asset_id, int $image_id): void
+	{
+		try {
+			$this->deleteUseCase->execute($image_id);
+		} catch (DomainException $e) {
+			$asset = $this->getAssetUseCase->execute($asset_id);
+			http_response_code(400);
+			renderView(
+				'admin/assets/images/index', [
+				'errorMessage' => $e->getMessage(),
+				'asset_id' => $asset_id,
+				'asset' => $asset,
+				]
+			);
+		} catch (Exception $e) {
+			http_response_code(500);
+			renderView('error', ['error' => $e->getMessage()]);
+		}
+		http_response_code(204);
+		header('Location: /admin/assets/' . $asset_id . '/images/', true, 303);
+	}
+
 }

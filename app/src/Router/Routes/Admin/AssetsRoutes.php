@@ -155,6 +155,18 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 );
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
+
+        $this->router->delete(
+            $prefix . '/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
+                if ($middleware) {
+                    header('Location: /', true);
+                    die();
+                } 
+                $image_id = intval($_POST['id'] ?? 0);
+
+                ServiceContainer::get(ImageController::class)->delete($slug['id'], $image_id);
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
     }
 }
 

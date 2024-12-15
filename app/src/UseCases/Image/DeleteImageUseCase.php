@@ -22,7 +22,6 @@ class DeleteImageUseCase
             $this->filesService->deleteImage($image->path);
             if ($image) {
                 $this->imageRepository->delete($id);
-                return;
             }
         } catch (RuntimeException $e) {
             throw new Exception('Error deleting image' . $e->getMessage(), 500, $e);
