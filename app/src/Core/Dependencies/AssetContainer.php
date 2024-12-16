@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\Dependencies\Admin;
-use Controllers\AssetController;
-use Controllers\ImageController;
+namespace Core\Dependencies;
+use Controllers\Admin\AssetController;
+use Controllers\Admin\ImageController;
 use Core\ContainerInterface;
 
 use Repositories\Asset\AssetSQLiteRepository;

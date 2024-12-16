@@ -1,6 +1,6 @@
 <?php
 
-namespace Controllers;
+namespace Controllers\Admin;
 
 use UseCases\Category\CreateCategoryUseCase;
 use UseCases\Category\DeleteCategoryUseCase;

@@ -1,7 +1,7 @@
 <?php
 
-use Core\Dependencies\Admin\AssetContainer;
-use Core\Dependencies\Admin\CategoryContainer;
+use Core\Dependencies\AssetContainer;
+use Core\Dependencies\CategoryContainer;
 use Core\Dependencies\AuthorizationContainer;
 use Core\Dependencies\IndexContainer;
 use Core\Dependencies\UserContainer;
@@ -17,5 +17,6 @@ $container = new ServiceContainer();
 
 (new AssetContainer())->initDependencies();
 (new CategoryContainer())->initDependencies();
+(new UserContainer())->initDependencies();
 
 return $container;

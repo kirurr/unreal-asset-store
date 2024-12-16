@@ -1,6 +1,6 @@
 <?php
 
-namespace Controllers;
+namespace Controllers\Admin;
 
 use UseCases\Asset\EditAssetUseCase;
 use UseCases\Asset\GetAssetUseCase;

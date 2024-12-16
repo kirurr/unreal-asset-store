@@ -11,7 +11,8 @@ class UserSQLiteRepository implements UserRepositoryInterface
 {
     public function __construct(
         private PDO $pdo
-    ) {}
+    ) {
+    }
 
     public function getByEmail(string $email): ?User
     {
@@ -56,12 +57,67 @@ class UserSQLiteRepository implements UserRepositoryInterface
         try {
             $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-            $stmt = $this->pdo->prepare('INSERT INTO user (name, email, password) VALUES (:name, :email, :password)');
-            $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password_hash]);
+            $stmt = $this->pdo->prepare('INSERT INTO user (name, email, password, role) VALUES (:name, :email, :password, :role)');
+            $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password_hash, 'role' => 'user']);
 
             return new User($this->pdo->lastInsertId(), $name, $email, $password_hash, 'user');
         } catch (PDOException $e) {
             throw new RuntimeException('Database error: ' . $e->getMessage(), 500, $e);
         }
     }
+    
+    public function update(User $user): void
+    {
+        try {
+            $stmt = $this->pdo->prepare('UPDATE user SET name = :name, email = :email, password = :password WHERE id = :id');
+            $stmt->execute(
+                [
+                'name' => $user->name,
+                'email' => $user->email,
+                'password' => $user->getPassword(),
+                'id' => $user->id
+                ]
+            );
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error: ' . $e->getMessage(), 500, $e);
+        }
+    }
+
+    public function delete(User $user): void
+    {
+        try {
+            $stmt = $this->pdo->prepare('DELETE FROM user WHERE id = :id');
+            $stmt->execute(['id' => $user->id]);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error: ' . $e->getMessage(), 500, $e);
+        }
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getAll(): array
+    {
+        try {
+            $stmt = $this->pdo->prepare('SELECT * FROM user');
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return array_map(
+                function ($user) {
+                    return new User(
+                        (int) $user['id'],
+                        $user['name'],
+                        $user['email'],
+                        $user['password'],
+                        $user['role']
+                    );
+                },
+                $result
+            );
+            
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error: ' . $e->getMessage(), 500, $e);
+        }
+    }
+
 }

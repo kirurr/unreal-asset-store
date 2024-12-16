@@ -7,16 +7,7 @@
 		<title>Unreal Asset Store</title>
 	</head>
 	<body>
-		<? if($user): ?>
-			<h2>welcome <?= $user['name'] ?? '' ?></h2>
-			<a href="/signout">sign out</a>
-			<? if($user['role'] === 'admin'): ?>
-				<a href="/admin/">admin</a>
-			<? endif ?>
-		<? else:?>
-			<a href="/signin">sign in</a>
-			<a href="/signup">sign up</a>
-		<? endif ?>
+		<? renderComponent('navbar', ['user' => $user]);?>
 		<script src="main.js"></script>
 	</body>	
 </html>

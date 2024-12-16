@@ -46,6 +46,38 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         }
     }
 
+    public function getByUserId(string $user_id): array
+    {
+        try {
+            $stmt = $this->pdo->prepare('SELECT * FROM asset WHERE user_id = :user_id');
+            $stmt->execute(['user_id' => $user_id]);
+            $assets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if (!$assets) {
+                return [];
+            }
+            $result = [];
+            foreach ($assets as $asset) {
+                $result[] = new Asset(
+                    $asset['id'],
+                    $asset['name'],
+                    $asset['info'],
+                    $asset['description'],
+                    [],
+					$asset['preview_image'],
+                    $asset['price'],
+                    $asset['engine_version'],
+                    $asset['category_id'],
+                    $asset['user_id'],
+                    $asset['created_at'],
+                    $asset['purchase_count']
+                );
+            }
+            return $result;
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
+        }
+    }
+
     public function getById(string $id): ?Asset
     {
         try {

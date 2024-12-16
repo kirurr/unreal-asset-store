@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\Dependencies\Admin;
+namespace Core\Dependencies;
 
-use Controllers\CategoryController;
+use Controllers\Admin\CategoryController;
 use Core\ContainerInterface;
 use Core\ServiceContainer;
 use PDO;

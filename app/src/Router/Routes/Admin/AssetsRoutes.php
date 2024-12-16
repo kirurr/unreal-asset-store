@@ -2,8 +2,8 @@
 
 namespace Router\Routes\Admin;
 
-use Controllers\AssetController;
-use Controllers\ImageController;
+use Controllers\Admin\AssetController;
+use Controllers\Admin\ImageController;
 use Core\Errors\MiddlewareException;
 use Router\Middlewares\IsUserAdminMiddleware;
 use Core\ServiceContainer;
@@ -103,7 +103,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 if ($middleware) {
                     header('Location: /', true);
                     die();
-                } 
+				}
                 ServiceContainer::get(ImageController::class)->show($slug['id']);
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );

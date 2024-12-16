@@ -2,7 +2,7 @@
 
 namespace Router\Routes\Admin;
 
-use Controllers\CategoryController;
+use Controllers\Admin\CategoryController;
 use Core\Errors\MiddlewareException;
 use Router\Middlewares\IsUserAdminMiddleware;
 use Core\ServiceContainer;

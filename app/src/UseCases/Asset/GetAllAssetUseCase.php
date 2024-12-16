@@ -17,15 +17,18 @@ class GetAllAssetUseCase
     /**
      * @return Asset[]
      */
-    public function execute(int $category_id = null): array
+    public function execute(int $category_id = null, int $user_id = null): array
     {
         try {
-			if ($category_id) {
-				return $this->repository->getByCategoryId($category_id);
-			}
+            if ($category_id) {
+                return $this->repository->getByCategoryId($category_id);
+            }
+            elseif ($user_id) {
+                return $this->repository->getByUserId($user_id);
+            }
             return $this->repository->getAll();
         } catch (RuntimeException $e) {
-            throw new Exception('Unable to get all assets: ' . $e->getMessage(), 500, $e);
+            throw new Exception('Unable to get assets: ' . $e->getMessage(), 500, $e);
         }
     }
 }

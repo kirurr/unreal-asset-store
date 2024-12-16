@@ -20,13 +20,15 @@
                 <button type="submit">update</button>
             </form>
 
+			<?php if ($asset->preview_image !== $image->path): ?>
             <form action="/admin/assets/<?php echo $asset_id ?>/images/" method="post">
                 <input type="hidden" name="_method" value="delete">
                 <input type="hidden" name="id" value="<?php echo $image->id ?>">
                 <button type="submit">delete</button>
             </form>
+			<?php endif; ?>
 			<?php if ($asset->preview_image === $image->path): ?>
-				<span>already preview image</span>
+				<span>this is preview image</span>
 			<?php else: ?>
             <form action="/admin/assets/<?php echo $asset_id ?>/images/" method="post">
                 <input type="hidden" name="_method" value="patch">

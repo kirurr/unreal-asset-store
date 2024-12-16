@@ -1,6 +1,6 @@
 <?php
 
-namespace Controllers;
+namespace Controllers\Admin;
 
 use UseCases\Asset\CreateAssetUseCase;
 use UseCases\Asset\DeleteAssetUseCase;
@@ -11,7 +11,6 @@ use DomainException;
 use Exception;
 use UseCases\Category\GetAllCategoryUseCase;
 use UseCases\Image\CreateImageUseCase;
-use UseCases\Image\GetImageUseCase;
 use UseCases\Image\GetImagesForAssetUseCase;
 use UseCases\Image\DeleteImageUseCase;
 use UseCases\Image\UpdateImageUseCase;
