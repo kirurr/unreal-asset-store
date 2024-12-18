@@ -52,7 +52,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 ServiceContainer::get(AssetController::class)->create(
                     $name, $info, $description, $images, $price, $engine_version, $category_id
                 );
-            }
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
         $this->router->get(
             $prefix . '/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
@@ -113,7 +113,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 $previous_image_order = intval($_POST['last_order'] ?? 0);
 
                 ServiceContainer::get(ImageController::class)->create($slug['id'], $images, $previous_image_order);
-            }
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
         
 
@@ -125,7 +125,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 $image_id = intval($_POST['id'] ?? 0);
 
                 ServiceContainer::get(ImageController::class)->updatePreviewImage($slug['id'], $image_id);
-            }
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
 
         $this->router->put(

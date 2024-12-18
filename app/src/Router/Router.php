@@ -63,7 +63,7 @@ class Router
         if ($route) {
             $middlewareError = null;
             try {
-                $this->handleMiddlewares(...$route['middlewares']);
+                $this->handleMiddlewares($slug, ...$route['middlewares']);
             } catch (MiddlewareException $e) {
                 $middlewareError = $e;
             }
@@ -73,10 +73,10 @@ class Router
         }
     }
 
-    private function handleMiddlewares(Middleware ...$middlewares): void
+    private function handleMiddlewares(array $slug, Middleware ...$middlewares): void
     {
         foreach ($middlewares as $middleware) {
-            $result = $middleware();
+            $result = $middleware($slug);
         }
     }
 

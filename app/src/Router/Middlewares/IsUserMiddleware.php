@@ -11,7 +11,7 @@ class IsUserMiddleware extends Middleware
         private SessionInterface $session
     ) {}
 
-    public function __invoke(): void
+    public function __invoke(array $slug = []): void
     {
 		if($this->session->hasUser()) {
 			return;

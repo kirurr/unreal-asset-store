@@ -11,7 +11,7 @@ class IsUserAdminMiddleware extends Middleware
         private SessionInterface $session
     ) {}
 
-    public function __invoke(): void
+    public function __invoke(array $slug = []): void
     {
         $user = $this->session->getUser();
         if (!$user) {

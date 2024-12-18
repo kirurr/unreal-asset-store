@@ -7,6 +7,8 @@ abstract class Middleware
     public function __construct(
         private string $name
     ) {}
-
-    abstract public function __invoke(): void;
+    /**
+     * @param array<string,mixed> $slug
+     */
+    abstract public function __invoke(array $slug): void;
 }
