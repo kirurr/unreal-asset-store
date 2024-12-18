@@ -3,14 +3,12 @@
 namespace Core\Dependencies;
 
 use Controllers\MainPageController;
-use Controllers\ProfilePageController;
 use Core\ContainerInterface;
 use Core\ServiceContainer;
 use Services\Files\FilesystemFilesService;
 use Services\Session\SessionService;
 use Exception;
 use PDO;
-use UseCases\User\GetUserUseCase;
 
 class IndexContainer extends ServiceContainer implements ContainerInterface
 {
@@ -42,11 +40,5 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
             return new MainPageController($this::get(SessionService::class));
         });
 		
-		$this->set(ProfilePageController::class, function () {
-			return new ProfilePageController(
-				$this::get(SessionService::class),
-				$this::get(GetUserUseCase::class)
-			);
-        });
     }
 }

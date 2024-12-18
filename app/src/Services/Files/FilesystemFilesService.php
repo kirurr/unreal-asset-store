@@ -44,5 +44,9 @@ class FilesystemFilesService implements FilesInterface
         if (file_exists($path_to_delete)) {
             unlink($path_to_delete);
         }
+        $dir_to_delete = dirname($path_to_delete);
+        if (count(scandir($dir_to_delete)) <= 2) {
+            rmdir($dir_to_delete);
+        }
     }
 }

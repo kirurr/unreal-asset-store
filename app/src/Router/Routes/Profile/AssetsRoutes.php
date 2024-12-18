@@ -1,9 +1,10 @@
 <?php
 
-namespace Router\Routes\Admin;
+namespace Router\Routes\Profile;
 
-use Controllers\Admin\AssetController;
-use Controllers\Admin\ImageController;
+use Controllers\Profile\AssetController;
+use Controllers\Profile\ImageController;
+
 use Core\Errors\MiddlewareException;
 use Router\Middlewares\IsUserAdminMiddleware;
 use Core\ServiceContainer;
@@ -15,14 +16,6 @@ class AssetsRoutes extends Routes implements RoutesInterface
 {
     public function defineRoutes(string $prefix = ''): void
     {
-        $this->router->get(
-            $prefix . '/', function (array $slug, ?MiddlewareException  $middleware) {
-                if ($middleware) {
-					redirect('/');
-                }
-                ServiceContainer::get(AssetController::class)->show();
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
-        );
         $this->router->get(
             $prefix . '/create/', function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {

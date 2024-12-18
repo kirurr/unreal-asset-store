@@ -13,14 +13,14 @@ class DeleteAssetUseCase
         private AssetRepositoryInterface $repository
     ) {}
 
-    public function execute(int $id): void
+    public function execute(string $id): void
     {
         try {
             $asset = $this->repository->getById($id);
             if (!$asset) {
                 throw new DomainException('Asset not found');
             }
-            $this->repository->delete($id);
+			$this->repository->delete($id);
         } catch (RuntimeException $e) {
             throw new Exception('Unable to delete asset: ' . $e->getMessage(), 500, $e);
         }

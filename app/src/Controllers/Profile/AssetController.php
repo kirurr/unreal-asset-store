@@ -1,6 +1,6 @@
 <?php
 
-namespace Controllers\Admin;
+namespace Controllers\Profile;
 
 use UseCases\Asset\CreateAssetUseCase;
 use UseCases\Asset\DeleteAssetUseCase;
@@ -34,14 +34,14 @@ class AssetController
     public function show(): void
     {
         $assets = $this->getAllUseCase->execute();
-        renderView('admin/assets/index', ['assets' => $assets]);
+        renderView('profile/assets/index', ['assets' => $assets]);
     }
 
     public function showCreate(): void
     {
         $categories = $this->getAllCategoryUseCase->execute();
         renderView(
-            'admin/assets/create', ['categories' => $categories]
+            'profile/assets/create', ['categories' => $categories]
         );
     }
 
@@ -50,16 +50,16 @@ class AssetController
         try {
             $categories = $this->getAllCategoryUseCase->execute();
             $asset = $this->getUseCase->execute($id);
-            renderView('admin/assets/edit', ['asset' => $asset, 'categories' => $categories]);
+            renderView('profile/assets/edit', ['asset' => $asset, 'categories' => $categories]);
         } catch (DomainException $e) {
             http_response_code(404);
-            header('Location: /admin/assets', true);
+            header('Location: /profile/assets', true);
         } catch (Exception $e) {
             http_response_code(500);
             renderView('error', ['error' => $e->getMessage()]);
         }
 
-        renderView('admin/assets/edit', ['asset' => $asset]);
+        renderView('profile/assets/edit', ['asset' => $asset]);
     }
 
     public function delete(string $id): void
@@ -73,7 +73,7 @@ class AssetController
         } catch (DomainException $e) {
             http_response_code(400);
             renderView(
-                'admin/assets/edit', [
+                'profile/assets/edit', [
                 'errorMessage' => $e->getMessage(),
                 ]
             );
@@ -82,7 +82,7 @@ class AssetController
             renderView('error', ['error' => $e->getMessage()]);
         }
         http_response_code(200);
-        header('Location: /admin/assets', true, 303);
+        header('Location: /profile/', true, 303);
     }
     public function edit(string $id, string $name, string $info, string $description, int $price, int $engine_version, int $category_id): void
     {
@@ -93,7 +93,7 @@ class AssetController
             $categories = $this->getAllCategoryUseCase->execute();
             $asset = $this->getUseCase->execute($id);
             renderView(
-                'admin/assets/edit', [
+                'profile/assets/edit', [
                 'categories' => $categories,
                 'asset' => $asset,
                 'errorMessage' => $e->getMessage(),
@@ -113,7 +113,7 @@ class AssetController
             renderView('error', ['error' => $e->getMessage()]);
         }
         http_response_code(200);
-        header('Location: /admin/assets', true, 303);
+        header('Location: /profile/', true, 303);
     }
     public function create(string $name, string $info, string $description, array $images, int $price, int $engine_version, int $category_id): void
     {
@@ -138,7 +138,7 @@ class AssetController
             $categories = $this->getAllCategoryUseCase->execute();
             http_response_code(400);
             renderView(
-                'admin/assets/create', [
+                'profile/assets/create', [
                 'errorMessage' => $e->getMessage(),
                 'categories' => $categories,
                 'previousData' => [
@@ -156,7 +156,7 @@ class AssetController
             renderView('error', ['error' => $e->getMessage()]);
         }
         http_response_code(201);
-        header('Location: /admin/assets', true, 303);
+        header('Location: /profile/', true, 303);
     }
 
 }
