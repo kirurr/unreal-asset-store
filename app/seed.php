@@ -49,7 +49,7 @@ try {
 		description TEXT NOT NULL,
 		price INTEGER NOT NULL,
 		preview_image TEXT NOT NULL,
-		engine_version INTEGER NOT NULL,
+		engine_version TEXT NOT NULL,
 		category_id INTEGER NOT NULL,
 		user_id INTEGER NOT NULL,
 		created_at INTEGER DEFAULT (strftime('%s', 'now')),
@@ -69,6 +69,20 @@ try {
 
 	echo "Created images table\n";
 
+	$pdo->exec("DROP TABLE IF EXISTS file");
+
+	$pdo->exec("CREATE TABLE IF NOT EXISTS file (
+		id INTEGER PRIMARY KEY,
+		asset_id TEXT NOT NULL,
+		name TEXT NOT NULL,
+		path TEXT NOT NULL,
+		version TEXT NOT NULL,
+		description TEXT NOT NULL,
+		size INTEGER NOT NULL,
+		created_at INTEGER DEFAULT (strftime('%s', 'now'))
+	)");
+
+	echo "Created files table\n";
 
 } catch (Exception $e) {
     echo $e->getMessage();

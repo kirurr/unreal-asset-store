@@ -84,7 +84,7 @@ class AssetController
         http_response_code(200);
         header('Location: /profile/', true, 303);
     }
-    public function edit(string $id, string $name, string $info, string $description, int $price, int $engine_version, int $category_id): void
+    public function edit(string $id, string $name, string $info, string $description, int $price, string $engine_version, int $category_id): void
     {
         try {
             $this->editUseCase->execute($id, name: $name, info: $info, description: $description, price: $price, engine_version: $engine_version, category_id: $category_id);
@@ -115,7 +115,7 @@ class AssetController
         http_response_code(200);
         header('Location: /profile/', true, 303);
     }
-    public function create(string $name, string $info, string $description, array $images, int $price, int $engine_version, int $category_id): void
+    public function create(string $name, string $info, string $description, array $images, int $price, string $engine_version, int $category_id): void
     {
         try {
             $asset_id = uniqid();

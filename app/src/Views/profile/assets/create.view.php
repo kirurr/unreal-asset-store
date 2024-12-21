@@ -18,7 +18,7 @@
             <label for="price">Price</label>
             <input type="number" name="price" id="price" value="<?php echo htmlspecialchars($previousData['price'] ?? '') ?>">
             <label for="engine_version">Engine Version</label>
-            <input type="number" name="engine_version" id="engine_version" value="<?php echo htmlspecialchars($previousData['engine_version'] ?? '') ?>">
+            <input type="text" name="engine_version" id="engine_version" value="<?php echo htmlspecialchars($previousData['engine_version'] ?? '') ?>">
             <label for="category_id">Category ID</label>
             <select name="category_id" id="category_id">
                 <?php foreach ($categories as $category): ?>

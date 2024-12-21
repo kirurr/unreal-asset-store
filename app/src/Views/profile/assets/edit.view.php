@@ -20,7 +20,7 @@
             <label for="price">price</label>
             <input type="number" name="price" value="<?php echo $asset->price ?>">
             <label for="engine_version">engine_version</label>
-            <input type="number" name="engine_version" value="<?php echo $asset->engine_version ?>">
+            <input type="text" name="engine_version" value="<?php echo $asset->engine_version ?>">
             <select name="category_id">
                 <?php foreach ($categories as $category): ?>
                     <option value="<?php echo $category->id ?>"><?php echo $category->name ?></option>

@@ -3,9 +3,7 @@
 namespace Core\Dependencies;
 use Controllers\Admin\UserController;
 use Core\ContainerInterface;
-
 use Repositories\User\UserSQLiteRepository;
-use PDO;
 use Core\ServiceContainer;
 use UseCases\Asset\GetAllAssetUseCase;
 use UseCases\User\DeleteUserUseCase;
@@ -17,11 +15,6 @@ class UserContainer extends ServiceContainer implements ContainerInterface
 {
     public function initDependencies(): void
     {
-        $this->set(
-            UserSQLiteRepository::class, function () {
-                return new UserSQLiteRepository($this::get(PDO::class));
-            }
-        );
 
         $this->set(
             GetAllUserUseCase::class, function () {

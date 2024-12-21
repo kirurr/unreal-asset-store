@@ -19,11 +19,6 @@ class CategoryContainer extends ServiceContainer implements ContainerInterface
     public function initDependencies(): void
     {
 
-        $this->set(
-            CategorySQLiteRepository::class, function () {
-                return new CategorySQLiteRepository($this::get(PDO::class));
-            }
-        );
 
         $this->set(
             CreateCategoryUseCase::class, function () {

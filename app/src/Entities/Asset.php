@@ -15,11 +15,11 @@ class Asset
         public array $images,
 		public string $preview_image,
         public int $price,
-        public int $engine_version,
+        public string $engine_version,
         public int $category_id,
         public int $user_id,
         public int $created_at,
-        public int $purchase_count = 0
+        public int $purchase_count = 0,
     ) {
     }
 }

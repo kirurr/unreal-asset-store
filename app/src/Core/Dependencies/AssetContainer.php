@@ -2,12 +2,13 @@
 
 namespace Core\Dependencies;
 use Controllers\Admin\AssetController;
+use Controllers\Admin\FileController;
 use Controllers\Admin\ImageController;
 use Core\ContainerInterface;
 
 use Repositories\Asset\AssetSQLiteRepository;
+use Repositories\File\SQLiteFileRepository;
 use Repositories\Image\SQLiteImageRepository;
-use PDO;
 use Core\ServiceContainer;
 use Services\Files\FilesystemFilesService;
 use Services\Session\SessionService;
@@ -16,6 +17,8 @@ use UseCases\Asset\DeleteAssetUseCase;
 use UseCases\Asset\EditAssetUseCase;
 use UseCases\Category\GetAllCategoryUseCase;
 use UseCases\Asset\GetAllAssetUseCase;
+use UseCases\File\CreateFileUseCase;
+use UseCases\File\GetFilesUseCase;
 use UseCases\Image\CreateImageUseCase;
 use UseCases\Asset\GetAssetUseCase;
 use UseCases\Image\GetImageUseCase;
@@ -27,17 +30,6 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
 {
     public function initDependencies(): void
     {
-        $this->set(
-            SQLiteImageRepository::class, function () {
-                return new SQLiteImageRepository($this::get(PDO::class));
-            }
-        );
-
-        $this->set(
-            AssetSQLiteRepository::class, function () {
-                return new AssetSQLiteRepository($this::get(PDO::class));
-            }
-        );
 
         $this->set(
             CreateAssetUseCase::class, function () {
@@ -62,6 +54,23 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
         $this->set(
             DeleteAssetUseCase::class, function () {
                 return new DeleteAssetUseCase($this::get(AssetSQLiteRepository::class));
+            }
+        );
+
+        $this->set(
+            AssetController::class, function () {
+                return new AssetController(
+                    $this::get(CreateAssetUseCase::class),
+                    $this::get(GetAllAssetUseCase::class),
+                    $this::get(EditAssetUseCase::class),
+                    $this::get(GetAssetUseCase::class),
+                    $this::get(DeleteAssetUseCase::class),
+                    $this::get(GetAllCategoryUseCase::class),
+                    $this::get(CreateImageUseCase::class),
+                    $this::get(UpdateImageUseCase::class),
+                    $this::get(DeleteImageUseCase::class),
+                    $this::get(GetImagesForAssetUseCase::class)
+                );
             }
         );
 
@@ -92,23 +101,6 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
 			}
 		);
 
-        $this->set(
-            AssetController::class, function () {
-                return new AssetController(
-                    $this::get(CreateAssetUseCase::class),
-                    $this::get(GetAllAssetUseCase::class),
-                    $this::get(EditAssetUseCase::class),
-                    $this::get(GetAssetUseCase::class),
-                    $this::get(DeleteAssetUseCase::class),
-                    $this::get(GetAllCategoryUseCase::class),
-                    $this::get(CreateImageUseCase::class),
-                    $this::get(UpdateImageUseCase::class),
-                    $this::get(DeleteImageUseCase::class),
-                    $this::get(GetImagesForAssetUseCase::class)
-                );
-            }
-        );
-
 		$this->set(
 			ImageController::class, function () {
 				return new ImageController(
@@ -119,6 +111,25 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
 					$this::get(GetImageUseCase::class),
 					$this::get(EditAssetUseCase::class),
 					$this::get(GetAssetUseCase::class)
+				);
+			}	
+		);
+
+		$this->set(
+			GetFilesUseCase::class, function () {
+				return new GetFilesUseCase($this::get(SQLiteFileRepository::class));
+			}
+		);
+
+		$this->set(CreateFileUseCase::class, function () {
+			return new CreateFileUseCase($this::get(SQLiteFileRepository::class), $this::get(FilesystemFilesService::class));
+		});
+
+		$this->set(
+			FileController::class, function () {
+				return new FileController(
+					$this::get(GetFilesUseCase::class),
+					$this::get(CreateFileUseCase::class)
 				);
 			}
 		);

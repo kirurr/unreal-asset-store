@@ -9,6 +9,7 @@
     <body>
         <h1>edit asset</h1>
         <a href="/admin/assets/<?php echo $asset->id ?>/images/">images</a>
+        <a href="/admin/assets/<?php echo $asset->id ?>/files/">files</a>
         <form action="/admin/assets/<?php echo $asset->id ?>" method="post">
             <input type="hidden" name="_method" value="put">
             <label for="name">name</label>
@@ -20,7 +21,7 @@
             <label for="price">price</label>
             <input type="number" name="price" value="<?php echo $asset->price ?>">
             <label for="engine_version">engine_version</label>
-            <input type="number" name="engine_version" value="<?php echo $asset->engine_version ?>">
+            <input type="text" name="engine_version" value="<?php echo $asset->engine_version ?>">
             <select name="category_id">
                 <?php foreach ($categories as $category): ?>
                     <option value="<?php echo $category->id ?>"><?php echo $category->name ?></option>

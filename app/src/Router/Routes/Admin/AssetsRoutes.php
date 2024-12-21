@@ -3,6 +3,7 @@
 namespace Router\Routes\Admin;
 
 use Controllers\Admin\AssetController;
+use Controllers\Admin\FileController;
 use Controllers\Admin\ImageController;
 use Core\Errors\MiddlewareException;
 use Router\Middlewares\IsUserAdminMiddleware;
@@ -46,7 +47,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 $info = htmlspecialchars($_POST['info'] ?? '');
                 $description = htmlspecialchars($_POST['description'] ?? '');
                 $price = intval($_POST['price'] ?? 0);
-                $engine_version = intval($_POST['engine_version'] ?? 0);
+                $engine_version = htmlspecialchars($_POST['engine_version'] ?? '');
                 $category_id = intval($_POST['category_id'] ?? 0);
 
                 ServiceContainer::get(AssetController::class)->create(
@@ -72,7 +73,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 $info = htmlspecialchars($_POST['info'] ?? '');
                 $description = htmlspecialchars($_POST['description'] ?? '');
                 $price = intval($_POST['price'] ?? 0);
-                $engine_version = intval($_POST['engine_version'] ?? 0);
+                $engine_version = htmlspecialchars($_POST['engine_version'] ?? '');
                 $category_id = intval($_POST['category_id'] ?? 0);
 
                     ServiceContainer::get(AssetController::class)->edit(
@@ -91,6 +92,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
         
+		## IMAGES
         $this->router->get(
             $prefix . '/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
@@ -153,6 +155,40 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 $image_id = intval($_POST['id'] ?? 0);
 
                 ServiceContainer::get(ImageController::class)->delete($slug['id'], $image_id);
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+
+		## FILES
+		$this->router->get(
+            $prefix . '/{id}/files/', function (array $slug, ?MiddlewareException   $middleware) {
+                if ($middleware) {
+					redirect('/');
+				}
+                ServiceContainer::get(FileController::class)->show($slug['id']);
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+		$this->router->get(
+            $prefix . '/{id}/files/create/', function (array $slug, ?MiddlewareException   $middleware) {
+                if ($middleware) {
+					redirect('/');
+				}
+                ServiceContainer::get(FileController::class)->showCreate($slug['id']);
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+
+		$this->router->post(
+            $prefix . '/{id}/files/create/', function (array $slug, ?MiddlewareException   $middleware) {
+                if ($middleware) {
+					redirect('/');
+				}
+
+                $name = htmlspecialchars($_POST['name'] ?? '');
+                $version = htmlspecialchars($_POST['version'] ?? '');
+                $description = htmlspecialchars($_POST['description'] ?? '');
+                $file_name = htmlspecialchars($_FILES['file']['name'] ?? '');
+                $path = htmlspecialchars($_FILES['file']['tmp_name'] ?? '');
+
+                ServiceContainer::get(FileController::class)->create($slug['id'], $name, $version, $description, $file_name, $path);
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
     }

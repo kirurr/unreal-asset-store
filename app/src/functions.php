@@ -12,6 +12,6 @@ function renderComponent(string $component, array $data = []) {
 }
 
 function redirect(string $url) {
-	header('Location: ' . $url);
+	header('Location: ' . $url, true);
 	die();
 }

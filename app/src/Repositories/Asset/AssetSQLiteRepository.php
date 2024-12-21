@@ -138,7 +138,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         }
     }
 
-    public function create(string $id, string $name, string $info, string $description, string $preview_image, int $price, int $engine_version, int $category_id, int $user_id): void
+    public function create(string $id, string $name, string $info, string $description, string $preview_image, int $price, string $engine_version, int $category_id, int $user_id): void
     {
         try {
             $stmt = $this->pdo->prepare(

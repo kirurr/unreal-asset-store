@@ -19,7 +19,7 @@ class CreateAssetUseCase
      * @param  array<string> $images
      */
     public function execute(
-        string $id, string $name, string $info, string $description, string $preview_image, int $price, int $engine_version, int $category_id
+        string $id, string $name, string $info, string $description, string $preview_image, int $price, string $engine_version, int $category_id
     ): void {
         $user = $this->session->getUser();
         try {

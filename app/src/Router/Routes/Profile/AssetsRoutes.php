@@ -41,7 +41,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 $info = htmlspecialchars($_POST['info'] ?? '');
                 $description = htmlspecialchars($_POST['description'] ?? '');
                 $price = intval($_POST['price'] ?? 0);
-                $engine_version = intval($_POST['engine_version'] ?? 0);
+                $engine_version = htmlspecialchars($_POST['engine_version'] ?? '');
                 $category_id = intval($_POST['category_id'] ?? 0);
 
                 ServiceContainer::get(AssetController::class)->create(
@@ -67,7 +67,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 $info = htmlspecialchars($_POST['info'] ?? '');
                 $description = htmlspecialchars($_POST['description'] ?? '');
                 $price = intval($_POST['price'] ?? 0);
-                $engine_version = intval($_POST['engine_version'] ?? 0);
+                $engine_version = htmlspecialchars($_POST['engine_version'] ?? '');
                 $category_id = intval($_POST['category_id'] ?? 0);
 
                     ServiceContainer::get(AssetController::class)->edit(
