@@ -9,6 +9,7 @@
     <body>
 		<h1>edit asset <?= $asset->name ?></h1>
         <a href="/profile/assets/<?php echo $asset->id ?>/images/">images</a>
+        <a href="/profile/assets/<?php echo $asset->id ?>/files/">files</a>
         <form action="/profile/assets/<?php echo $asset->id ?>" method="post">
             <input type="hidden" name="_method" value="put">
             <label for="name">name</label>
