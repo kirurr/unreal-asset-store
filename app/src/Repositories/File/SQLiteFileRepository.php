@@ -61,7 +61,7 @@ class SQLiteFileRepository implements FileRepositoryInterface
         }
     }
 
-    public function findById(string $id): ?File
+    public function getById(string $id): ?File
     {
         try {
             $stmt = $this->pdo->prepare('SELECT * FROM file WHERE id = :id');
@@ -84,7 +84,7 @@ class SQLiteFileRepository implements FileRepositoryInterface
         }
     }
 
-    public function findAllByAssetId(string $asset_id): array
+    public function getAllByAssetId(string $asset_id): array
     {
         try {
             $stmt = $this->pdo->prepare('SELECT * FROM file WHERE asset_id = :asset_id');
