@@ -5,6 +5,7 @@ namespace Controllers\Admin;
 use DomainException;
 use Exception;
 use UseCases\File\CreateFileUseCase;
+use UseCases\File\DeleteFileUseCase;
 use UseCases\File\GetFileByIdUseCase;
 use UseCases\File\GetFilesUseCase;
 use UseCases\File\UpdateFileUseCase;
@@ -15,7 +16,8 @@ class FileController
         private GetFilesUseCase $getFilesUseCase,
         private CreateFileUseCase $createUseCase,
         private GetFileByIdUseCase $getFileByIdUseCase,
-        private UpdateFileUseCase $updateFileUseCase
+		private UpdateFileUseCase $updateFileUseCase,
+		private DeleteFileUseCase $deleteFileUseCase
     ) {
     }
 
@@ -70,7 +72,7 @@ class FileController
         } catch (DomainException $e) {
             $file = $this->getFileByIdUseCase->execute($file_id);
             http_response_code(400);
-            renderView('admin/assets/files/edit', ['file' => $file, 'asset_id' => $asset_id, 'errorMessages' => $e->getMessage()]);
+            renderView('admin/assets/files/edit', ['file' => $file, 'asset_id' => $asset_id, 'errorMessage' => $e->getMessage()]);
         } catch (Exception $e) {
             http_response_code(500);
             renderView('error', ['error' => $e->getMessage()]);
@@ -78,4 +80,16 @@ class FileController
         http_response_code(201);
         header("Location: /admin/assets/$asset_id/files", true, 303);
     }
+
+	public function delete(string $asset_id, string $file_id): void
+	{
+		try {
+			$this->deleteFileUseCase->execute($file_id);
+		} catch (Exception $e) {
+			http_response_code(500);
+			renderView('error', ['error' => $e->getMessage()]);
+		}
+		http_response_code(201);
+		header("Location: /admin/assets/$asset_id/files", true, 303);
+	}
 }

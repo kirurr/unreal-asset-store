@@ -217,5 +217,14 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 ServiceContainer::get(FileController::class)->update($slug['id'], $slug['file_id'], $name, $version, $description, $file_name, $path, $old_path);
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
+
+        $this->router->delete(
+            $prefix . '/{id}/files/{file_id}/', function (array $slug, ?MiddlewareException   $middleware) {
+                if ($middleware) {
+                    redirect('/');
+                }
+                ServiceContainer::get(FileController::class)->delete($slug['id'], $slug['file_id']);
+            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+        );
     }
 }

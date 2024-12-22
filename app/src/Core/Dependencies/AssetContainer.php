@@ -18,6 +18,7 @@ use UseCases\Asset\EditAssetUseCase;
 use UseCases\Category\GetAllCategoryUseCase;
 use UseCases\Asset\GetAllAssetUseCase;
 use UseCases\File\CreateFileUseCase;
+use UseCases\File\DeleteFileUseCase;
 use UseCases\File\GetFileByIdUseCase;
 use UseCases\File\GetFilesUseCase;
 use UseCases\File\UpdateFileUseCase;
@@ -141,13 +142,18 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
             }
         );
 
+		$this->set(DeleteFileUseCase::class, function () {
+			return new DeleteFileUseCase($this::get(SQLiteFileRepository::class), $this->get(FilesystemFilesService::class));
+		});
+
         $this->set(
             FileController::class, function () {
                 return new FileController(
                     $this::get(GetFilesUseCase::class),
                     $this::get(CreateFileUseCase::class),
                     $this::get(GetFileByIdUseCase::class),
-                    $this::get(UpdateFileUseCase::class)
+					$this::get(UpdateFileUseCase::class),
+					$this::get(DeleteFileUseCase::class)
                 );
             }
         );

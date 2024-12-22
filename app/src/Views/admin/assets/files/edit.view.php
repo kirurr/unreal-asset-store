@@ -9,7 +9,7 @@
         <h1>edit file</h1>
         <form action="/admin/assets/<?php echo $asset_id ?>/files/<?php echo $file->id ?>" method="post" enctype="multipart/form-data">
             <input type="hidden" name="_method" value="put">
-			<input type="hidden" name="path" value="<?php echo $file->path ?>">
+            <input type="hidden" name="path" value="<?php echo $file->path ?>">
             <label for="name">Name</label>
             <input type="text" name="name" value="<?php echo $file->name ?>">
             <label for="version">Version</label>
@@ -19,8 +19,12 @@
             <label for="file">File</label>
             <input type="file" name="file" id="file">
             <button type="submit">Submit</button>
-			<p><?= $errorMessage ?? '' ?></p>
+            <p><?php echo $errorMessage ?? '' ?></p>
         </form>
-		<p><a href="/admin/assets/<?php echo $asset_id ?>/files">Back</a></p>
+        <form action="/admin/assets/<?php echo $asset_id ?>/files/<?php echo $file->id ?>" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="_method" value="delete">
+            <button type="submit">Delete</button>
+        </form>
+        <p><a href="/admin/assets/<?php echo $asset_id ?>/files">Back</a></p>
     </body>
 </html>
