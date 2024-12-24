@@ -101,14 +101,14 @@ class AuthRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }
+            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
         );
 
         $this->router->get(
             $prefix . '/signout/', function () {
                 $this->authController->signOut();
                 redirect('/');
-            }
+            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
         );
     }
 }

@@ -62,7 +62,8 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
                     $this::get(CreateImageUseCase::class),
                     $this::get(UpdateImageUseCase::class),
                     $this::get(DeleteImageUseCase::class),
-                    $this::get(GetImagesForAssetUseCase::class)
+					$this::get(GetImagesForAssetUseCase::class),
+					$this->get(SessionService::class)
                 );
             }
         );

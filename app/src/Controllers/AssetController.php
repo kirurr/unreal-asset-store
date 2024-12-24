@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Services\Session\SessionInterface;
 use UseCases\Asset\Asset;
 use UseCases\Asset\CreateAssetUseCase;
 use UseCases\Asset\DeleteAssetUseCase;
@@ -28,6 +29,7 @@ class AssetController
         private UpdateImageUseCase $updateImageUseCase,
         private DeleteImageUseCase $deleteImageUseCase,
         private GetImagesForAssetUseCase $getImagesForAssetUseCase,
+		private SessionInterface $session
     ) {
     }
 
@@ -36,8 +38,10 @@ class AssetController
      */
     public function getAssetsPageData(): array
     {
+		if ($this->session->hasUser()) {
+			return ['assets' => $this->getAllUseCase->execute(user_id: $this->session->getUser()['id'])];
+		}	
         return ['assets' => $this->getAllUseCase->execute()];
-
     }
 
     /**

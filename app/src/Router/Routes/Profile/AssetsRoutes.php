@@ -10,6 +10,7 @@ use DomainException;
 use Exception;
 use Router\Middlewares\IsUserAssetAuthorMiddleware;
 use Core\ServiceContainer;
+use Router\Middlewares\IsUserMiddleware;
 use Router\Routes\Routes;
 use Services\Session\SessionService;
 use Router\Routes\RoutesInterface;
@@ -39,7 +40,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
 
                 $data = $this->assetController->getAssetsPageData();
                 renderView('profile/assets/index', $data);
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
         );
 
         $this->router->get(
@@ -50,7 +51,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
 
                 $data = $this->assetController->getCreatePageData();
                 renderView('profile/assets/create', $data);
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
         );
         $this->router->post(
             $prefix . '/create/', function (array $slug, ?MiddlewareException  $middleware) {
@@ -96,7 +97,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
         );
         $this->router->get(
             $prefix . '/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
