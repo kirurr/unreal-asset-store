@@ -27,7 +27,7 @@ class ImageController
     /**
      * @return array{ asset_id: string, images: Image[], asset: Asset }
      */
-    public function getMainPageData(string $asset_id): array
+    public function getImagesPageData(string $asset_id): array
     {
         return [
         'asset_id' => $asset_id,
@@ -49,10 +49,6 @@ class ImageController
     /**
      * @return array{ asset: Asset }
      */
-    public function getEditPageData(string $asset_id): array
-    {
-        return ['asset' => $this->getAssetUseCase->execute($asset_id)];
-    }
 
     /**
      * @param array{ name: string, tmp_name: string } $images

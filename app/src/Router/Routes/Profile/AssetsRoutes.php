@@ -187,7 +187,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 if ($middleware) {
                     redirect('/');
                 }
-                $data = $this->imageController->getMainPageData($slug['id']);
+                $data = $this->imageController->getImagesPageData($slug['id']);
                 renderView('profile/assets/images/index', $data);
             }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
@@ -208,7 +208,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     $this->imageController->create($slug['id'], $images, $previous_image_order);
 					redirect('/profile/assets/' . $slug['id'] . '/images/');
                 } catch (DomainException $e) {
-                    $data = $this->imageController->getEditPageData($slug['id']);
+					$data = $this->imageController->getImagesPageData($slug['id']);
 
                     http_response_code(400);
                     renderView(
@@ -216,6 +216,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                         'errorMessage' => $e->getMessage(),
                         'asset_id' => $slug['id'],
                         'asset' => $data['asset'],
+						'images' => $data['images'],
                         ]
                     );
                 } catch (Exception $e) {
@@ -236,13 +237,15 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     $this->imageController->updatePreviewImage($slug['id'], $image_id);
 					redirect('/profile/assets/' . $slug['id'] . '/images/');
                 } catch (DomainException $e) {
-                    $data = $this->imageController->getEditPageData($slug['id']);
+					$data = $this->imageController->getImagesPageData($slug['id']);
+
                     http_response_code(400);
                     renderView(
                         'profile/assets/images/index', [
                         'errorMessage' => $e->getMessage(),
                         'asset_id' => $slug['id'],
                         'asset' => $data['asset'],
+						'images' => $data['images'],
                         ]
                     );
                 } catch (Exception $e) {
@@ -266,11 +269,15 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     $this->imageController->update($slug['id'], $image_id, $image_name, $tmp_name, $image_order, $old_image_path);
 					redirect('/profile/assets/' . $slug['id'] . '/images/');
                 } catch (DomainException $e) {
+					$data = $this->imageController->getImagesPageData($slug['id']);
+
                     http_response_code(400);
                     renderView(
                         'profile/assets/images/index', [
                         'errorMessage' => $e->getMessage(),
                         'asset_id' => $slug['id'],
+                        'asset' => $data['asset'],
+						'images' => $data['images'],
                         ]
                     );
                 } catch (Exception $e) {
@@ -290,13 +297,15 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     $this->imageController->delete($slug['id'], $image_id);
 					redirect('/profile/assets/' . $slug['id'] . '/images/');
                 } catch (DomainException $e) {
-                    $data = $this->imageController->getEditPageData($slug['id']);
+					$data = $this->imageController->getImagesPageData($slug['id']);
+
                     http_response_code(400);
                     renderView(
                         'profile/assets/images/index', [
                         'errorMessage' => $e->getMessage(),
                         'asset_id' => $slug['id'],
                         'asset' => $data['asset'],
+						'images' => $data['images'],
                         ]
                     );
                 } catch (Exception $e) {
