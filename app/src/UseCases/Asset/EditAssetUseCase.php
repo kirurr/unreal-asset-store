@@ -16,7 +16,7 @@ class EditAssetUseCase
     /**
      * @param array<string> $images
      */
-    public function execute(string $id, string $name = null, string $info = null, string $description = null, string $preview_image = null, int $price = null, int $engine_version = null, int $category_id = null): void
+    public function execute(string $id, string $name = null, string $info = null, string $description = null, string $preview_image = null, int $price = null, string $engine_version = null, int $category_id = null): void
     {
         try {
             $asset = $this->repository->getById($id);
