@@ -22,4 +22,6 @@ interface AssetRepositoryInterface
     public function create(string $id, string $name, string $info, string $description, string $preview_image, int $price, string $engine_version, int $category_id, int $user_id): void;
     public function update(Asset $asset): void;
     public function delete(string $id): void;
+	public function incrementPurchasedCount(string $id): void;
+	public function decrementPurchasedCount(string $id): void;
 }

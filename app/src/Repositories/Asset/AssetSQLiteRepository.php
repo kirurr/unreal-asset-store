@@ -197,4 +197,24 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
             throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
         }
     }
+
+	public function incrementPurchasedCount(string $id): void
+	{
+		try {
+			$stmt = $this->pdo->prepare('UPDATE asset SET purchase_count = purchase_count + 1 WHERE id = :id');
+			$stmt->execute(['id' => $id]);
+		} catch (PDOException $e) {
+			throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
+		}
+	}
+
+	public function decrementPurchasedCount(string $id): void
+	{
+		try {
+			$stmt = $this->pdo->prepare('UPDATE asset SET purchase_count = purchase_count - 1 WHERE id = :id');
+			$stmt->execute(['id' => $id]);
+		} catch (PDOException $e) {
+			throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
+		}
+	}
 }

@@ -93,4 +93,24 @@ class CategorySQLiteRepository implements CategoryRepositoryInterface
             throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
         }
     }
+
+	public function incrementAssetCount(int $id): void
+	{
+		try {
+			$stmt = $this->pdo->prepare('UPDATE category SET asset_count = asset_count + 1 WHERE id = :id');
+			$stmt->execute(['id' => $id]);
+		} catch (PDOException $e) {
+			throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
+		}
+	}
+
+	public function decrementAssetCount(int $id): void
+	{
+		try {
+			$stmt = $this->pdo->prepare('UPDATE category SET asset_count = asset_count - 1 WHERE id = :id');
+			$stmt->execute(['id' => $id]);
+		} catch (PDOException $e) {
+			throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
+		}
+	}
 }
