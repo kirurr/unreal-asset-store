@@ -2,6 +2,7 @@
 
 namespace Core\Dependencies;
 
+use Controllers\FileController;
 use Core\ContainerInterface;
 
 use Core\ServiceContainer;
@@ -44,6 +45,17 @@ class FileContainer extends ServiceContainer implements ContainerInterface {
 			return new DeleteFileUseCase($this::get(SQLiteFileRepository::class), $this->get(FilesystemFilesService::class));
 		});
 
+        $this->set(
+            FileController::class, function () {
+                return new FileController(
+                    $this::get(GetFilesUseCase::class),
+                    $this::get(CreateFileUseCase::class),
+                    $this::get(GetFileByIdUseCase::class),
+                    $this::get(UpdateFileUseCase::class),
+                    $this::get(DeleteFileUseCase::class)
+                );
+            }
+        );
     }
 
 }

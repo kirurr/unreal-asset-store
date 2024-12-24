@@ -1,7 +1,7 @@
 <?php
 
 namespace Core\Dependencies;
-use Controllers\Admin\UserController;
+use Controllers\UserController;
 use Core\ContainerInterface;
 use Repositories\User\UserSQLiteRepository;
 use Core\ServiceContainer;

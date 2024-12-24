@@ -2,10 +2,9 @@
 
 namespace Core\Dependencies;
 
-use Controllers\Admin\CategoryController;
+use Controllers\CategoryController;
 use Core\ContainerInterface;
 use Core\ServiceContainer;
-use PDO;
 use Repositories\Asset\AssetSQLiteRepository;
 use UseCases\Category\CreateCategoryUseCase;
 use UseCases\Category\DeleteCategoryUseCase;

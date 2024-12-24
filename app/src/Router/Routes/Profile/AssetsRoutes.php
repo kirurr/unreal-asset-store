@@ -2,14 +2,13 @@
 
 namespace Router\Routes\Profile;
 
-use Controllers\Profile\AssetController;
-use Controllers\Profile\FileController;
-use Controllers\Profile\ImageController;
-
+use Controllers\AssetController;
+use Controllers\FileController;
+use Controllers\ImageController;
 use Core\Errors\MiddlewareException;
-use Router\Middlewares\IsUserAdminMiddleware;
+use DomainException;
+use Exception;
 use Router\Middlewares\IsUserAssetAuthorMiddleware;
-use Router\Middlewares\IsUserMiddleware;
 use Core\ServiceContainer;
 use Router\Routes\Routes;
 use Services\Session\SessionService;
@@ -18,15 +17,40 @@ use UseCases\Asset\GetAssetUseCase;
 
 class AssetsRoutes extends Routes implements RoutesInterface
 {
+    private AssetController $assetController;
+    private ImageController $imageController;
+    private FileController $fileController;
+
+    public function __construct($router)
+    {
+        parent::__construct($router);
+        $this->assetController = ServiceContainer::get(AssetController::class);
+        $this->imageController = ServiceContainer::get(ImageController::class);
+        $this->fileController = ServiceContainer::get(FileController::class);
+    }
+
     public function defineRoutes(string $prefix = ''): void
     {
+        $this->router->get(
+            $prefix . '/', function (array $slug, ?MiddlewareException  $middleware) {
+                if ($middleware) {
+                    redirect('/');
+                }
+
+                $data = $this->assetController->getAssetsPageData();
+                renderView('profile/assets/index', $data);
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+        );
+
         $this->router->get(
             $prefix . '/create/', function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
                     redirect('/');
                 }
-                ServiceContainer::get(AssetController::class)->showCreate();
-            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
+
+                $data = $this->assetController->getCreatePageData();
+                renderView('profile/assets/create', $data);
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
         $this->router->post(
             $prefix . '/create/', function (array $slug, ?MiddlewareException  $middleware) {
@@ -46,18 +70,51 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 $engine_version = htmlspecialchars($_POST['engine_version'] ?? '');
                 $category_id = intval($_POST['category_id'] ?? 0);
 
-                ServiceContainer::get(AssetController::class)->create(
-                    $name, $info, $description, $images, $price, $engine_version, $category_id
-                );
-            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
+                try {
+                    $this->assetController->create(
+                        $name, $info, $description, $images, $price, $engine_version, $category_id
+                    );
+                    redirect('/profile/assets/');
+                } catch (DomainException $e) {
+                    $data = $this->assetController->getCreatePageData();
+                        
+                    http_response_code(400);
+                    renderView(
+                        'profile/assets/create', [
+                        'errorMessage' => $e->getMessage(),
+                        'categories' => $data['categories'],
+                        'previousData' => [
+                        'name' => $name,
+                        'info' => $info,
+                        'description' => $description,
+                        'price' => $price,
+                        'engine_version' => $engine_version,
+                        'category_id' => $category_id,
+                        ]
+                        ]
+                    );
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
         $this->router->get(
             $prefix . '/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
                     redirect('/');
                 }
-                ServiceContainer::get(AssetController::class)->showEdit($slug['id']);
-            }, [ new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class)) ]
+
+                try {
+                    $data = $this->assetController->getEditPageData($slug['id']);
+                    renderView('profile/assets/edit', $data);
+                } catch (DomainException $e) {
+                    http_response_code(404);
+					redirect('/profile/assets');
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->put(
@@ -65,6 +122,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 if ($middleware) {
                     redirect('/');
                 }
+
                 $name = htmlspecialchars($_POST['name'] ?? '');
                 $info = htmlspecialchars($_POST['info'] ?? '');
                 $description = htmlspecialchars($_POST['description'] ?? '');
@@ -72,10 +130,33 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 $engine_version = htmlspecialchars($_POST['engine_version'] ?? '');
                 $category_id = intval($_POST['category_id'] ?? 0);
 
-                    ServiceContainer::get(AssetController::class)->edit(
-                        $slug['id'], $name, $info, $description, $price, $engine_version, $category_id
+                try {
+                    $this->assetController->edit($slug['id'], $name, $info, $description, $price, $engine_version, $category_id);
+                    redirect('/profile/assets/');
+                } catch (DomainException $e) {
+                    $data = $this->assetController->getEditPageData($slug['id']);
+
+                    http_response_code(400);
+                    renderView(
+                        'profile/assets/edit', [
+                        'categories' => $data['categories'],
+                        'asset' => $data['asset'],
+                        'errorMessage' => $e->getMessage(),
+                        'previousData' => [
+                        'name' => $name,
+                        'info' => $info,
+                        'description' => $description,
+                        'price' => $price,
+                        'engine_version' => $engine_version,
+                        'category_id' => $category_id,
+                        ],
+                        'fields' => ['name', 'info', 'description', 'images', 'price', 'engine_version', 'category_id']
+                        ]
                     );
-            }, [ new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class)) ]
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
 
 
@@ -84,18 +165,31 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 if ($middleware) {
                     redirect('/');
                 } 
-                ServiceContainer::get(AssetController::class)->delete($slug['id']);
-            }, [ new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class)) ]
+                try {
+                    $this->assetController->delete($slug['id']);
+                    redirect('/profile/assets');
+                } catch (DomainException $e) {
+                    http_response_code(400);
+                    renderView(
+                        'profile/assets/edit', [
+                        'errorMessage' => $e->getMessage(),
+                        ]
+                    );
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
-
+        
         // IMAGES
         $this->router->get(
             $prefix . '/{id}/images/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
                     redirect('/');
                 }
-                ServiceContainer::get(ImageController::class)->show($slug['id']);
-            }, [ new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class)) ]
+                $data = $this->imageController->getMainPageData($slug['id']);
+                renderView('profile/assets/images/index', $data);
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->post(
@@ -110,8 +204,24 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 }
                 $previous_image_order = intval($_POST['last_order'] ?? 0);
 
-                ServiceContainer::get(ImageController::class)->create($slug['id'], $images, $previous_image_order);
-            }, [ new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class)) ]
+                try {
+                    $this->imageController->create($slug['id'], $images, $previous_image_order);
+					redirect('/profile/assets/' . $slug['id'] . '/images/');
+                } catch (DomainException $e) {
+                    $data = $this->imageController->getEditPageData($slug['id']);
+
+                    http_response_code(400);
+                    renderView(
+                        'profile/assets/images/index', [
+                        'errorMessage' => $e->getMessage(),
+                        'asset_id' => $slug['id'],
+                        'asset' => $data['asset'],
+                        ]
+                    );
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
         
 
@@ -122,8 +232,23 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } 
                 $image_id = intval($_POST['id'] ?? 0);
 
-                ServiceContainer::get(ImageController::class)->updatePreviewImage($slug['id'], $image_id);
-            }, [ new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class)) ]
+                try {
+                    $this->imageController->updatePreviewImage($slug['id'], $image_id);
+					redirect('/profile/assets/' . $slug['id'] . '/images/');
+                } catch (DomainException $e) {
+                    $data = $this->imageController->getEditPageData($slug['id']);
+                    http_response_code(400);
+                    renderView(
+                        'profile/assets/images/index', [
+                        'errorMessage' => $e->getMessage(),
+                        'asset_id' => $slug['id'],
+                        'asset' => $data['asset'],
+                        ]
+                    );
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->put(
@@ -137,10 +262,21 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 $tmp_name = $_FILES['images']['tmp_name']?? '';
                 $old_image_path = htmlspecialchars($_POST['path'] ?? '');
 
-                ServiceContainer::get(ImageController::class)->update(
-                    $slug['id'], $image_id, $image_name, $tmp_name, $image_order, $old_image_path
-                );
-            }, [ new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class)) ]
+                try {
+                    $this->imageController->update($slug['id'], $image_id, $image_name, $tmp_name, $image_order, $old_image_path);
+					redirect('/profile/assets/' . $slug['id'] . '/images/');
+                } catch (DomainException $e) {
+                    http_response_code(400);
+                    renderView(
+                        'profile/assets/images/index', [
+                        'errorMessage' => $e->getMessage(),
+                        'asset_id' => $slug['id'],
+                        ]
+                    );
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->delete(
@@ -150,8 +286,23 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } 
                 $image_id = intval($_POST['id'] ?? 0);
 
-                ServiceContainer::get(ImageController::class)->delete($slug['id'], $image_id);
-            }, [ new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class)) ]
+                try {
+                    $this->imageController->delete($slug['id'], $image_id);
+					redirect('/profile/assets/' . $slug['id'] . '/images/');
+                } catch (DomainException $e) {
+                    $data = $this->imageController->getEditPageData($slug['id']);
+                    http_response_code(400);
+                    renderView(
+                        'profile/assets/images/index', [
+                        'errorMessage' => $e->getMessage(),
+                        'asset_id' => $slug['id'],
+                        'asset' => $data['asset'],
+                        ]
+                    );
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         // FILES
@@ -160,16 +311,24 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 if ($middleware) {
                     redirect('/');
                 }
-                ServiceContainer::get(FileController::class)->show($slug['id']);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+
+                try {
+                    $data = $this->fileController->getMainPageData($slug['id']);
+                    renderView('profile/assets/files/index', ['files' => $data['files'], 'asset_id' => $slug['id']]);
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                } 
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
+
         $this->router->get(
             $prefix . '/{id}/files/create/', function (array $slug, ?MiddlewareException   $middleware) {
                 if ($middleware) {
                     redirect('/');
                 }
-                ServiceContainer::get(FileController::class)->showCreate($slug['id']);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+
+                renderView('profile/assets/files/create', ['asset_id' => $slug['id']]);
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->post(
@@ -184,8 +343,13 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 $file_name = htmlspecialchars($_FILES['file']['name'] ?? '');
                 $path = htmlspecialchars($_FILES['file']['tmp_name'] ?? '');
 
-                ServiceContainer::get(FileController::class)->create($slug['id'], $name, $version, $description, $file_name, $path);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+                try {
+                    $this->fileController->create($slug['id'], $name, $version, $description, $file_name, $path);
+					redirect('/profile/assets/' . $slug['id'] . '/files/');
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                } 
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->get(
@@ -193,8 +357,13 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 if ($middleware) {
                     redirect('/');
                 }
-                ServiceContainer::get(FileController::class)->showEdit($slug['id'], $slug['file_id']);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+                try {
+                    $data = $this->fileController->getEditPageData($slug['id'], $slug['file_id']);
+                    renderView('profile/assets/files/edit', ['file' => $data['file'], 'asset_id' => $slug['id']]);
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                } 
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->put(
@@ -210,8 +379,23 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 $path = htmlspecialchars($_FILES['file']['tmp_name'] ?? '');
                 $old_path = htmlspecialchars($_POST['path'] ?? '');
 
-                ServiceContainer::get(FileController::class)->update($slug['id'], $slug['file_id'], $name, $version, $description, $file_name, $path, $old_path);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+                try {
+                    $this->fileController->update($slug['id'], $slug['file_id'], $name, $version, $description, $file_name, $path, $old_path);
+					redirect('/profile/assets/' . $slug['id'] . '/files/');
+                } catch (DomainException $e) {
+                    $data = $this->fileController->getEditPageData($slug['id'], $slug['file_id']);
+                    http_response_code(400);
+                    renderView(
+                        'profile/assets/files/edit', [
+                        'file' => $data['file'],
+                        'asset_id' => $slug['id'],
+                        'errorMessage' => $e->getMessage()
+                        ]
+                    );
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->delete(
@@ -219,9 +403,14 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 if ($middleware) {
                     redirect('/');
                 }
-                ServiceContainer::get(FileController::class)->delete($slug['id'], $slug['file_id']);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+                try {
+                    $this->fileController->delete($slug['id'], $slug['file_id']);
+					redirect('/profile/assets/' . $slug['id'] . '/files/');
+                } catch (Exception $e) {
+                    http_response_code(500);
+                    renderView('error', ['error' => $e->getMessage()]);
+                }
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );
     }
 }
-

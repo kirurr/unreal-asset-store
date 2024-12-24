@@ -1,6 +1,5 @@
 <?php
 
-use Core\Dependencies\AdminContainer;
 use Core\Dependencies\AssetContainer;
 use Core\Dependencies\CategoryContainer;
 use Core\Dependencies\AuthorizationContainer;
@@ -28,6 +27,5 @@ $container = new ServiceContainer();
 (new UserContainer())->initDependencies();
 
 (new ProfileContainer())->initDependencies();
-(new AdminContainer())->initDependencies();
 
 return $container;

@@ -1,13 +1,12 @@
 <?php
 
-namespace Controllers\Profile;
+namespace Controllers;
 
-use Exception;
 use Services\Session\SessionService;
 use UseCases\Asset\GetAllAssetUseCase;
 use UseCases\User\GetUserUseCase;
 
-class MainController
+class ProfileController
 {
     public function __construct(
         private SessionService $session,
@@ -16,20 +15,19 @@ class MainController
     ) {
     }
 
-    public function show(): void
+    /**
+     * @return array{ user: User, assets: Asset[],}
+     */
+    public function getProfileData(): array
     {
-        try 
-        {
             $session = $this->session->getUser();
 
             $user = $this->getUserUseCase->execute((int) $session['id']);
             $assets = $this->getAllAssetUseCase->execute(user_id: $user->id);
-            renderView('profile/index', ['user' => $user, 'assets' => $assets]);
-        } 
-        catch (Exception $e) 
-        {
-            renderView('error', ['message' => $e->getMessage()]);
-        }
+        return [
+        'user' => $user,
+        'assets' => $assets
+        ];
     }
 
 }

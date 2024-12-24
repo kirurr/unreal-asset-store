@@ -9,9 +9,11 @@ class MainPageController
     public function __construct(
         private SessionService $session
     ) {}
-
-    public function show(): void
+    /**
+     * @return array{ user: User }
+     */
+    public function getMainPageData(): array
     {
-        renderView('main', ['user' => $this->session->getUser()]);
+		return ['user' => $this->session->getUser()];
     }
 }

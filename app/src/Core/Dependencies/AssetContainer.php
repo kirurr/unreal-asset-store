@@ -1,6 +1,7 @@
 <?php
 
 namespace Core\Dependencies;
+use Controllers\AssetController;
 use Core\ContainerInterface;
 
 use Repositories\Asset\AssetSQLiteRepository;
@@ -12,6 +13,11 @@ use UseCases\Asset\DeleteAssetUseCase;
 use UseCases\Asset\EditAssetUseCase;
 use UseCases\Asset\GetAllAssetUseCase;
 use UseCases\Asset\GetAssetUseCase;
+use UseCases\Image\CreateImageUseCase;
+use UseCases\Image\GetImagesForAssetUseCase;
+use UseCases\Image\UpdateImageUseCase;
+use UseCases\Image\DeleteImageUseCase;
+use UseCases\Category\GetAllCategoryUseCase;
 
 class AssetContainer extends ServiceContainer implements ContainerInterface
 {
@@ -44,5 +50,21 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
             }
         );
 
+        $this->set(
+            AssetController::class, function () {
+                return new AssetController(
+                    $this::get(CreateAssetUseCase::class),
+                    $this::get(GetAllAssetUseCase::class),
+                    $this::get(EditAssetUseCase::class),
+                    $this::get(GetAssetUseCase::class),
+                    $this::get(DeleteAssetUseCase::class),
+                    $this::get(GetAllCategoryUseCase::class),
+                    $this::get(CreateImageUseCase::class),
+                    $this::get(UpdateImageUseCase::class),
+                    $this::get(DeleteImageUseCase::class),
+                    $this::get(GetImagesForAssetUseCase::class)
+                );
+            }
+        );
     }
 }

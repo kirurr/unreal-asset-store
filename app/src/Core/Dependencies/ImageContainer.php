@@ -1,10 +1,13 @@
 <?php
 
 namespace Core\Dependencies;
+use Controllers\ImageController;
 use Core\ContainerInterface;
 
 use Core\ServiceContainer;
 use Services\Files\FilesystemFilesService;
+use UseCases\Asset\EditAssetUseCase;
+use UseCases\Asset\GetAssetUseCase;
 use UseCases\Image\CreateImageUseCase;
 use Repositories\Image\SQLiteImageRepository;
 use UseCases\Image\GetImageUseCase;
@@ -42,6 +45,19 @@ class ImageContainer extends ServiceContainer implements ContainerInterface {
             }
         );
 
+        $this->set(
+            ImageController::class, function () {
+                return new ImageController(
+                    $this::get(GetImagesForAssetUseCase::class),
+                    $this::get(CreateImageUseCase::class),
+                    $this::get(DeleteImageUseCase::class),
+                    $this::get(UpdateImageUseCase::class),
+                    $this::get(GetImageUseCase::class),
+                    $this::get(EditAssetUseCase::class),
+                    $this::get(GetAssetUseCase::class)
+                );
+            }
+        );
     }
 
 }

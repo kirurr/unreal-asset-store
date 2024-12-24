@@ -3,46 +3,112 @@
 namespace Router\Routes;
 
 use Controllers\AuthController;
+use Core\Errors\MiddlewareException;
 use Core\ServiceContainer;
+use DomainException;
+use Exception;
 use Router\Middlewares\IsUserMiddleware;
+use Router\Router;
 use Services\Session\SessionService;
 
 class AuthRoutes extends Routes implements RoutesInterface
 {
+    private AuthController $authController;
+
+    public function __construct(Router $router)
+	{
+		parent::__construct($router);
+		$this->authController = ServiceContainer::get(AuthController::class);
+	}
+
     public function defineRoutes(string $prefix = ''): void
     {
-        $this->router->get($prefix . '/signin/', function (array $slug, ?string $middlewareError) {
-            if ($middlewareError) {
-                ServiceContainer::get(AuthController::class)->showSignInPage();
-            } else {
-                header('Location: /');
+        $this->router->get(
+            $prefix . '/signin/', function (array $slug, ?MiddlewareException $middleware) {
+                if ($middleware) {
+                    renderView('auth/signin', []);
+                } 
+
+                redirect('/');
+            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+
+        $this->router->get(
+            $prefix . '/signup/', function (array $slug, ?MiddlewareException $middleware) {
+                if ($middleware) {
+                    renderView('auth/signup', []);
+                }
+
+                redirect('/');
+            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+
+        $this->router->post(
+            $prefix . '/signin/', function (array $slug, ?MiddlewareException $middleware) {
+                if (!$middleware) {
+                    redirect('/');
+                }
+
+                $email = htmlspecialchars($_POST['email'] ?? '');
+                $password = htmlspecialchars($_POST['password'] ?? '');
+                try {
+                    $this->authController->signIn($email, $password);
+                    redirect('/');
+                } catch (DomainException $e) {
+                    http_response_code(400);
+                    renderView(
+                        'auth/signin', [
+                        'errorMessage' => $e->getMessage(),
+                        'previousData' => [
+                        'email' => $email,
+                        'password' => $password
+                        ],
+                        'fields' => ['email', 'password']
+                        ]
+                    );
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
+        );
+
+        $this->router->post(
+            $prefix . '/signup/', function (array $slug, ?MiddlewareException $middleware) {
+                if (!$middleware) {
+                    redirect('/');
+                }
+
+                $name = htmlspecialchars($_POST['name'] ?? '');
+                $email = htmlspecialchars($_POST['email'] ?? '');
+                $password = htmlspecialchars($_POST['password'] ?? '');
+
+                try {
+                    $this->authController->signUp($name, $email, $password);
+                    redirect('/');
+                } catch (DomainException $e) {
+                    http_response_code(400);
+                    renderView(
+                        'auth/signup', [
+                        'errorMessage' => $e->getMessage(),
+                        'previousData' => [
+                        'email' => $email,
+                        'password' => $password,
+                        'name' => $name
+                        ],
+                        'fields' => ['email']
+                        ]
+                    );
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
             }
-        }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]);
+        );
 
-        $this->router->get($prefix . '/signup/', function (array $slug, ?string $middlewareError) {
-            if ($middlewareError) {
-                ServiceContainer::get(AuthController::class)->showSignUpPage();
-            } else {
-                header('Location: /');
+        $this->router->get(
+            $prefix . '/signout/', function () {
+                $this->authController->signOut();
+                redirect('/');
             }
-        }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]);
-
-        $this->router->post($prefix . '/signin/', function () {
-            $email = htmlspecialchars($_POST['email'] ?? '');
-            $password = htmlspecialchars($_POST['password'] ?? '');
-            ServiceContainer::get(AuthController::class)->signIn($email, $password);
-        });
-
-        $this->router->post($prefix . '/signup/', function () {
-            $name = htmlspecialchars($_POST['name'] ?? '');
-            $email = htmlspecialchars($_POST['email'] ?? '');
-            $password = htmlspecialchars($_POST['password'] ?? '');
-
-            ServiceContainer::get(AuthController::class)->signUp($name, $email, $password);
-        });
-
-        $this->router->get($prefix . '/signout/', function () {
-            ServiceContainer::get(AuthController::class)->signOut();
-        });
+        );
     }
 }
