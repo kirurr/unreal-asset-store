@@ -13,7 +13,7 @@
 		<? else : ?>
 			<? foreach ($files as $file): ?>
 				<a href="/profile/assets/<?= $asset_id ?>/files/<?= $file->id ?>">
-					<?= $file->name ?>
+					file: <?= $file->name ?>
 				</a>
 			<? endforeach; ?>
 		<? endif; ?>

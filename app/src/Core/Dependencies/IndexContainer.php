@@ -16,7 +16,7 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
     {
         try {
             $this->set(PDO::class, function () {
-                $dbPath = '/var/www/storage/test.db';
+                $dbPath = '/var/www/storage/unreal-asset-store.db';
                 $pdo = new PDO('sqlite:' . $dbPath);
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 return $pdo;
