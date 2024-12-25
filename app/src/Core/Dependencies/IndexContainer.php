@@ -9,6 +9,8 @@ use Services\Files\FilesystemFilesService;
 use Services\Session\SessionService;
 use Exception;
 use PDO;
+use UseCases\Asset\GetMainPageAssetsUseCase;
+use UseCases\Asset\GetTopAssetsUseCase;
 
 class IndexContainer extends ServiceContainer implements ContainerInterface
 {
@@ -37,7 +39,11 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
         );
 
         $this->set(MainPageController::class, function () {
-            return new MainPageController($this::get(SessionService::class));
+			return new MainPageController(
+				$this::get(SessionService::class),
+				$this::get(GetTopAssetsUseCase::class),
+				$this::get(GetMainPageAssetsUseCase::class)
+			);
         });
 		
     }

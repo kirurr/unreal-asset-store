@@ -4,7 +4,9 @@ namespace Router\Routes;
 
 use Controllers\MainPageController;
 use Core\ServiceContainer;
+use Exception;
 use Router\Router;
+use UseCases\Asset\Variant;
 
 class MainRoutes extends Routes implements RoutesInterface
 {
@@ -19,9 +21,15 @@ class MainRoutes extends Routes implements RoutesInterface
     {
         $this->router->get(
             $prefix . '/', function () {
-                $data = $this->mainPageController->getMainPageData();
+                $query = isset($_GET['variant']) ? htmlspecialchars($_GET['variant']) : 'today';
+                $variant = (Variant::tryFrom($query) ?? Variant::NEW_TODAY);
 
-                renderView('main', $data);
+                try {
+                    $data = $this->mainPageController->getMainPageData($variant);
+                    renderView('main', $data);
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
             }
         );
 

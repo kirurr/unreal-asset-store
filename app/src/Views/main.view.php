@@ -8,6 +8,8 @@
 	</head>
 	<body>
 		<? renderComponent('navbar', ['user' => $user]);?>
+		<? renderComponent('main/top-assets', ['assets' => $topAssets]);?>
+		<? renderComponent('main/more-assets', ['assets' => $moreAssets]);?>
 		<script src="main.js"></script>
 	</body>	
 </html>
