@@ -23,7 +23,7 @@ class DeleteCategoryUseCase
             if (!$category) {
                 throw new DomainException('Category not found');
             }
-            $assets = $this->assetRepository->getByCategoryId($id);
+            $assets = $this->assetRepository->getAssets(category_id: $id);
             if ($assets) {
                 throw new DomainException('Category has assets');
             }

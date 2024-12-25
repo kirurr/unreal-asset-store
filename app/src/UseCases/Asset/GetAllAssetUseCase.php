@@ -20,13 +20,7 @@ class GetAllAssetUseCase
     public function execute(int $category_id = null, int $user_id = null): array
     {
         try {
-            if ($category_id) {
-                return $this->repository->getByCategoryId($category_id);
-            }
-            elseif ($user_id) {
-                return $this->repository->getByUserId($user_id);
-            }
-            return $this->repository->getAll();
+			return $this->repository->getAssets(category_id: $category_id, user_id: $user_id);
         } catch (RuntimeException $e) {
             throw new Exception('Unable to get assets: ' . $e->getMessage(), 500, $e);
         }

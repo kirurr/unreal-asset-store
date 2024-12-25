@@ -14,70 +14,6 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
     ) {
     }
 
-    public function getByCategoryId(string $category_id): array
-    {
-        try {
-            $stmt = $this->pdo->prepare('SELECT * FROM asset WHERE category_id = :category_id');
-            $stmt->execute(['category_id' => $category_id]);
-            $assets = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            if (!$assets) {
-                return [];
-            }
-            $result = [];
-            foreach ($assets as $asset) {
-                $images = json_decode($asset['images']);
-                $result[] = new Asset(
-                    $asset['id'],
-                    $asset['name'],
-                    $asset['info'],
-                    $asset['description'],
-                    $images,
-                    $asset['price'],
-                    $asset['engine_version'],
-                    $asset['category_id'],
-                    $asset['user_id'],
-                    $asset['created_at'],
-                    $asset['purchase_count']
-                );
-            }
-            return $result;
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
-        }
-    }
-
-    public function getByUserId(string $user_id): array
-    {
-        try {
-            $stmt = $this->pdo->prepare('SELECT * FROM asset WHERE user_id = :user_id');
-            $stmt->execute(['user_id' => $user_id]);
-            $assets = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            if (!$assets) {
-                return [];
-            }
-            $result = [];
-            foreach ($assets as $asset) {
-                $result[] = new Asset(
-                    $asset['id'],
-                    $asset['name'],
-                    $asset['info'],
-                    $asset['description'],
-                    [],
-					$asset['preview_image'],
-                    $asset['price'],
-                    $asset['engine_version'],
-                    $asset['category_id'],
-                    $asset['user_id'],
-                    $asset['created_at'],
-                    $asset['purchase_count']
-                );
-            }
-            return $result;
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
-        }
-    }
-
     public function getById(string $id): ?Asset
     {
         try {
@@ -93,7 +29,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                 $asset['info'],
                 $asset['description'],
                 [],
-				$asset['preview_image'],
+                $asset['preview_image'],
                 $asset['price'],
                 $asset['engine_version'],
                 $asset['category_id'],
@@ -106,35 +42,113 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         }
     }
 
-    public function getAll(): array
-    {
+    /**
+     * @return ?Asset[]
+     */
+    public function getAssets(
+        int $category_id = null,
+        int $user_id = null,
+		string $search = null,
+		string $engine_version = null,
+        int $interval = null,
+        bool $byNew = null,
+        bool $byPopular = null,
+        bool $asc = null,
+        int $minPrice = null,
+        int $maxPrice = null,
+        int $limit = null
+    ): array {
+        $query = "SELECT * FROM asset";
+        $conditions = [];
+
+		if ($search) {
+			$conditions[] = "name LIKE :search OR info LIKE :search OR description LIKE :search";
+		}
+		if ($engine_version) {
+			$conditions[] = "engine_version = :engine_version";
+		}
+        if ($category_id) {
+            $conditions[] = "category_id = :category_id";
+        }
+        if ($user_id) {
+            $conditions[] = "user_id = :user_id";
+        }
+        if ($interval) {
+            $conditions[] = "created_at >= strftime('%s', 'now', '-$interval days') AND created_at < strftime('%s', 'now')";
+        }
+        if ($minPrice) {
+            $conditions[] = "price >= :minPrice";
+        }
+        if ($maxPrice) {
+            $conditions[] = "price <= :maxPrice";
+        }
+
+        if ($conditions) {
+            $query .= " WHERE " . implode(' AND ', $conditions);
+        }
+
+        if ($byNew && $byPopular) {
+            $query .= " ORDER BY purchase_count" . ($asc ? " ASC" : " DESC") . ", created_at" . ($asc ? " ASC" : " DESC");
+        } elseif ($byNew) {
+            $query .= " ORDER BY created_at" . ($asc ? " ASC" : " DESC");
+        } elseif ($byPopular) {
+            $query .= " ORDER BY purchase_count" . ($asc ? " ASC" : " DESC");
+        }
+
+        if ($limit) {
+            $query .= " LIMIT :limit";
+        }
+
         try {
-            $stmt = $this->pdo->prepare('SELECT * FROM asset');
+
+                $stmt = $this->pdo->prepare($query);
+            if ($category_id) {
+                $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+            }
+            if ($user_id) {
+                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            }
+			if ($search) {
+				$stmt->bindParam(':search', $search, PDO::PARAM_STR);
+			}
+			if ($engine_version) {
+				$stmt->bindParam(':engine_version', $engine_version, PDO::PARAM_STR);
+			}
+			if ($limit) {
+				$stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+			}
+            if ($minPrice) {
+                $stmt->bindParam(':minPrice', $minPrice, PDO::PARAM_INT);
+            }
+            if ($maxPrice) {
+                $stmt->bindParam(':maxPrice', $maxPrice, PDO::PARAM_INT);
+            }
+
             $stmt->execute();
             $assets = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if (!$assets) {
                 return [];
             }
-            $result = [];
-            foreach ($assets as $asset) {
-                $result[] = new Asset(
+
+            return array_map(
+                fn($asset) => new Asset(
                     $asset['id'],
                     $asset['name'],
                     $asset['info'],
                     $asset['description'],
                     [],
-					$asset['preview_image'],
+                    $asset['preview_image'],
                     $asset['price'],
                     $asset['engine_version'],
                     $asset['category_id'],
                     $asset['user_id'],
                     $asset['created_at'],
                     $asset['purchase_count']
-                );
-            }
-            return $result;
+                ),
+                $assets
+            );
         } catch (PDOException $e) {
-            throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
+            throw new RuntimeException('Database error: ' . $e->getMessage(), 500, $e);
         }
     }
 
@@ -175,7 +189,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                 'name' => $asset->name,
                 'info' => $asset->info,
                 'description' => $asset->description,
-				'preview_image' => $asset->preview_image,
+                'preview_image' => $asset->preview_image,
                 'price' => $asset->price,
                 'engine_version' => $asset->engine_version,
                 'category_id' => $asset->category_id,
@@ -198,23 +212,23 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         }
     }
 
-	public function incrementPurchasedCount(string $id): void
-	{
-		try {
-			$stmt = $this->pdo->prepare('UPDATE asset SET purchase_count = purchase_count + 1 WHERE id = :id');
-			$stmt->execute(['id' => $id]);
-		} catch (PDOException $e) {
-			throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
-		}
-	}
+    public function incrementPurchasedCount(string $id): void
+    {
+        try {
+            $stmt = $this->pdo->prepare('UPDATE asset SET purchase_count = purchase_count + 1 WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
+        }
+    }
 
-	public function decrementPurchasedCount(string $id): void
-	{
-		try {
-			$stmt = $this->pdo->prepare('UPDATE asset SET purchase_count = purchase_count - 1 WHERE id = :id');
-			$stmt->execute(['id' => $id]);
-		} catch (PDOException $e) {
-			throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
-		}
-	}
+    public function decrementPurchasedCount(string $id): void
+    {
+        try {
+            $stmt = $this->pdo->prepare('UPDATE asset SET purchase_count = purchase_count - 1 WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
+        }
+    }
 }

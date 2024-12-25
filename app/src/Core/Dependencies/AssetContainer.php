@@ -14,6 +14,8 @@ use UseCases\Asset\DeleteAssetUseCase;
 use UseCases\Asset\EditAssetUseCase;
 use UseCases\Asset\GetAllAssetUseCase;
 use UseCases\Asset\GetAssetUseCase;
+use UseCases\Asset\GetMainPageAssetsUseCase;
+use UseCases\Asset\GetTopAssetsUseCase;
 use UseCases\Image\CreateImageUseCase;
 use UseCases\Image\GetImagesForAssetUseCase;
 use UseCases\Image\UpdateImageUseCase;
@@ -52,6 +54,18 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
         $this->set(
             DeleteAssetUseCase::class, function () {
                 return new DeleteAssetUseCase($this::get(AssetSQLiteRepository::class), $this::get(CategorySQLiteRepository::class));
+            }
+        );
+
+        $this->set(
+            GetTopAssetsUseCase::class, function () {
+                return new GetTopAssetsUseCase($this::get(AssetSQLiteRepository::class));
+            }
+        );
+
+        $this->set(
+            GetMainPageAssetsUseCase::class, function () {
+                return new GetMainPageAssetsUseCase($this::get(AssetSQLiteRepository::class));
             }
         );
 
