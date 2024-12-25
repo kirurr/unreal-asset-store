@@ -13,7 +13,7 @@ class Asset
         public string $info,
         public string $description,
         public array $images,
-		public string $preview_image,
+        public string $preview_image,
         public int $price,
         public string $engine_version,
         public int $category_id,
@@ -23,3 +23,4 @@ class Asset
     ) {
     }
 }
+

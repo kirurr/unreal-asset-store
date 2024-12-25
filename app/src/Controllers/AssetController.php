@@ -29,14 +29,14 @@ class AssetController
         private UpdateImageUseCase $updateImageUseCase,
         private DeleteImageUseCase $deleteImageUseCase,
         private GetImagesForAssetUseCase $getImagesForAssetUseCase,
-		private SessionInterface $session
+		private SessionInterface $session,
     ) {
     }
 
     /**
      * @return array{ assets: Asset[] }
      */
-    public function getAssetsPageData(): array
+    public function getAdminAssetsPageData(): array
     {
 		if ($this->session->hasUser()) {
 			return ['assets' => $this->getAllUseCase->execute(user_id: $this->session->getUser()['id'])];

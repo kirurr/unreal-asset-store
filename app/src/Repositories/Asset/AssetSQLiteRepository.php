@@ -109,7 +109,8 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                 $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             }
 			if ($search) {
-				$stmt->bindParam(':search', $search, PDO::PARAM_STR);
+				$searchWildcard = '%' . $search . '%';
+				$stmt->bindParam(':search', $searchWildcard, PDO::PARAM_STR);
 			}
 			if ($engine_version) {
 				$stmt->bindParam(':engine_version', $engine_version, PDO::PARAM_STR);

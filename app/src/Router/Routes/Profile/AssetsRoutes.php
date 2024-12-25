@@ -38,7 +38,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     redirect('/');
                 }
 
-                $data = $this->assetController->getAssetsPageData();
+                $data = $this->assetController->getAdminAssetsPageData();
                 renderView('profile/assets/index', $data);
             }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
         );

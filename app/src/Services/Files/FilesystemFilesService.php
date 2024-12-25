@@ -7,7 +7,7 @@ use RuntimeException;
 
 class FilesystemFilesService implements FilesInterface
 {
-    private const UPLOAD_DIR = BASE_PATH . '../public/assets/';
+    private const UPLOAD_DIR = BASE_PATH . '../public/assets_images/';
     private const FILES_DIR = BASE_PATH . '../storage/files/';
     public function saveImage(string $name, string $tmp_name, string $asset_id): string
     {
@@ -22,7 +22,7 @@ class FilesystemFilesService implements FilesInterface
             $filePath = $uploadDir . $newFileName;
 
             if (move_uploaded_file($tmp_name, $filePath)) {
-                return "/assets/$asset_id/$newFileName";
+                return "/assets_images/$asset_id/$newFileName";
             } 
             throw new RuntimeException('Error saving image');
 
