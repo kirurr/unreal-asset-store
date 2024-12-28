@@ -1,3 +1,8 @@
+<?php
+/** @var array<string,mixed> $user */
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>

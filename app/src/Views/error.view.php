@@ -1,3 +1,7 @@
+<?php
+/** @var string $error */
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

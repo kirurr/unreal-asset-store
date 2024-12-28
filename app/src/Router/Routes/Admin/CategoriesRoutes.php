@@ -5,6 +5,7 @@ namespace Router\Routes\Admin;
 use Controllers\CategoryController;
 use Core\Errors\MiddlewareException;
 use DomainException;
+use Entities\Category;
 use Exception;
 use Router\Middlewares\IsUserAdminMiddleware;
 use Core\ServiceContainer;
@@ -12,15 +13,18 @@ use Router\Router;
 use Router\Routes\Routes;
 use Services\Session\SessionService;
 use Router\Routes\RoutesInterface;
+use Services\Validation\CategoryValidationService;
 
 class CategoriesRoutes extends Routes implements RoutesInterface
 {
     private CategoryController $categoryController;
+    private CategoryValidationService $categoryValidationService;
 
     public function __construct(Router $router)
     {
         parent::__construct($router);
         $this->categoryController = ServiceContainer::get(CategoryController::class);
+        $this->categoryValidationService = ServiceContainer::get(CategoryValidationService::class);
     }
 
     public function defineRoutes(string $prefix = ''): void
@@ -54,20 +58,27 @@ class CategoriesRoutes extends Routes implements RoutesInterface
                     redirect('/');
                 }
 
-                $name = htmlspecialchars($_POST['name'] ?? '');
-                $description = htmlspecialchars($_POST['description'] ?? '');
+                [$errors, $data] = $this->categoryValidationService->validate(
+                    $_POST['name'] ?? '',
+                    $_POST['description'] ?? ''
+                );
 
                 try {
-                    $this->categoryController->create($name, $description);
+                    if ($errors) {
+                        throw new DomainException('One or more fields are invalid');
+                    }
+
+                    $this->categoryController->create($data['name'], $data['description']);
                     redirect('/admin/categories/');
                 } catch (DomainException $e) {
                     http_response_code(400);
                     renderView(
                         'admin/categories/create', [
                         'errorMessage' => $e->getMessage(),
+                        'errors' => $errors,
                         'previousData' => [
-                        'name' => $name,
-                        'description' => $description,
+                        'name' => $data['name'],
+                        'description' => $data['description'],
                         ]
                         ]
                     );
@@ -79,16 +90,16 @@ class CategoriesRoutes extends Routes implements RoutesInterface
         $this->router->get(
             $prefix . '/{id}/', function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
-					redirect('/');
+                    redirect('/');
                 }
                 try {
                     $data = $this->categoryController->getEditPageData($slug['id']);
                     renderView('admin/categories/edit', $data);
                 } catch (DomainException $e) {
                     http_response_code(404);
-					redirect('/admin/categories');
+                    redirect('/admin/categories');
                 } catch (Exception $e) {
-					$this->handleException($e);
+                    $this->handleException($e);
                 }
             }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
         );
@@ -98,22 +109,25 @@ class CategoriesRoutes extends Routes implements RoutesInterface
                 if ($middleware) {
                     redirect('/');
                 }
-                $name = htmlspecialchars($_POST['name'] ?? '');
-                $description = htmlspecialchars($_POST['description'] ?? '');
+                [$errors, $data] = $this->categoryValidationService->validate(
+                    $_POST['name'] ?? '',
+                    $_POST['description'] ?? ''
+                );
 
                 try {
-                    $this->categoryController->edit($slug['id'], $name, $description);
+                    if ($errors) {
+                        throw new DomainException('One or more fields are invalid');
+                    }
+
+                    $this->categoryController->edit($slug['id'], $data['name'], $data['description']);
                     redirect('/admin/categories/');
                 } catch (DomainException $e) {
                     http_response_code(400);
                     renderView(
                         'admin/categories/edit', [
                         'errorMessage' => $e->getMessage(),
-                        'previousData' => [
-                        'name' => $name,
-                        'description' => $description,
-                        ],
-                        'fields' => ['name', 'description', 'image']
+                        'errors' => $errors,
+                        'category' => new Category($slug['id'], $data['name'], $data['description'], 0),
                         ]
                     );
                 } catch (Exception $e) {

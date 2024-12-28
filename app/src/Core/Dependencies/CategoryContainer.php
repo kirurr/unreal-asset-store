@@ -6,6 +6,7 @@ use Controllers\CategoryController;
 use Core\ContainerInterface;
 use Core\ServiceContainer;
 use Repositories\Asset\AssetSQLiteRepository;
+use Services\Validation\CategoryValidationService;
 use UseCases\Category\CreateCategoryUseCase;
 use UseCases\Category\DeleteCategoryUseCase;
 use UseCases\Category\GetAllCategoryUseCase;
@@ -18,6 +19,11 @@ class CategoryContainer extends ServiceContainer implements ContainerInterface
     public function initDependencies(): void
     {
 
+        $this->set(
+            CategoryValidationService::class, function () {
+                return new CategoryValidationService();
+            }
+        );
 
         $this->set(
             CreateCategoryUseCase::class, function () {
