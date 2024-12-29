@@ -5,6 +5,7 @@ use Controllers\UserController;
 use Core\ContainerInterface;
 use Repositories\User\UserSQLiteRepository;
 use Core\ServiceContainer;
+use Services\Validation\UserValidationService;
 use UseCases\Asset\GetAllAssetUseCase;
 use UseCases\User\DeleteUserUseCase;
 use UseCases\User\GetAllUserUseCase;
@@ -15,6 +16,11 @@ class UserContainer extends ServiceContainer implements ContainerInterface
 {
     public function initDependencies(): void
     {
+        $this->set(
+            UserValidationService::class, function () {
+                return new UserValidationService();
+            }
+        );
 
         $this->set(
             GetAllUserUseCase::class, function () {

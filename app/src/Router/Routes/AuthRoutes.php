@@ -10,16 +10,19 @@ use Exception;
 use Router\Middlewares\IsUserMiddleware;
 use Router\Router;
 use Services\Session\SessionService;
+use Services\Validation\UserValidationService;
 
 class AuthRoutes extends Routes implements RoutesInterface
 {
     private AuthController $authController;
+    private UserValidationService $userValidationService;
 
     public function __construct(Router $router)
-	{
-		parent::__construct($router);
-		$this->authController = ServiceContainer::get(AuthController::class);
-	}
+    {
+        parent::__construct($router);
+        $this->authController = ServiceContainer::get(AuthController::class);
+        $this->userValidationService = ServiceContainer::get(UserValidationService::class);
+    }
 
     public function defineRoutes(string $prefix = ''): void
     {
@@ -49,10 +52,17 @@ class AuthRoutes extends Routes implements RoutesInterface
                     redirect('/');
                 }
 
-                $email = htmlspecialchars($_POST['email'] ?? '');
-                $password = htmlspecialchars($_POST['password'] ?? '');
+                [$errors, $data] = $this->userValidationService->validateSignIn(
+                    $_POST['email'] ?? '',
+                    $_POST['password'] ?? ''
+                );
+
                 try {
-                    $this->authController->signIn($email, $password);
+                    if ($errors) {
+                        throw new DomainException('One or more fields are invalid');
+                    }
+
+                    $this->authController->signIn($data['email'], $data['password']);
                     redirect('/');
                 } catch (DomainException $e) {
                     http_response_code(400);
@@ -60,10 +70,10 @@ class AuthRoutes extends Routes implements RoutesInterface
                         'auth/signin', [
                         'errorMessage' => $e->getMessage(),
                         'previousData' => [
-                        'email' => $email,
-                        'password' => $password
+                        'email' => $data['email'],
+                        'password' => $data['password']
                         ],
-                        'fields' => ['email', 'password']
+                        'errors' => $errors,
                         ]
                     );
                 } catch (Exception $e) {
@@ -78,12 +88,19 @@ class AuthRoutes extends Routes implements RoutesInterface
                     redirect('/');
                 }
 
-                $name = htmlspecialchars($_POST['name'] ?? '');
-                $email = htmlspecialchars($_POST['email'] ?? '');
-                $password = htmlspecialchars($_POST['password'] ?? '');
+
+                [$errors, $data] = $this->userValidationService->validateSignUp(
+                    $_POST['name'] ?? '',
+                    $_POST['email'] ?? '',
+                    $_POST['password'] ?? ''
+                );
 
                 try {
-                    $this->authController->signUp($name, $email, $password);
+                    if ($errors) {
+                        throw new DomainException('One or more fields are invalid');
+                    }
+
+                    $this->authController->signUp($data['name'], $data['email'], $data['password']);
                     redirect('/');
                 } catch (DomainException $e) {
                     http_response_code(400);
@@ -91,11 +108,11 @@ class AuthRoutes extends Routes implements RoutesInterface
                         'auth/signup', [
                         'errorMessage' => $e->getMessage(),
                         'previousData' => [
-                        'email' => $email,
-                        'password' => $password,
-                        'name' => $name
+                        'email' => $data['email'],
+                        'password' => $data['password'],
+                        'name' => $data['name']
                         ],
-                        'fields' => ['email']
+                        'errors' => $errors,
                         ]
                     );
                 } catch (Exception $e) {

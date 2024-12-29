@@ -12,15 +12,18 @@ use Router\Router;
 use Router\Routes\Routes;
 use Services\Session\SessionService;
 use Router\Routes\RoutesInterface;
+use Services\Validation\UserValidationService;
 
 class UserRoutes extends Routes implements RoutesInterface
 {
     private UserController $userController;
+    private UserValidationService $userValidationService;
 
     public function __construct(Router $router)
     {
         parent::__construct($router);
         $this->userController = ServiceContainer::get(UserController::class);
+        $this->userValidationService = ServiceContainer::get(UserValidationService::class);
     }
 
     public function defineRoutes(string $prefix = ''): void
@@ -72,23 +75,35 @@ class UserRoutes extends Routes implements RoutesInterface
                 if ($middleware) {
                     redirect('/');
                 }
-                $name = $_POST['name'] ?? null;
-                $email = $_POST['email'] ?? null;
-                $role = $_POST['role'] ?? null;
-                $password = $_POST['password'] ?? null;
 
+                [$errors, $data] = $this->userValidationService->validateUpdate(
+                    $_POST['name'] ?? '', 
+                    $_POST['password'] ?? '', 
+                    $_POST['email'] ?? '', 
+                    $_POST['role'] ?? ''
+                );
                 try {
-                    $this->userController->update($slug['id'], $name, $email, $role, $password);
-                    redirect('/admin/users');
+                    if ($errors) {
+                        throw new DomainException('One or more fields are invalid');
+                    }
 
+                    $this->userController->update($slug['id'], $data[ 'name' ], $data[ 'email' ], $data[ 'role' ], $data[ 'password' ]);
+                    redirect('/admin/users');
                 } catch (DomainException $e) {
-                    $data = $this->userController->getEditPageData($slug['id']);
+                    $pageData = $this->userController->getEditPageData($slug['id']);
                     http_response_code(400);
                     renderView(
                         'admin/users/edit', [
-                        'user' => $data['user'],
-                        'assets' => $data['assets'],
-                        'errorMessage' => $e->getMessage()
+                        'user' => $pageData['user'],
+                        'assets' => $pageData['assets'],
+                        'previousData' => [
+                        'name' => $data['name'],
+                        'email' => $data['email'],
+                        'role' => $data['role'],
+                        'password' => $data['password']
+                        ],
+                        'errorMessage' => $e->getMessage(),
+                        'errors' => $errors
                         ]
                     );
                 } catch (Exception $e) {
@@ -100,7 +115,7 @@ class UserRoutes extends Routes implements RoutesInterface
         $this->router->delete(
             $prefix . '/{id}/', function (array $slug, ?MiddlewareException $middleware) {
                 if ($middleware) {
-					redirect('/');
+                    redirect('/');
                 }
 
                 try {
