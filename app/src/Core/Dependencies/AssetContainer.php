@@ -9,6 +9,7 @@ use Repositories\Category\CategorySQLiteRepository;
 use Repositories\Image\SQLiteImageRepository;
 use Core\ServiceContainer;
 use Services\Session\SessionService;
+use Services\Validation\AssetValidationService;
 use UseCases\Asset\CreateAssetUseCase;
 use UseCases\Asset\DeleteAssetUseCase;
 use UseCases\Asset\EditAssetUseCase;
@@ -27,6 +28,11 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
 {
     public function initDependencies(): void
     {
+        $this->set(
+            AssetValidationService::class, function () {
+                return new AssetValidationService();
+            }
+        );
 
         $this->set(
             CreateAssetUseCase::class, function () {
@@ -70,11 +76,11 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
             }
         );
 
-		$this->set(
-			GetAssetsPageUseCase::class, function () {
-				return new GetAssetsPageUseCase($this::get(AssetSQLiteRepository::class));
-			}
-		);
+        $this->set(
+            GetAssetsPageUseCase::class, function () {
+                return new GetAssetsPageUseCase($this::get(AssetSQLiteRepository::class));
+            }
+        );
 
         $this->set(
             AssetController::class, function () {
@@ -89,7 +95,7 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
                     $this::get(UpdateImageUseCase::class),
                     $this::get(DeleteImageUseCase::class),
                     $this::get(GetImagesForAssetUseCase::class),
-					$this->get(SessionService::class),
+                    $this->get(SessionService::class),
                 );
             }
         );

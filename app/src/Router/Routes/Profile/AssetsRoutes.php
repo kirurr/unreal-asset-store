@@ -15,19 +15,23 @@ use Router\Routes\Routes;
 use Services\Session\SessionService;
 use Router\Routes\RoutesInterface;
 use UseCases\Asset\GetAssetUseCase;
+use Services\Validation\AssetValidationService;
+use Router\Router;
 
 class AssetsRoutes extends Routes implements RoutesInterface
 {
     private AssetController $assetController;
     private ImageController $imageController;
     private FileController $fileController;
+    private AssetValidationService $assetValidationService;
 
-    public function __construct($router)
+    public function __construct(Router $router)
     {
         parent::__construct($router);
         $this->assetController = ServiceContainer::get(AssetController::class);
         $this->imageController = ServiceContainer::get(ImageController::class);
         $this->fileController = ServiceContainer::get(FileController::class);
+        $this->assetValidationService = ServiceContainer::get(AssetValidationService::class);
     }
 
     public function defineRoutes(string $prefix = ''): void
@@ -64,33 +68,47 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } else {
                     $images = $_FILES['images'];
                 }
-                $name = htmlspecialchars($_POST['name'] ?? '');
-                $info = htmlspecialchars($_POST['info'] ?? '');
-                $description = htmlspecialchars($_POST['description'] ?? '');
-                $price = intval($_POST['price'] ?? 0);
-                $engine_version = htmlspecialchars($_POST['engine_version'] ?? '');
-                $category_id = intval($_POST['category_id'] ?? 0);
+                [$errors, $data] = $this->assetValidationService->validate(
+                    name: $_POST['name'] ?? '',
+                    info: $_POST['info'] ?? '',
+                    description: $_POST['description'] ?? '',
+                    price: $_POST['price'] ?? '',
+                    engine_version: $_POST['engine_version'] ?? '',
+                    category_id: $_POST['category_id'] ?? '',
+                    images: $images
+                );
 
                 try {
+                    if ($errors) {
+                        throw new DomainException('One or more fields are invalid');
+                    }
+
                     $this->assetController->create(
-                        $name, $info, $description, $images, $price, $engine_version, $category_id
+                        $data[ 'name' ],
+                        $data[ 'info' ],
+                        $data[ 'description' ],
+                        $data[ 'images' ],
+                        $data[ 'price' ],
+                        $data[ 'engine_version' ],
+                        $data[ 'category_id' ]
                     );
                     redirect('/profile/assets/');
                 } catch (DomainException $e) {
-                    $data = $this->assetController->getCreatePageData();
+                    $pageData = $this->assetController->getCreatePageData();
                         
                     http_response_code(400);
                     renderView(
                         'profile/assets/create', [
                         'errorMessage' => $e->getMessage(),
-                        'categories' => $data['categories'],
+                        'errors' => $errors,
+                        'categories' => $pageData['categories'],
                         'previousData' => [
-                        'name' => $name,
-                        'info' => $info,
-                        'description' => $description,
-                        'price' => $price,
-                        'engine_version' => $engine_version,
-                        'category_id' => $category_id,
+                        'name' => $data[ 'name' ],
+                        'info' => $data[ 'info' ],
+                        'description' => $data[ 'description' ],
+                        'price' => $data[ 'price' ],
+                        'engine_version' => $data[ 'engine_version' ],
+                        'category_id' => $data[ 'category_id' ],
                         ]
                         ]
                     );
@@ -124,34 +142,48 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     redirect('/');
                 }
 
-                $name = htmlspecialchars($_POST['name'] ?? '');
-                $info = htmlspecialchars($_POST['info'] ?? '');
-                $description = htmlspecialchars($_POST['description'] ?? '');
-                $price = intval($_POST['price'] ?? 0);
-                $engine_version = htmlspecialchars($_POST['engine_version'] ?? '');
-                $category_id = intval($_POST['category_id'] ?? 0);
-
+                [$errors, $data] = $this->assetValidationService->validateUpdate(
+                    name: $_POST['name'] ?? '',
+                    info: $_POST['info'] ?? '',
+                    description: $_POST['description'] ?? '',
+                    price: $_POST['price'] ?? '',
+                    engine_version: $_POST['engine_version'] ?? '',
+                    category_id: $_POST['category_id'] ?? '',
+                );
                 try {
-                    $this->assetController->edit($slug['id'], $name, $info, $description, $price, $engine_version, $category_id);
+                    $this->assetController->edit(
+                        $slug['id'],
+                        $data[ 'name' ],
+                        $data[ 'info' ],
+                        $data[ 'description' ],
+                        $data[ 'price' ],
+                        $data[ 'engine_version' ],
+                        $data[ 'category_id' ],
+                    );
+
                     redirect('/profile/assets/');
                 } catch (DomainException $e) {
-                    $data = $this->assetController->getEditPageData($slug['id']);
+                    if ($errors) {
+                        throw new DomainException('One or more fields are invalid');
+                    }
+
+                    $pageData = $this->assetController->getEditPageData($slug['id']);
 
                     http_response_code(400);
                     renderView(
                         'profile/assets/edit', [
-                        'categories' => $data['categories'],
-                        'asset' => $data['asset'],
+                        'categories' => $pageData['categories'],
+                        'asset' => $pageData['asset'],
                         'errorMessage' => $e->getMessage(),
+                        'errors' => $errors,
                         'previousData' => [
-                        'name' => $name,
-                        'info' => $info,
-                        'description' => $description,
-                        'price' => $price,
-                        'engine_version' => $engine_version,
-                        'category_id' => $category_id,
+                        'name' => $data[ 'name' ],
+                        'info' => $data[ 'info' ],
+                        'description' => $data[ 'description' ],
+                        'price' => $data[ 'price' ],
+                        'engine_version' => $data[ 'engine_version' ],
+                        'category_id' => $data[ 'category_id' ],
                         ],
-                        'fields' => ['name', 'info', 'description', 'images', 'price', 'engine_version', 'category_id']
                         ]
                     );
                 } catch (Exception $e) {
@@ -205,19 +237,25 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 }
                 $previous_image_order = intval($_POST['last_order'] ?? 0);
 
+                $errors = $this->assetValidationService->validateImages($images);
+
                 try {
+                    if ($errors) {
+                        throw new DomainException($errors['images']);
+                    }
+
                     $this->imageController->create($slug['id'], $images, $previous_image_order);
 					redirect('/profile/assets/' . $slug['id'] . '/images/');
                 } catch (DomainException $e) {
-					$data = $this->imageController->getImagesPageData($slug['id']);
+                    $pageData = $this->imageController->getImagesPageData($slug['id']);
 
                     http_response_code(400);
                     renderView(
                         'profile/assets/images/index', [
                         'errorMessage' => $e->getMessage(),
                         'asset_id' => $slug['id'],
-                        'asset' => $data['asset'],
-						'images' => $data['images'],
+                        'asset' => $pageData['asset'],
+                        'images' => $pageData['images'],
                         ]
                     );
                 } catch (Exception $e) {
@@ -232,21 +270,25 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 if ($middleware) {
                     redirect('/');
                 } 
-                $image_id = intval($_POST['id'] ?? 0);
+
+                [$errors, $data] = $this->assetValidationService->validatePreviewImage($_POST['id'] ?? '');
 
                 try {
-                    $this->imageController->updatePreviewImage($slug['id'], $image_id);
-					redirect('/profile/assets/' . $slug['id'] . '/images/');
-                } catch (DomainException $e) {
-					$data = $this->imageController->getImagesPageData($slug['id']);
+                    if ($errors) {
+                        throw new DomainException(['image_id']);
+                    }
 
+                    $this->imageController->updatePreviewImage($slug['id'], $data[ 'image_id' ]);
+                    redirect('/profile/assets/' . $slug['id'] . '/images/');
+                } catch (DomainException $e) {
+                    $pageData = $this->imageController->getImagesPageData($slug['id']);
                     http_response_code(400);
                     renderView(
                         'profile/assets/images/index', [
                         'errorMessage' => $e->getMessage(),
                         'asset_id' => $slug['id'],
-                        'asset' => $data['asset'],
-						'images' => $data['images'],
+                        'asset' => $pageData['asset'],
+                        'images' => $pageData['images'],
                         ]
                     );
                 } catch (Exception $e) {
@@ -260,25 +302,38 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 if ($middleware) {
                     redirect('/');
                 } 
-                $image_id = intval($_POST['id'] ?? 0);
-                $image_order = intval($_POST['image_order'] ?? 0);
-                $image_name = $_FILES['images']['name'] ?? '';
-                $tmp_name = $_FILES['images']['tmp_name']?? '';
-                $old_image_path = htmlspecialchars($_POST['path'] ?? '');
 
+                [$errors, $data] = $this->assetValidationService->validateUpdateImage(
+                    $_POST['id'] ?? 0,
+                    $_POST['image_order'] ?? 0,
+                    $_FILES['images']['name'] ?? '',
+                    $_FILES['images']['tmp_name'] ?? '',
+                    $_POST['path'] ?? ''
+                );
                 try {
-                    $this->imageController->update($slug['id'], $image_id, $image_name, $tmp_name, $image_order, $old_image_path);
-					redirect('/profile/assets/' . $slug['id'] . '/images/');
-                } catch (DomainException $e) {
-					$data = $this->imageController->getImagesPageData($slug['id']);
+                    if ($errors) {
+                        throw new DomainException($errors['image']);
+                    }
 
+                    $this->imageController->update(
+                        $slug['id'],
+                        $data[ 'image_id' ],
+                        $data[ 'image_name' ],
+                        $data[ 'tmp_name' ],
+                        $data[ 'image_order' ],
+                        $data[ 'old_image_path' ]
+                    );
+
+                    redirect('/profile/assets/' . $slug['id'] . '/images/');
+                } catch (DomainException $e) {
+                    $pageData = $this->imageController->getImagesPageData($slug['id']);
                     http_response_code(400);
                     renderView(
                         'profile/assets/images/index', [
                         'errorMessage' => $e->getMessage(),
                         'asset_id' => $slug['id'],
-                        'asset' => $data['asset'],
-						'images' => $data['images'],
+                        'asset' => $pageData['asset'],
+                        'images' => $pageData['images'],
                         ]
                     );
                 } catch (Exception $e) {
@@ -347,15 +402,44 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     redirect('/');
                 }
 
-                $name = htmlspecialchars($_POST['name'] ?? '');
-                $version = htmlspecialchars($_POST['version'] ?? '');
-                $description = htmlspecialchars($_POST['description'] ?? '');
-                $file_name = htmlspecialchars($_FILES['file']['name'] ?? '');
-                $path = htmlspecialchars($_FILES['file']['tmp_name'] ?? '');
+                [$errors, $data] = $this->assetValidationService->validateFile(
+                    name: $_POST['name'] ?? '',
+                    version: $_POST['version'] ?? '',
+                    description: $_POST['description'] ?? '',
+                    file_name: $_FILES['file']['name'] ?? '',
+                    path: $_FILES['file']['tmp_name'] ?? ''
+                );
 
                 try {
-                    $this->fileController->create($slug['id'], $name, $version, $description, $file_name, $path);
-					redirect('/profile/assets/' . $slug['id'] . '/files/');
+                    if ($errors) {
+                        throw new DomainException('One or more fields are invalid');
+                    }
+
+                    $this->fileController->create(
+                        $slug['id'],
+                        $data[ 'name' ],
+                        $data[ 'version' ],
+                        $data[ 'description' ],
+                        $data[ 'file_name' ],
+                        $data[ 'path' ],
+                    );
+
+                    redirect("/profile/assets/" . $slug['id'] . "$/files");
+                } catch (DomainException $e) {
+                    http_response_code(400);
+                    renderView(
+                        'profile/assets/files/create', [
+                        'errorMessage' => $e->getMessage(),
+                        'previousData' => [
+                        'name' => $data[ 'name' ],
+                        'version' => $data[ 'version' ],
+                        'description' => $data[ 'description' ],
+                        'file_name' => $data[ 'file_name' ],
+                        ],
+                        'asset_id' => $slug['id'],
+                        'errors' => $errors,
+                        ]
+                    );
                 } catch (Exception $e) {
                     $this->handleException($e);
                 } 
@@ -382,23 +466,46 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     redirect('/');
                 }
 
-                $name = htmlspecialchars($_POST['name'] ?? '');
-                $version = htmlspecialchars($_POST['version'] ?? '');
-                $description = htmlspecialchars($_POST['description'] ?? '');
-                $file_name = htmlspecialchars($_FILES['file']['name'] ?? '');
-                $path = htmlspecialchars($_FILES['file']['tmp_name'] ?? '');
-                $old_path = htmlspecialchars($_POST['path'] ?? '');
+                [$errors, $data] = $this->assetValidationService->validateUpdateFile(
+                    $_POST['name'] ?? '',
+                    $_POST['version'] ?? '',
+                    $_POST['description'] ?? '',
+                    $_FILES['file']['name'] ?? '',
+                    $_FILES['file']['tmp_name'] ?? '',
+                    $_POST['path'] ?? ''
+                );
 
                 try {
-                    $this->fileController->update($slug['id'], $slug['file_id'], $name, $version, $description, $file_name, $path, $old_path);
-					redirect('/profile/assets/' . $slug['id'] . '/files/');
+                    if ($errors) {
+                        throw new DomainException('One or more fields are invalid');
+                    }
+
+                    $this->fileController->update(
+                        $slug['id'],
+                        $slug['file_id'],
+                        $data[ 'name' ],
+                        $data[ 'version' ],
+                        $data[ 'description' ],
+                        $data[ 'file_name' ],
+                        $data[ 'path' ],
+                        $data[ 'old_path' ]
+                    );
+
+                    redirect("/profile/assets/" . $slug['id'] . "/files");
                 } catch (DomainException $e) {
-                    $data = $this->fileController->getEditPageData($slug['id'], $slug['file_id']);
+                    $pageData = $this->fileController->getEditPageData($slug['id'], $slug['file_id']);
                     http_response_code(400);
                     renderView(
                         'profile/assets/files/edit', [
-                        'file' => $data['file'],
+                        'errors' => $errors,
+                        'file' => $pageData['file'],
                         'asset_id' => $slug['id'],
+                        'previousData' => [
+                        'name' => $data[ 'name' ],
+                        'version' => $data[ 'version' ],
+                        'description' => $data[ 'description' ],
+                        'file_name' => $data[ 'file_name' ],
+                        ],
                         'errorMessage' => $e->getMessage()
                         ]
                     );
@@ -417,8 +524,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     $this->fileController->delete($slug['id'], $slug['file_id']);
 					redirect('/profile/assets/' . $slug['id'] . '/files/');
                 } catch (Exception $e) {
-                    http_response_code(500);
-                    renderView('error', ['error' => $e->getMessage()]);
+                    $this->handleException($e);
                 }
             }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
         );

@@ -1,3 +1,12 @@
+<?php
+/**
+ * @var string $errorMessage
+ * @var array $previousData
+ * @var int $asset_id
+ * @var array $errors
+ */
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,13 +20,21 @@
 			<input type="hidden" name="_method" value="post">
             <label for="name">Name</label>
             <input type="text" name="name" id="name" value="<?php echo htmlspecialchars($previousData['name'] ?? '') ?>">
+			<span><?php echo $errors['name'] ?? '' ?></span>
+
             <label for="info">version</label>
-            <input type="text" name="version" id="version" value="<?php echo htmlspecialchars($previousData['info'] ?? '') ?>">
+            <input type="text" name="version" id="version" value="<?php echo htmlspecialchars($previousData['version'] ?? '') ?>">
+			<span><?php echo $errors['version'] ?? '' ?></span>
+
             <label for="description">Description</label>
             <textarea name="description" id="description"><?php echo htmlspecialchars($previousData['description'] ?? '') ?></textarea>
+			<span><?php echo $errors['description'] ?? '' ?></span>
+
             <label for="images">File</label>
 			<!--TODO: add filetype restriction -->
             <input type="file" name="file" id="file">
+			<span><?php echo $errors['file'] ?? '' ?></span>
+
             <button type="submit">Create</button>
         </form>
         <?if (isset($errorMessage)) : ?>

@@ -1,3 +1,19 @@
+<?php
+/**
+ * @var Image[] $images
+ */
+/**
+ * @var Asset $asset
+ */
+/**
+ * @var string|null $errorMessage
+ */
+/**
+ * @var string $asset_id
+ */
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +23,7 @@
 </head>
     <body>
         <h1>Images for asset</h1>
-		<?php $errorMessage = $errorMessage ?? '' ?>
+        <p><?php echo $errorMessage ?? '' ?></p>
         <?php foreach ($images as $image): ?>
         <div>
             <img src="<?php echo $image->path ?>" alt="image ">
