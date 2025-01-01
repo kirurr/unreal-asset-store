@@ -3,11 +3,16 @@
 namespace Router\Routes;
 
 use Controllers\AssetsPageController;
+use Core\Errors\MiddlewareException;
 use Core\ServiceContainer;
 use Entities\AssetFilters;
-use Exception;
+use Router\Middlewares\IsUserPurchasedAssetMiddleware;
 use Router\Router;
-
+use Exception;
+use UseCases\Asset\GetAssetUseCase;
+use UseCases\File\GetFileByIdUseCase;
+use UseCases\Purchase\IsUserPurchasedAssetUseCase;
+use Services\Session\SessionService;
 
 class AssetsRoutes extends Routes implements RoutesInterface
 {
@@ -52,14 +57,84 @@ class AssetsRoutes extends Routes implements RoutesInterface
                             $maxPrice = $asset->price;
                         }
                     }
-					$data['prices'] = ['min' => $minPrice, 'max' => $maxPrice];
+                    $data['prices'] = ['min' => $minPrice, 'max' => $maxPrice];
 
-                    renderView('assets', $data);
+                    renderView('assets/assets', $data);
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            } 
+            }
         );
-    }
+        $this->router->get(
+            $prefix . '/{id}/', function (array $slug, ?MiddlewareException $middleware) {
+				$isUserPurchasedAsset = false;
+				if (!$middleware) {
+					$isUserPurchasedAsset = true;
+				}
+                try {
+                    $data = $this->assetsPageController->getAssetPageData($slug['id']);
+					$data['isUserPurchasedAsset'] = $isUserPurchasedAsset;
+                    renderView('assets/asset', $data);
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }, [new IsUserPurchasedAssetMiddleware(
+				ServiceContainer::get(SessionService::class),
+				ServiceContainer::get(GetFileByIdUseCase::class),
+				ServiceContainer::get(IsUserPurchasedAssetUseCase::class),
+				ServiceContainer::get(GetAssetUseCase::class),
+			)]
+        );
 
+        $this->router->get(
+            $prefix . '/{id}/files/', function (array $slug, ?MiddlewareException $middleware) {
+                if ($middleware) {
+					redirect('/assets/' . $slug['id'] . '/');
+                }
+
+                try {
+                    $data = $this->assetsPageController->getFilesPageData(
+                        $slug['id'],
+                    );
+                    renderView('assets/files', $data);
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }, [new IsUserPurchasedAssetMiddleware(
+				ServiceContainer::get(SessionService::class),
+				ServiceContainer::get(GetFileByIdUseCase::class),
+				ServiceContainer::get(IsUserPurchasedAssetUseCase::class),
+				ServiceContainer::get(GetAssetUseCase::class),
+			)]
+        );
+
+        $this->router->get(
+            $prefix . '/{id}/files/{file_id}/', function (array $slug, ?MiddlewareException $middleware) {
+				if ($middleware) {
+					redirect('/assets/' . $slug['id'] . '/');
+				}
+
+                try {
+                    $file = $this->assetsPageController->getFileForDownload($slug['id'], $slug['file_id']);
+
+                    $download_data = $file->getDownloadData();
+
+                    header('Content-Type: ' . download_data['mime_type']);
+                    header('Content-Length: ' . download_data['filesize']);
+                    header('Content-Disposition: inline; filename="' . $download_data['file_name'] . '"');
+                    readfile($download_data['path']);
+
+					$this->assetsPageController->changeAssetPurchaseCount($slug['id']);
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }, [new IsUserPurchasedAssetMiddleware(
+				ServiceContainer::get(SessionService::class),
+				ServiceContainer::get(GetFileByIdUseCase::class),
+				ServiceContainer::get(IsUserPurchasedAssetUseCase::class),
+				ServiceContainer::get(GetAssetUseCase::class),
+			)]
+        );
+
+    }
 }

@@ -18,7 +18,11 @@ class GetFilesUseCase
     public function execute(string $id): array
     {
         try {
-            return $this->repository->getAllByAssetId($id);
+            $files =$this->repository->getAllByAssetId($id);
+			if (!$files) {
+				throw new Exception('No files found', 404);
+			}
+			return $files;
         } catch (RuntimeException $e) {
             throw new Exception('Unable to get files: ' . $e->getMessage(), 500, $e);
         }

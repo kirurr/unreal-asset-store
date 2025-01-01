@@ -4,6 +4,7 @@ use Core\Dependencies\AssetContainer;
 use Core\Dependencies\CategoryContainer;
 use Core\Dependencies\AuthorizationContainer;
 use Core\Dependencies\IndexContainer;
+use Core\Dependencies\PurchaseContainer;
 use Core\Dependencies\RepositoryContainer;
 use Core\Dependencies\UserContainer;
 use Core\Dependencies\ProfileContainer;
@@ -25,6 +26,7 @@ $container = new ServiceContainer();
 (new FileContainer())->initDependencies();
 (new CategoryContainer())->initDependencies();
 (new UserContainer())->initDependencies();
+(new PurchaseContainer())->initDependencies();
 
 (new ProfileContainer())->initDependencies();
 

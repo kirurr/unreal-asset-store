@@ -84,6 +84,17 @@ try {
 
 	echo "Created files table\n";
 
+	$pdo->exec("DROP TABLE IF EXISTS purchase");
+
+	$pdo->exec("CREATE TABLE IF NOT EXISTS purchase (
+		id INTEGER PRIMARY KEY,
+		asset_id TEXT NOT NULL,
+		user_id INTEGER NOT NULL,
+		purchase_date INTEGER DEFAULT (strftime('%s', 'now'))
+	)");
+
+	echo "Created purchases table\n";
+
 } catch (Exception $e) {
     echo $e->getMessage();
     die();

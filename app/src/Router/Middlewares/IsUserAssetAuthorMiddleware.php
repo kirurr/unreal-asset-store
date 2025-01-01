@@ -21,6 +21,10 @@ class IsUserAssetAuthorMiddleware extends Middleware
         };
 
         $asset = $this->getAssetUseCase->execute($slug['id']);
+		if (!$asset) {
+			throw new MiddlewareException('Asset not found');
+		}
+
         if($asset->user_id !== $this->session->getUser()['id']) {
             throw new MiddlewareException('User is not author of asset');
         }

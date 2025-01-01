@@ -10,10 +10,15 @@ use Services\Files\FilesystemFilesService;
 use Services\Session\SessionService;
 use Exception;
 use PDO;
+use UseCases\Asset\ChangeAssetPurchaseCountUseCase;
+use UseCases\Asset\GetAssetUseCase;
 use UseCases\Asset\GetAssetsPageUseCase;
 use UseCases\Asset\GetMainPageAssetsUseCase;
 use UseCases\Asset\GetTopAssetsUseCase;
 use UseCases\Category\GetAllCategoryUseCase;
+use UseCases\Category\GetCategoryUseCase;
+use UseCases\File\GetFileByIdUseCase;
+use UseCases\File\GetFilesUseCase;
 
 class IndexContainer extends ServiceContainer implements ContainerInterface
 {
@@ -59,7 +64,13 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
             AssetsPageController::class, function () {
                 return new AssetsPageController(
                     $this::get(GetAllCategoryUseCase::class),
-                    $this::get(GetAssetsPageUseCase::class)
+                    $this::get(GetAssetsPageUseCase::class),
+                    $this::get(GetAssetUseCase::class),
+					$this::get(GetCategoryUseCase::class),
+					$this::get(SessionService::class),
+					$this::get(GetFilesUseCase::class),
+					$this::get(GetFileByIdUseCase::class),
+					$this::get(ChangeAssetPurchaseCountUseCase::class)
                 );
             }
         );

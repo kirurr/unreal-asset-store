@@ -86,7 +86,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                         $data[ 'name' ],
                         $data[ 'info' ],
                         $data[ 'description' ],
-                        $data[ 'images' ],
+						$images,
                         $data[ 'price' ],
                         $data[ 'engine_version' ],
                         $data[ 'category_id' ]
@@ -422,7 +422,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                         $data[ 'path' ],
                     );
 
-                    redirect("/admin/assets/" . $slug['id'] . "$/files");
+                    redirect("/admin/assets/" . $slug['id'] . "$/iles");
                 } catch (DomainException $e) {
                     http_response_code(400);
                     renderView(
