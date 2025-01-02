@@ -19,9 +19,6 @@ class GetFilesUseCase
     {
         try {
             $files =$this->repository->getAllByAssetId($id);
-			if (!$files) {
-				throw new Exception('No files found', 404);
-			}
 			return $files;
         } catch (RuntimeException $e) {
             throw new Exception('Unable to get files: ' . $e->getMessage(), 500, $e);

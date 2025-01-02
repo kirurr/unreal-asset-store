@@ -11,8 +11,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
 {
     public function __construct(
         private PDO $pdo
-    ) {
-    }
+    ) {}
 
     public function getById(string $id): ?Asset
     {
@@ -48,8 +47,8 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
     public function getAssets(
         int $category_id = null,
         int $user_id = null,
-		string $search = null,
-		string $engine_version = null,
+        string $search = null,
+        string $engine_version = null,
         int $interval = null,
         bool $byNew = null,
         bool $byPopular = null,
@@ -58,66 +57,65 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         int $maxPrice = null,
         int $limit = null
     ): array {
-        $query = "SELECT * FROM asset";
+        $query = 'SELECT * FROM asset';
         $conditions = [];
 
-		if ($search) {
-			$conditions[] = "name LIKE :search OR info LIKE :search OR description LIKE :search";
-		}
-		if ($engine_version) {
-			$conditions[] = "engine_version = :engine_version";
-		}
+        if ($search) {
+            $conditions[] = 'name LIKE :search OR info LIKE :search OR description LIKE :search';
+        }
+        if ($engine_version) {
+            $conditions[] = 'engine_version = :engine_version';
+        }
         if ($category_id) {
-            $conditions[] = "category_id = :category_id";
+            $conditions[] = 'category_id = :category_id';
         }
         if ($user_id) {
-            $conditions[] = "user_id = :user_id";
+            $conditions[] = 'user_id = :user_id';
         }
         if ($interval) {
             $conditions[] = "created_at >= strftime('%s', 'now', '-$interval days') AND created_at < strftime('%s', 'now')";
         }
         if ($minPrice) {
-            $conditions[] = "price >= :minPrice";
+            $conditions[] = 'price >= :minPrice';
         }
         if ($maxPrice) {
-            $conditions[] = "price <= :maxPrice";
+            $conditions[] = 'price <= :maxPrice';
         }
 
         if ($conditions) {
-            $query .= " WHERE " . implode(' AND ', $conditions);
+            $query .= ' WHERE ' . implode(' AND ', $conditions);
         }
 
         if ($byNew && $byPopular) {
-            $query .= " ORDER BY purchase_count" . ($asc ? " ASC" : " DESC") . ", created_at" . ($asc ? " ASC" : " DESC");
+            $query .= ' ORDER BY purchase_count' . ($asc ? ' ASC' : ' DESC') . ', created_at' . ($asc ? ' ASC' : ' DESC');
         } elseif ($byNew) {
-            $query .= " ORDER BY created_at" . ($asc ? " ASC" : " DESC");
+            $query .= ' ORDER BY created_at' . ($asc ? ' ASC' : ' DESC');
         } elseif ($byPopular) {
-            $query .= " ORDER BY purchase_count" . ($asc ? " ASC" : " DESC");
+            $query .= ' ORDER BY purchase_count' . ($asc ? ' ASC' : ' DESC');
         }
 
         if ($limit) {
-            $query .= " LIMIT :limit";
+            $query .= ' LIMIT :limit';
         }
 
         try {
-
-                $stmt = $this->pdo->prepare($query);
+            $stmt = $this->pdo->prepare($query);
             if ($category_id) {
                 $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
             }
             if ($user_id) {
                 $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             }
-			if ($search) {
-				$searchWildcard = '%' . $search . '%';
-				$stmt->bindParam(':search', $searchWildcard, PDO::PARAM_STR);
-			}
-			if ($engine_version) {
-				$stmt->bindParam(':engine_version', $engine_version, PDO::PARAM_STR);
-			}
-			if ($limit) {
-				$stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-			}
+            if ($search) {
+                $searchWildcard = '%' . $search . '%';
+                $stmt->bindParam(':search', $searchWildcard, PDO::PARAM_STR);
+            }
+            if ($engine_version) {
+                $stmt->bindParam(':engine_version', $engine_version, PDO::PARAM_STR);
+            }
+            if ($limit) {
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            }
             if ($minPrice) {
                 $stmt->bindParam(':minPrice', $minPrice, PDO::PARAM_INT);
             }
@@ -157,20 +155,20 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
     {
         try {
             $stmt = $this->pdo->prepare(
-                'INSERT INTO asset (id, name, info, description, preview_image, price, engine_version, category_id, user_id)
-				VALUES (:id, :name, :info, :description, :preview_image, :price, :engine_version, :category_id, :user_id)'
+                "INSERT INTO asset (id, name, info, description, preview_image, price, engine_version, category_id, user_id)
+\t\t\t\tVALUES (:id, :name, :info, :description, :preview_image, :price, :engine_version, :category_id, :user_id)"
             );
             $stmt->execute(
                 [
-                'id' => $id,
-                'name' => $name,
-                'info' => $info,
-                'description' => $description,
-                'preview_image' => $preview_image,
-                'price' => $price,
-                'engine_version' => $engine_version,
-                'category_id' => $category_id,
-                'user_id' => $user_id,
+                    'id' => $id,
+                    'name' => $name,
+                    'info' => $info,
+                    'description' => $description,
+                    'preview_image' => $preview_image,
+                    'price' => $price,
+                    'engine_version' => $engine_version,
+                    'category_id' => $category_id,
+                    'user_id' => $user_id,
                 ]
             );
         } catch (PDOException $e) {
@@ -182,23 +180,22 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
     {
         try {
             $stmt = $this->pdo->prepare(
-                'UPDATE asset SET name = :name, info = :info, description = :description, preview_image = :preview_image, price = :price, engine_version = :engine_version, category_id = :category_id
-				WHERE id = :id'
+                "UPDATE asset SET name = :name, info = :info, description = :description, preview_image = :preview_image, price = :price, engine_version = :engine_version, category_id = :category_id
+\t\t\t\tWHERE id = :id"
             );
             $stmt->execute(
                 [
-                'name' => $asset->name,
-                'info' => $asset->info,
-                'description' => $asset->description,
-                'preview_image' => $asset->preview_image,
-                'price' => $asset->price,
-                'engine_version' => $asset->engine_version,
-                'category_id' => $asset->category_id,
-                'id' => $asset->id,
+                    'name' => $asset->name,
+                    'info' => $asset->info,
+                    'description' => $asset->description,
+                    'preview_image' => $asset->preview_image,
+                    'price' => $asset->price,
+                    'engine_version' => $asset->engine_version,
+                    'category_id' => $asset->category_id,
+                    'id' => $asset->id,
                 ]
             );
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
         }
     }
@@ -231,5 +228,35 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         } catch (PDOException $e) {
             throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
         }
+    }
+
+    public function getAssetsByUserPurchases(int $user_id): array
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT asset.* FROM purchase JOIN user ON purchase.user_id = user.id JOIN asset ON purchase.asset_id = asset.id WHERE user.id = :user_id'
+        );
+        $stmt->execute(['user_id' => $user_id]);
+        $assets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (!$assets) {
+            return [];
+        }
+
+        return array_map(
+            fn($asset) => new Asset(
+                $asset['id'],
+                $asset['name'],
+                $asset['info'],
+                $asset['description'],
+                [],
+                $asset['preview_image'],
+                $asset['price'],
+                $asset['engine_version'],
+                $asset['category_id'],
+                $asset['user_id'],
+                $asset['created_at'],
+                $asset['purchase_count']
+            ),
+            $assets
+        );
     }
 }

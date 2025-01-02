@@ -33,4 +33,8 @@ interface AssetRepositoryInterface
     public function delete(string $id): void;
     public function incrementPurchasedCount(string $id): void;
     public function decrementPurchasedCount(string $id): void;
+    /**
+     * @return ?Asset[]
+     */
+    public function getAssetsByUserPurchases(int $user_id): array;
 }

@@ -1,13 +1,13 @@
 <?php
 
 namespace Core\Dependencies;
+
 use Controllers\AssetController;
 use Core\ContainerInterface;
-
+use Core\ServiceContainer;
 use Repositories\Asset\AssetSQLiteRepository;
 use Repositories\Category\CategorySQLiteRepository;
 use Repositories\Image\SQLiteImageRepository;
-use Core\ServiceContainer;
 use Services\Session\SessionService;
 use Services\Validation\AssetValidationService;
 use UseCases\Asset\ChangeAssetPurchaseCountUseCase;
@@ -15,15 +15,16 @@ use UseCases\Asset\CreateAssetUseCase;
 use UseCases\Asset\DeleteAssetUseCase;
 use UseCases\Asset\EditAssetUseCase;
 use UseCases\Asset\GetAllAssetUseCase;
-use UseCases\Asset\GetAssetUseCase;
+use UseCases\Asset\GetAssetsByUserPurhcasesUseCase;
 use UseCases\Asset\GetAssetsPageUseCase;
+use UseCases\Asset\GetAssetUseCase;
 use UseCases\Asset\GetMainPageAssetsUseCase;
 use UseCases\Asset\GetTopAssetsUseCase;
+use UseCases\Category\GetAllCategoryUseCase;
 use UseCases\Image\CreateImageUseCase;
+use UseCases\Image\DeleteImageUseCase;
 use UseCases\Image\GetImagesForAssetUseCase;
 use UseCases\Image\UpdateImageUseCase;
-use UseCases\Image\DeleteImageUseCase;
-use UseCases\Category\GetAllCategoryUseCase;
 
 class AssetContainer extends ServiceContainer implements ContainerInterface
 {
@@ -83,9 +84,13 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
             }
         );
 
-		$this->set(ChangeAssetPurchaseCountUseCase::class, function () {
-			return new ChangeAssetPurchaseCountUseCase($this::get(AssetSQLiteRepository::class));
-		});
+        $this->set(ChangeAssetPurchaseCountUseCase::class, function () {
+            return new ChangeAssetPurchaseCountUseCase($this::get(AssetSQLiteRepository::class));
+        });
+
+        $this->set(GetAssetsByUserPurhcasesUseCase::class, function () {
+            return new GetAssetsByUserPurhcasesUseCase($this::get(AssetSQLiteRepository::class));
+        });
 
         $this->set(
             AssetController::class, function () {
