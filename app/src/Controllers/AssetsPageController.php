@@ -10,8 +10,9 @@ use UseCases\Asset\GetAssetsPageUseCase;
 use UseCases\Asset\GetAssetUseCase;
 use UseCases\Category\GetAllCategoryUseCase;
 use UseCases\Category\GetCategoryUseCase;
-use UseCases\File\GetFilesUseCase;
 use UseCases\File\GetFileByIdUseCase;
+use UseCases\File\GetFilesUseCase;
+use UseCases\Purchase\PurchaseAssetUseCase;
 
 class AssetsPageController
 {
@@ -21,9 +22,10 @@ class AssetsPageController
         private GetAssetUseCase $getAssetUseCase,
         private GetCategoryUseCase $getCategoryUseCase,
         private SessionService $sessionService,
-		private GetFilesUseCase $getFilesUseCase,
-		private GetFileByIdUseCase $getFileUseCase,
-		private ChangeAssetPurchaseCountUseCase $changeAssetPurchaseCountUseCase
+        private GetFilesUseCase $getFilesUseCase,
+        private GetFileByIdUseCase $getFileUseCase,
+        private ChangeAssetPurchaseCountUseCase $changeAssetPurchaseCountUseCase,
+		private PurchaseAssetUseCase $purchaseAssetUseCase
     ) {}
 
     /**
@@ -52,7 +54,7 @@ class AssetsPageController
         ];
     }
 
-	/**
+    /**
      * @return array{ asset: Asset, category: Category, files: File[] }
      */
     public function getFilesPageData(string $id): array
@@ -69,13 +71,30 @@ class AssetsPageController
         ];
     }
 
-	public function getFileForDownload(string $id, string $file_id): ?File
+    public function getFileForDownload(string $id, string $file_id): ?File
+    {
+        return $this->getFileUseCase->execute($file_id);
+    }
+
+    public function changeAssetPurchaseCount(string $id, bool $increment): void
+    {
+        $this->changeAssetPurchaseCountUseCase->execute($id, $increment);
+    }
+
+	/**
+	 * @return array{ asset: Asset }
+	 */
+    public function getPurchasePageData(string $id): array
+    {
+        $asset = $this->getAssetUseCase->execute($id);
+
+        return [
+            'asset' => $asset,
+        ];
+    }
+
+	public function purchaseAsset(string $id): void
 	{
-		return $this->getFileUseCase->execute($file_id);
-	}
-	
-	public function changeAssetPurchaseCount(string $id, bool $increment): void
-	{
-		$this->changeAssetPurchaseCountUseCase->execute($id, $increment);
+		$this->purchaseAssetUseCase->execute($id);
 	}
 }

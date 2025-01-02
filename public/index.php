@@ -1,4 +1,8 @@
 <?php
+set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+    throw new Exception($errstr, $errno);
+});
+
 const BASE_PATH = __DIR__ . '/../html/';
 
 require BASE_PATH . 'vendor/autoload.php';
@@ -18,5 +22,7 @@ try {
     $router->route($uri, $method);
 } catch (Exception $e) {
     http_response_code(500);
+	//TODO: log error and not show it to user
     renderView('error', ['error' => $e->getMessage()]);
 }
+restore_error_handler();

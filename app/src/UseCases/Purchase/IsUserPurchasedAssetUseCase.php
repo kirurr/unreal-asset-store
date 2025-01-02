@@ -2,7 +2,9 @@
 
 namespace UseCases\Purchase;
 
+use Exception;
 use Repositories\Purchase\PurchaseRepositoryInterface;
+use RuntimeException;
 
 class IsUserPurchasedAssetUseCase
 {
@@ -12,7 +14,11 @@ class IsUserPurchasedAssetUseCase
 
     public function execute(string $asset_id, int $user_id): bool
     {
-        $user_purchases = $this->purchaseRepository->getAllByUserId($user_id);
+        try {
+            $user_purchases = $this->purchaseRepository->getAllByUserId($user_id);
+        } catch (RuntimeException $e) {
+            throw new Exception('Unable to get purchases: ' . $e->getMessage(), 500, $e);
+        }
         if (!$user_purchases) {
             return false;
         }

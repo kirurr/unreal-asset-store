@@ -29,7 +29,7 @@ use Entities\User;
 	<?php if ($isUserPurchasedAsset): ?>
 		<a href="/assets/<?= $asset->id ?>/files">files</a>
 	<?php elseif (isset($user) && $asset->price > 0): ?>
-		<a href="/assets/<?= $asset->id ?>/buy">buy</a>
+		<a href="/assets/<?= $asset->id ?>/purchase">buy</a>
 	<?php elseif (!isset($user)): ?>
 		<p>you need to be logged in to buy asset</p>
 		<a href="/auth/login">login</a>
