@@ -1,6 +1,9 @@
 # Используем официальный образ PHP
 FROM php:8.3-apache
 
+# Копируем custom-php.ini в директорию для конфигурации PHP
+COPY custom-php.ini /usr/local/etc/php/conf.d/
+
 # Копируем содержимое текущей директории в папку /var/www/html в контейнере
 COPY ./app /var/www/html/
 
