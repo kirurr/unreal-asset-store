@@ -9,6 +9,7 @@ use Core\ServiceContainer;
 use Services\Session\SessionService;
 use UseCases\Asset\GetAllAssetUseCase;
 use UseCases\Asset\GetAssetsByUserPurhcasesUseCase;
+use UseCases\Review\GetReviewsByUserIdUseCase;
 use UseCases\User\GetUserUseCase;
 
 class ProfileContainer extends ServiceContainer implements ContainerInterface
@@ -21,7 +22,8 @@ class ProfileContainer extends ServiceContainer implements ContainerInterface
                     $this::get(SessionService::class),
                     $this::get(GetUserUseCase::class),
                     $this::get(GetAllAssetUseCase::class),
-					$this::get(GetAssetsByUserPurhcasesUseCase::class)
+					$this::get(GetAssetsByUserPurhcasesUseCase::class),
+					$this::get(GetReviewsByUserIdUseCase::class)
                 );
             }
         );

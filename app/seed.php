@@ -95,6 +95,21 @@ try {
 
 	echo "Created purchases table\n";
 
+	$pdo->exec("DROP TABLE IF EXISTS review");
+
+	$pdo->exec("CREATE TABLE IF NOT EXISTS review (
+		id INTEGER PRIMARY KEY,
+		asset_id TEXT NOT NULL,
+		user_id INTEGER NOT NULL,
+		review TEXT NOT NULL,
+		positive TEXT,
+		negative TEXT,
+		created_at INTEGER DEFAULT (strftime('%s', 'now')),
+		is_positive BOOLEAN DEFAULT FALSE
+	)");
+
+	echo "Created reviews table\n";
+
 } catch (Exception $e) {
     echo $e->getMessage();
     die();

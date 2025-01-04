@@ -13,6 +13,8 @@ use UseCases\Category\GetCategoryUseCase;
 use UseCases\File\GetFileByIdUseCase;
 use UseCases\File\GetFilesUseCase;
 use UseCases\Purchase\PurchaseAssetUseCase;
+use UseCases\Review\CreateReviewUseCase;
+use UseCases\Review\GetReviewsByAssetIdUseCase;
 
 class AssetsPageController
 {
@@ -25,7 +27,9 @@ class AssetsPageController
         private GetFilesUseCase $getFilesUseCase,
         private GetFileByIdUseCase $getFileUseCase,
         private ChangeAssetPurchaseCountUseCase $changeAssetPurchaseCountUseCase,
-		private PurchaseAssetUseCase $purchaseAssetUseCase
+        private PurchaseAssetUseCase $purchaseAssetUseCase,
+        private GetReviewsByAssetIdUseCase $getReviewsByAssetIdUseCase,
+		private CreateReviewUseCase $createReviewUseCase,
     ) {}
 
     /**
@@ -40,16 +44,18 @@ class AssetsPageController
     }
 
     /**
-     * @return array{ asset: Asset, category: Category, user: array }
+     * @return array{ asset: Asset, category: Category, reviews: Review[] user: array }
      */
     public function getAssetPageData(string $id): array
     {
         $asset = $this->getAssetUseCase->execute($id);
         $category = $this->getCategoryUseCase->execute($asset->category_id);
+        $reviews = $this->getReviewsByAssetIdUseCase->execute($id);
 
         return [
             'asset' => $asset,
             'category' => $category,
+            'reviews' => $reviews,
             'user' => $this->sessionService->getUser()
         ];
     }
@@ -81,9 +87,9 @@ class AssetsPageController
         $this->changeAssetPurchaseCountUseCase->execute($id, $increment);
     }
 
-	/**
-	 * @return array{ asset: Asset }
-	 */
+    /**
+     * @return array{ asset: Asset }
+     */
     public function getPurchasePageData(string $id): array
     {
         $asset = $this->getAssetUseCase->execute($id);
@@ -93,8 +99,13 @@ class AssetsPageController
         ];
     }
 
-	public function purchaseAsset(string $id): void
+    public function purchaseAsset(string $id): void
+    {
+        $this->purchaseAssetUseCase->execute($id);
+    }
+
+	public function createReview(string $id, string $review, bool $is_positive, string $positive, string $negative): void
 	{
-		$this->purchaseAssetUseCase->execute($id);
+		$this->createReviewUseCase->execute($id, $review, $positive, $negative, $is_positive);
 	}
 }

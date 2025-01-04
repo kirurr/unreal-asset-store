@@ -18,10 +18,6 @@ class PurchaseContainer extends ServiceContainer implements ContainerInterface
 {
     public function initDependencies(): void
     {
-        $this->set(SQLitePurchaseRepository::class, function () {
-            return new SQLitePurchaseRepository($this::get(PDO::class));
-        });
-
         $this->set(GetPurchasesUseCase::class, function () {
             return new GetPurchasesUseCase($this::get(SQLitePurchaseRepository::class));
         });

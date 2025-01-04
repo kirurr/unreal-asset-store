@@ -8,6 +8,7 @@ use Core\ServiceContainer;
 use Repositories\Asset\AssetSQLiteRepository;
 use Repositories\Category\CategorySQLiteRepository;
 use Repositories\Image\SQLiteImageRepository;
+use Repositories\Purchase\SQLitePurchaseRepository;
 use Services\Session\SessionService;
 use Services\Validation\AssetValidationService;
 use UseCases\Asset\ChangeAssetPurchaseCountUseCase;
@@ -62,7 +63,11 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
         );
         $this->set(
             DeleteAssetUseCase::class, function () {
-                return new DeleteAssetUseCase($this::get(AssetSQLiteRepository::class), $this::get(CategorySQLiteRepository::class));
+				return new DeleteAssetUseCase(
+					$this::get(AssetSQLiteRepository::class),
+					$this::get(CategorySQLiteRepository::class),
+					$this::get(SQLitePurchaseRepository::class),
+				);
             }
         );
 

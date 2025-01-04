@@ -5,6 +5,7 @@ namespace Controllers;
 use Services\Session\SessionService;
 use UseCases\Asset\GetAllAssetUseCase;
 use UseCases\Asset\GetAssetsByUserPurhcasesUseCase;
+use UseCases\Review\GetReviewsByUserIdUseCase;
 use UseCases\User\GetUserUseCase;
 
 class ProfileController
@@ -13,7 +14,8 @@ class ProfileController
         private SessionService $session,
         private GetUserUseCase $getUserUseCase,
         private GetAllAssetUseCase $getAllAssetUseCase,
-        private GetAssetsByUserPurhcasesUseCase $getAssetsByUserPurhcasesUseCase
+		private GetAssetsByUserPurhcasesUseCase $getAssetsByUserPurhcasesUseCase,
+		private GetReviewsByUserIdUseCase $getReviewsByUserIdUseCase,
     ) {}
 
     /**
@@ -27,10 +29,13 @@ class ProfileController
         $assets = $this->getAllAssetUseCase->execute(user_id: $user->id);
         $purchased_assets = $this->getAssetsByUserPurhcasesUseCase->execute($user->id);
 
+		$reviews = $this->getReviewsByUserIdUseCase->execute($user->id);
+
         return [
             'user' => $user,
             'assets' => $assets,
-            'purchased_assets' => $purchased_assets
+			'purchased_assets' => $purchased_assets,
+			'reviews' => $reviews,
         ];
     }
 }

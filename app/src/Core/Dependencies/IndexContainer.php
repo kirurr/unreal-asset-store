@@ -20,6 +20,8 @@ use UseCases\Category\GetCategoryUseCase;
 use UseCases\File\GetFileByIdUseCase;
 use UseCases\File\GetFilesUseCase;
 use UseCases\Purchase\PurchaseAssetUseCase;
+use UseCases\Review\CreateReviewUseCase;
+use UseCases\Review\GetReviewsByAssetIdUseCase;
 
 class IndexContainer extends ServiceContainer implements ContainerInterface
 {
@@ -72,7 +74,9 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
 					$this::get(GetFilesUseCase::class),
 					$this::get(GetFileByIdUseCase::class),
 					$this::get(ChangeAssetPurchaseCountUseCase::class),
-					$this::get(PurchaseAssetUseCase::class)
+					$this::get(PurchaseAssetUseCase::class),
+					$this::get(GetReviewsByAssetIdUseCase::class),
+					$this::get(CreateReviewUseCase::class)
                 );
             }
         );

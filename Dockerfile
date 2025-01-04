@@ -13,6 +13,7 @@ COPY ./apache-vhost.conf /etc/apache2/sites-available/000-default.conf
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN composer install
+RUN composer dump-autoload
 
 RUN apt-get update && apt-get install -y \
 	unzip \

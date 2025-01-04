@@ -8,8 +8,10 @@ use Repositories\Asset\AssetSQLiteRepository;
 use Repositories\Category\CategorySQLiteRepository;
 use Repositories\File\SQLiteFileRepository;
 use Repositories\Image\SQLiteImageRepository;
-use PDO;
+use Repositories\Purchase\SQLitePurchaseRepository;
+use Repositories\Review\SQLiteReviewRepository;
 use Repositories\User\UserSQLiteRepository;
+use PDO;
 
 class RepositoryContainer extends ServiceContainer implements ContainerInterface
 {
@@ -27,9 +29,9 @@ class RepositoryContainer extends ServiceContainer implements ContainerInterface
             }
         );
 
-		$this->set(SQLiteFileRepository::class, function () {
-			return new SQLiteFileRepository($this::get(PDO::class));
-		});
+        $this->set(SQLiteFileRepository::class, function () {
+            return new SQLiteFileRepository($this::get(PDO::class));
+        });
 
         $this->set(
             UserSQLiteRepository::class, function () {
@@ -42,5 +44,14 @@ class RepositoryContainer extends ServiceContainer implements ContainerInterface
                 return new CategorySQLiteRepository($this::get(PDO::class));
             }
         );
+
+        $this->set(SQLiteReviewRepository::class, function () {
+            return new SQLiteReviewRepository(
+                $this->get(PDO::class),
+            );
+        });
+        $this->set(SQLitePurchaseRepository::class, function () {
+            return new SQLitePurchaseRepository($this::get(PDO::class));
+        });
     }
 }

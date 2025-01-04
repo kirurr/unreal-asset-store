@@ -12,6 +12,7 @@ $router = new Router();
 (new Admin\AssetsRoutes($router))->defineRoutes('/admin/assets');
 (new Admin\UserRoutes($router))->defineRoutes('/admin/users');
 (new Admin\PurchasesRoutes($router))->defineRoutes('/admin/purchases');
+(new Admin\ReviewsRoutes($router))->defineRoutes('/admin/reviews');
 
 (new Profile\MainProfileRoutes($router))->defineRoutes('/profile');
 (new Profile\AssetsRoutes($router))->defineRoutes('/profile/assets');

@@ -6,6 +6,7 @@ use Core\Dependencies\AuthorizationContainer;
 use Core\Dependencies\IndexContainer;
 use Core\Dependencies\PurchaseContainer;
 use Core\Dependencies\RepositoryContainer;
+use Core\Dependencies\ReviewContainer;
 use Core\Dependencies\UserContainer;
 use Core\Dependencies\ProfileContainer;
 use Core\Dependencies\ImageContainer;
@@ -27,6 +28,7 @@ $container = new ServiceContainer();
 (new CategoryContainer())->initDependencies();
 (new UserContainer())->initDependencies();
 (new PurchaseContainer())->initDependencies();
+(new ReviewContainer())->initDependencies();
 
 (new ProfileContainer())->initDependencies();
 

@@ -1,11 +1,13 @@
 <?php
 
+use Entities\Review;
 use Entities\User;
 
 /**
  * @var User $user
  * @var Asset[] $assets
  * @var Asset[] $purchased_assets
+ * @var Review[] $reviews
  */
 
 ?>
@@ -38,6 +40,21 @@ use Entities\User;
 			<?php foreach ($purchased_assets as $asset): ?>
 				<li>
 					<a href="/assets/<?php echo $asset->id ?>"><?php echo $asset->name ?></a>
+				</li>
+			<?php endforeach; ?>
+			</ul>
+		</div>
+
+
+		<div>
+			<h2>Your Reviews</h2>
+			<p>to edit your reviews, contact us</p>
+			<ul>
+			<?php foreach ($reviews as $review): ?>
+				<li>
+					<a href="/assets/<?= $review->asset_id ?>">show asset</a>
+					<p><?= $review->review ?></p>
+					<p>by <?= $review->user->name ?></p>
 				</li>
 			<?php endforeach; ?>
 			</ul>
