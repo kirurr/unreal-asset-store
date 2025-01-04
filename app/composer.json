@@ -17,5 +17,7 @@
       "email": "timon09df@gmail.com"
     }
   ],
-  "require": {}
+  "require": {
+    "ezyang/htmlpurifier": "^4.18"
+  }
 }

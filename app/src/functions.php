@@ -15,3 +15,13 @@ function redirect(string $url) {
 	header('Location: ' . $url, true);
 	die();
 }
+
+function retrieveData(array $previousData, mixed $object, string $name): mixed
+{
+    if (isset($previousData[$name])) {
+        return $previousData[$name];
+    } elseif (isset($object->$name)) {
+        return $object->{$name};
+    }
+	return '';
+}

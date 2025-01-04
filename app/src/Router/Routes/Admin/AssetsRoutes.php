@@ -150,6 +150,9 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     category_id: $_POST['category_id'] ?? '',
                 );
                 try {
+					if ($errors) {
+						throw new DomainException('One or more fields are invalid');
+					}
                     $this->assetController->edit(
                         $slug['id'],
                         $data[ 'name' ],
@@ -162,10 +165,6 @@ class AssetsRoutes extends Routes implements RoutesInterface
 
                     redirect('/admin/assets/');
                 } catch (DomainException $e) {
-                    if ($errors) {
-                        throw new DomainException('One or more fields are invalid');
-                    }
-
                     $pageData = $this->assetController->getEditPageData($slug['id']);
 
                     http_response_code(400);

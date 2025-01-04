@@ -2,11 +2,32 @@
 
 namespace Services\Validation;
 
+use HTMLPurifier;
+use HTMLPurifier_Config;
+
 class AssetValidationService
 {
+    private function purifyHTML(string $html): string
+    {
+        $config = HTMLPurifier_Config::createDefault();
+
+        $config->set('Cache.DefinitionImpl', null);
+        $config->set(
+			'HTML.AllowedElements',
+			'p, strong, img, ul, li, ol, br, a, em, span, h1, h2, h3, h4, h5, h6, div, pre, blockquote, code, hr, sub, sup',
+		);
+        $config->set(
+			'HTML.AllowedAttributes',
+			'src, alt, width, height, style, href',
+		);
+
+        $purifier = new HTMLPurifier($config);
+        return $purifier->purify($html);
+    }
+
     /**
      * @return array{ 0: array<string, string>, 1: array{
-     * name: string, 
+     * name: string,
      * info: string,
      * description: string,
      * price: int,
@@ -26,7 +47,7 @@ class AssetValidationService
     ): array {
         $vname = htmlspecialchars(trim($name));
         $vinfo = htmlspecialchars(trim($info));
-        $vdescription = htmlspecialchars(trim($description));
+        $vdescription = $this->purifyHTML($description);
         $vprice = intval($price);
         $vengine_version = htmlspecialchars(trim($engine_version));
         $vcategory_id = intval($category_id);
@@ -53,19 +74,18 @@ class AssetValidationService
         }
 
         return [$errors, [
-        'name' => $vname,
-        'info' => $vinfo,
-        'description' => $vdescription,
-        'price' => $vprice,
-        'engine_version' => $vengine_version,
-        'category_id' => $vcategory_id
-        ]
-        ];
+            'name' => $vname,
+            'info' => $vinfo,
+            'description' => $vdescription,
+            'price' => $vprice,
+            'engine_version' => $vengine_version,
+            'category_id' => $vcategory_id
+        ]];
     }
 
     /**
      * @return array{ 0: array<string, string>, 1: array{
-     * name: string, 
+     * name: string,
      * info: string,
      * description: string,
      * price: int,
@@ -83,7 +103,7 @@ class AssetValidationService
     ): array {
         $vname = htmlspecialchars(trim($name));
         $vinfo = htmlspecialchars(trim($info));
-        $vdescription = htmlspecialchars(trim($description));
+        $vdescription = $this->purifyHTML($description);
         $vprice = intval($price);
         $vengine_version = htmlspecialchars(trim($engine_version));
         $vcategory_id = intval($category_id);
@@ -101,16 +121,14 @@ class AssetValidationService
         }
 
         return [$errors, [
-        'name' => $vname,
-        'info' => $vinfo,
-        'description' => $vdescription,
-        'price' => $vprice,
-        'engine_version' => $vengine_version,
-        'category_id' => $vcategory_id
-        ]
-        ];
+            'name' => $vname,
+            'info' => $vinfo,
+            'description' => $vdescription,
+            'price' => $vprice,
+            'engine_version' => $vengine_version,
+            'category_id' => $vcategory_id
+        ]];
     }
-
 
     /**
      * @return array<string, string>
@@ -167,13 +185,12 @@ class AssetValidationService
         $vtmp_name = htmlspecialchars(trim($tmp_name));
         $vold_image_path = htmlspecialchars(trim($old_image_path));
 
-
         $errors = [];
 
         if ($vimage_id === 0) {
             $errors['image_id'] = 'Image id is required';
         }
-        
+
         if ($vimage_order === 0) {
             $errors['image_order'] = 'Image order is required';
         }
@@ -185,25 +202,24 @@ class AssetValidationService
         if (empty($vimage_name) || empty($vtmp_name)) {
             $errors['image'] = 'Image is required for updating';
         } else {
-            $imagesErrors = $this->checkImages(['name'=>[$vimage_name]]);
+            $imagesErrors = $this->checkImages(['name' => [$vimage_name]]);
             if ($imagesErrors) {
                 $errors['image'] = $imagesErrors;
             }
         }
 
         return [$errors, [
-        'image_id' => $vimage_id,
-        'image_order' => $vimage_order,
-        'image_name' => $vimage_name,
-        'tmp_name' => $vtmp_name,
-        'old_image_path' => $vold_image_path
-        ]
-        ];
-
+            'image_id' => $vimage_id,
+            'image_order' => $vimage_order,
+            'image_name' => $vimage_name,
+            'tmp_name' => $vtmp_name,
+            'old_image_path' => $vold_image_path
+        ]];
     }
+
     /**
      * @return array{ 0: array<string, string>, 1: array{
-     * name: string, 
+     * name: string,
      * version: string,
      * description: string,
      * file_name: string,
@@ -242,17 +258,17 @@ class AssetValidationService
             $errors['path'] = 'Path is required';
         }
         return [$errors, [
-        'name' => $vname,
-        'version' => $vversion,
-        'description' => $vdescription,
-        'file_name' => $vfile_name,
-        'path' => $vpath
-        ]
-        ];
+            'name' => $vname,
+            'version' => $vversion,
+            'description' => $vdescription,
+            'file_name' => $vfile_name,
+            'path' => $vpath
+        ]];
     }
+
     /**
      * @return array{ 0: array<string, string>, 1: array{
-     * name: string, 
+     * name: string,
      * version: string,
      * description: string,
      * file_name: string,
@@ -275,10 +291,8 @@ class AssetValidationService
         $vpath = htmlspecialchars(trim($path));
         $vold_path = htmlspecialchars(trim($old_path));
 
-
         $errors = [];
 
-        
         if (empty($vname)) {
             $errors['name'] = 'Name is required';
         }
@@ -297,7 +311,7 @@ class AssetValidationService
                 $errors['file'] = $fileErrors;
             }
         }
-        
+
         if (empty($vpath)) {
             $errors['path'] = 'Path is required';
         }
@@ -305,44 +319,43 @@ class AssetValidationService
             $errors['old_path'] = 'Old path is required';
         }
 
-
         return [$errors, [
-        'name' => $vname,
-        'version' => $vversion,
-        'description' => $vdescription,
-        'file_name' => $vfile_name,
-        'path' => $vpath,
-        'old_path' => $vold_path
-        ]
-        ];
+            'name' => $vname,
+            'version' => $vversion,
+            'description' => $vdescription,
+            'file_name' => $vfile_name,
+            'path' => $vpath,
+            'old_path' => $vold_path
+        ]];
     }
 
     private function checkFile(string $file_name): ?string
     {
         $allowed = [
-        '.zip',
-        '.rar',
-        '.7z',
-        '.tar',
-        '.gz',
-        '.bz2',
-        '.xz',
-        '.txt',
-        '.doc',
-        '.docx',
-        '.xls',
-        '.xlsx',
-        '.ppt',
-        '.pptx',
-        '.pdf',
+            '.zip',
+            '.rar',
+            '.7z',
+            '.tar',
+            '.gz',
+            '.bz2',
+            '.xz',
+            '.txt',
+            '.doc',
+            '.docx',
+            '.xls',
+            '.xlsx',
+            '.ppt',
+            '.pptx',
+            '.pdf',
         ];
         preg_match('/(\.\w*)$/', $file_name, $matches);
         $ext = $matches[0] ?? '';
         if (empty($ext) || !in_array($ext, $allowed)) {
-            return "Error loading file: " . $file_name . " - invalid file type";
+            return 'Error loading file: ' . $file_name . ' - invalid file type';
         }
         return null;
     }
+
     /**
      * @param array{ name: string[] } $images
      */
@@ -354,13 +367,13 @@ class AssetValidationService
             preg_match('/(\.\w*)$/', $name, $matches);
             $ext = $matches[0] ?? '';
             if (empty($ext) || !in_array($ext, $allowed)) {
-                $imagesErrors[] = "Error loading image: " . $name;
+                $imagesErrors[] = 'Error loading image: ' . $name;
             }
         }
         if ($imagesErrors) {
-              $result =  implode(', ', $imagesErrors);
-              $result .= PHP_EOL .'Only ' . implode(', ', $allowed) . ' files are allowed';
-              return $result;
+            $result = implode(', ', $imagesErrors);
+            $result .= PHP_EOL . 'Only ' . implode(', ', $allowed) . ' files are allowed';
+            return $result;
         }
         return null;
     }

@@ -24,6 +24,7 @@ use Entities\User;
 <body>
 	<h1>asset <?= $asset->name ?></h1>
 	<p>category: <?= $category->name ?></p>
+	<p>description: <?= $asset->description ?></p>
 	<p>price <?= $asset->price ?></p>
 
 

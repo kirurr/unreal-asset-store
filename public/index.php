@@ -20,7 +20,7 @@ $method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 
 try {
     $router->route($uri, $method);
-} catch (Exception $e) {
+} catch (Throwable $e) {
     http_response_code(500);
 	//TODO: log error and not show it to user
     renderView('error', ['error' => $e->getMessage()]);
