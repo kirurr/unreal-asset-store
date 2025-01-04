@@ -17,6 +17,7 @@ $router = new Router();
 (new Profile\MainProfileRoutes($router))->defineRoutes('/profile');
 (new Profile\AssetsRoutes($router))->defineRoutes('/profile/assets');
 
+(new CategoriesRoutes($router))->defineRoutes('/categories');
 (new AssetsRoutes($router))->defineRoutes('/assets');
 
 return $router;

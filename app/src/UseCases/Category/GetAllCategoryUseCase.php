@@ -16,10 +16,10 @@ class GetAllCategoryUseCase
     /**
      * @return Category[]
      */
-    public function execute(): array
+    public function execute(?bool $by_popular = false): array
     {
         try {
-            return $this->repository->getAll();
+            return $this->repository->getAll($by_popular);
         } catch (RuntimeException $e) {
             throw new Exception('Unable to get all categories: ' . $e->getMessage(), 500, $e);
         }

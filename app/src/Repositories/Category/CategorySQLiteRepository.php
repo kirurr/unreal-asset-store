@@ -41,20 +41,23 @@ class CategorySQLiteRepository implements CategoryRepositoryInterface
         }
     }
 
-    public function getAll(): ?array
+    public function getAll(bool $by_popular = false): array
     {
         try {
-            $stmt = $this->pdo->prepare('SELECT * FROM category');
+            $query = 'SELECT * FROM category';
+            if ($by_popular) {
+                $query .= ' ORDER BY asset_count DESC';
+            }
+
+            $stmt = $this->pdo->prepare($query);
             $stmt->execute();
             $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if (!$categories) {
                 return [];
             }
-            $result = [];
-            foreach ($categories as $category) {
-                $result[] = new Category($category['id'], $category['name'], $category['description'], $category['asset_count']);
-            }
-            return $result;
+            return array_map(function ($category) {
+                return new Category($category['id'], $category['name'], $category['description'], $category['asset_count']);
+            }, $categories);
         } catch (PDOException $e) {
             throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
         }
@@ -94,23 +97,23 @@ class CategorySQLiteRepository implements CategoryRepositoryInterface
         }
     }
 
-	public function incrementAssetCount(int $id): void
-	{
-		try {
-			$stmt = $this->pdo->prepare('UPDATE category SET asset_count = asset_count + 1 WHERE id = :id');
-			$stmt->execute(['id' => $id]);
-		} catch (PDOException $e) {
-			throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
-		}
-	}
+    public function incrementAssetCount(int $id): void
+    {
+        try {
+            $stmt = $this->pdo->prepare('UPDATE category SET asset_count = asset_count + 1 WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
+        }
+    }
 
-	public function decrementAssetCount(int $id): void
-	{
-		try {
-			$stmt = $this->pdo->prepare('UPDATE category SET asset_count = asset_count - 1 WHERE id = :id');
-			$stmt->execute(['id' => $id]);
-		} catch (PDOException $e) {
-			throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
-		}
-	}
+    public function decrementAssetCount(int $id): void
+    {
+        try {
+            $stmt = $this->pdo->prepare('UPDATE category SET asset_count = asset_count - 1 WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error' . $e->getMessage(), 500, $e);
+        }
+    }
 }

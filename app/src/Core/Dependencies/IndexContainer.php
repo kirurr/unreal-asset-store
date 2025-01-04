@@ -3,6 +3,7 @@
 namespace Core\Dependencies;
 
 use Controllers\AssetsPageController;
+use Controllers\CategoriesPageController;
 use Controllers\MainPageController;
 use Core\ContainerInterface;
 use Core\ServiceContainer;
@@ -80,5 +81,11 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
                 );
             }
         );
+
+		$this->set(CategoriesPageController::class, function () {
+			return new CategoriesPageController(
+				$this::get(GetAllCategoryUseCase::class),
+			);
+		});
     }
 }
