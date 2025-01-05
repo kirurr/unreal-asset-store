@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --padding-regular: 2rem;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+nav ul li {
+  position: relative;
+}
+
+.sublist {
+  max-height: 0;
+  position: absolute;
+  overflow: hidden;
+  transition: max-height 1s ease-in-out;
+	visibility: hidden; 
+  pointer-events: none; 
+}
+
+.sublist.open {
+  max-height: 100rem;
+	visibility: visible; 
+  pointer-events: auto; 
+}
+
+.navbar {
+	display: flex;
+}
+
+.section {
+  margin: 0 auto;
+  padding: var(--padding-regular) 0;
+  max-width: 1200px;
+  background: gray;
+}
+
+.header {
+  padding: var(--padding-regular) 0;
+}
