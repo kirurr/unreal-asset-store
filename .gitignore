@@ -2,3 +2,5 @@ vendor
 public/assets_images/
 storage/unreal-asset-store.db
 storage/files/
+style.css
+tailwindcss
