@@ -16,7 +16,7 @@ class Asset
         public string $preview_image,
         public int $price,
         public string $engine_version,
-        public int $category_id,
+		public Category $category,
         public int $user_id,
         public int $created_at,
         public int $purchase_count = 0,

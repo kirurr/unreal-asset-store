@@ -3,6 +3,7 @@
 namespace Repositories\Asset;
 
 use Entities\Asset;
+use Entities\Category;
 use PDO;
 use PDOException;
 use RuntimeException;
@@ -16,7 +17,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
     public function getById(string $id): ?Asset
     {
         try {
-            $stmt = $this->pdo->prepare('SELECT * FROM asset WHERE id = :id');
+            $stmt = $this->pdo->prepare('SELECT asset.*, category.id as category_id, category.name as category_name, category.description as category_description, category.asset_count as category_asset_count FROM asset JOIN category ON asset.category_id = category.id WHERE asset.id = :id');
             $stmt->execute(['id' => $id]);
             $asset = $stmt->fetch(PDO::FETCH_ASSOC);
             if (!$asset) {
@@ -31,7 +32,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                 $asset['preview_image'],
                 $asset['price'],
                 $asset['engine_version'],
-                $asset['category_id'],
+                new Category($asset['category_id'], $asset['category_name'], $asset['category_description'], $asset['category_asset_count']),
                 $asset['user_id'],
                 $asset['created_at'],
                 $asset['purchase_count']
@@ -57,7 +58,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         int $maxPrice = null,
         int $limit = null
     ): array {
-        $query = 'SELECT * FROM asset';
+		$query = 'SELECT asset.*, category.id as category_id, category.name as category_name, category.description as category_description, category.asset_count as category_asset_count FROM asset JOIN category ON asset.category_id = category.id';
         $conditions = [];
 
         if ($search) {
@@ -139,7 +140,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                     $asset['preview_image'],
                     $asset['price'],
                     $asset['engine_version'],
-                    $asset['category_id'],
+					new Category($asset['category_id'], $asset['category_name'], $asset['category_description'], $asset['category_asset_count']),
                     $asset['user_id'],
                     $asset['created_at'],
                     $asset['purchase_count']
@@ -191,7 +192,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                     'preview_image' => $asset->preview_image,
                     'price' => $asset->price,
                     'engine_version' => $asset->engine_version,
-                    'category_id' => $asset->category_id,
+                    'category_id' => $asset->category->id,
                     'id' => $asset->id,
                 ]
             );
@@ -251,7 +252,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                 $asset['preview_image'],
                 $asset['price'],
                 $asset['engine_version'],
-                $asset['category_id'],
+				new Category($asset['category_id'], $asset['category_name'], $asset['category_description'], $asset['category_asset_count']),
                 $asset['user_id'],
                 $asset['created_at'],
                 $asset['purchase_count']

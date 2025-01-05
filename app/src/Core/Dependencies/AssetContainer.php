@@ -53,7 +53,10 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
         );
         $this->set(
             EditAssetUseCase::class, function () {
-                return new EditAssetUseCase($this::get(AssetSQLiteRepository::class));
+                return new EditAssetUseCase(
+                    $this::get(AssetSQLiteRepository::class),
+                    $this::get(CategorySQLiteRepository::class),
+                );
             }
         );
         $this->set(
@@ -63,11 +66,11 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
         );
         $this->set(
             DeleteAssetUseCase::class, function () {
-				return new DeleteAssetUseCase(
-					$this::get(AssetSQLiteRepository::class),
-					$this::get(CategorySQLiteRepository::class),
-					$this::get(SQLitePurchaseRepository::class),
-				);
+                return new DeleteAssetUseCase(
+                    $this::get(AssetSQLiteRepository::class),
+                    $this::get(CategorySQLiteRepository::class),
+                    $this::get(SQLitePurchaseRepository::class),
+                );
             }
         );
 

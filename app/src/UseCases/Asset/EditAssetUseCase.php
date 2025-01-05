@@ -5,12 +5,14 @@ namespace UseCases\Asset;
 use Repositories\Asset\AssetRepositoryInterface;
 use DomainException;
 use Exception;
+use Repositories\Category\CategoryRepositoryInterface;
 use RuntimeException;
 
 class EditAssetUseCase
 {
     public function __construct(
-        private AssetRepositoryInterface $repository
+		private AssetRepositoryInterface $repository,
+		private CategoryRepositoryInterface $categoryRepository
     ) {
     }
     /**
@@ -23,6 +25,15 @@ class EditAssetUseCase
             if (!$asset) {
                 throw new DomainException('Asset not found');
             }
+
+			if ($category_id) {
+				$category = $this->categoryRepository->getById($category_id);
+				if (!$category) {
+					throw new DomainException('Category not found');
+				}
+			} else {
+				$category = $asset->category;
+			}
             
             $asset->name = $name ?? $asset->name;
             $asset->info = $info ?? $asset->info;
@@ -30,7 +41,7 @@ class EditAssetUseCase
             $asset->preview_image = $preview_image ?? $asset->preview_image;
             $asset->price = $price ?? $asset->price;
             $asset->engine_version = $engine_version ?? $asset->engine_version;
-            $asset->category_id = $category_id ?? $asset->category_id;
+            $asset->category = $category;
 
             $this->repository->update($asset);
         } catch (RuntimeException $e) {
