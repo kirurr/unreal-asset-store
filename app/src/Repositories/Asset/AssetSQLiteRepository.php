@@ -3,9 +3,11 @@
 namespace Repositories\Asset;
 
 use Entities\Asset;
+use Entities\AssetFilters;
 use Entities\Category;
 use PDO;
 use PDOException;
+use PDOStatement;
 use RuntimeException;
 
 class AssetSQLiteRepository implements AssetRepositoryInterface
@@ -42,44 +44,34 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         }
     }
 
-    /**
-     * @return ?Asset[]
-     */
-    public function getAssets(
-        int $category_id = null,
-        int $user_id = null,
-        string $search = null,
-        string $engine_version = null,
-        int $interval = null,
-        bool $byNew = null,
-        bool $byPopular = null,
-        bool $asc = null,
-        int $minPrice = null,
-        int $maxPrice = null,
-        int $limit = null
-    ): array {
-		$query = 'SELECT asset.*, category.id as category_id, category.name as category_name, category.description as category_description, category.asset_count as category_asset_count FROM asset JOIN category ON asset.category_id = category.id';
+    public function buildQuery(AssetFilters $filters, bool $isCount = false): PDOStatement
+    {
+        if (!$isCount) {
+            $query = 'SELECT asset.*, category.id as category_id, category.name as category_name, category.description as category_description, category.asset_count as category_asset_count FROM asset JOIN category ON asset.category_id = category.id';
+        } else {
+            $query = 'SELECT COUNT(*) FROM asset';
+        }
         $conditions = [];
 
-        if ($search) {
+        if ($filters->search) {
             $conditions[] = 'name LIKE :search OR info LIKE :search OR description LIKE :search';
         }
-        if ($engine_version) {
+        if ($filters->engine_version) {
             $conditions[] = 'engine_version = :engine_version';
         }
-        if ($category_id) {
+        if ($filters->category_id) {
             $conditions[] = 'category_id = :category_id';
         }
-        if ($user_id) {
+        if ($filters->user_id) {
             $conditions[] = 'user_id = :user_id';
         }
-        if ($interval) {
-            $conditions[] = "created_at >= strftime('%s', 'now', '-$interval days') AND created_at < strftime('%s', 'now')";
+        if ($filters->interval) {
+            $conditions[] = "created_at >= strftime('%s', 'now', '-$filters->interval days') AND created_at < strftime('%s', 'now')";
         }
-        if ($minPrice) {
+        if ($filters->minPrice) {
             $conditions[] = 'price >= :minPrice';
         }
-        if ($maxPrice) {
+        if ($filters->maxPrice) {
             $conditions[] = 'price <= :maxPrice';
         }
 
@@ -87,43 +79,72 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
             $query .= ' WHERE ' . implode(' AND ', $conditions);
         }
 
-        if ($byNew && $byPopular) {
-            $query .= ' ORDER BY purchase_count' . ($asc ? ' ASC' : ' DESC') . ', created_at' . ($asc ? ' ASC' : ' DESC');
-        } elseif ($byNew) {
-            $query .= ' ORDER BY created_at' . ($asc ? ' ASC' : ' DESC');
-        } elseif ($byPopular) {
-            $query .= ' ORDER BY purchase_count' . ($asc ? ' ASC' : ' DESC');
+        if ($filters->byNew && $filters->byPopular) {
+            $query .= ' ORDER BY purchase_count' . ($filters->asc ? ' ASC' : ' DESC') . ', created_at' . ($filters->asc ? ' ASC' : ' DESC');
+        } elseif ($filters->byNew) {
+            $query .= ' ORDER BY created_at' . ($filters->asc ? ' ASC' : ' DESC');
+        } elseif ($filters->byPopular) {
+            $query .= ' ORDER BY purchase_count' . ($filters->asc ? ' ASC' : ' DESC');
         }
 
-        if ($limit) {
+        if ($filters->limit && !$isCount) {
             $query .= ' LIMIT :limit';
+        }
+
+        if ($filters->offset && !$isCount) {
+            $query .= ' OFFSET :offset';
         }
 
         try {
             $stmt = $this->pdo->prepare($query);
-            if ($category_id) {
-                $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+            if ($filters->category_id) {
+                $stmt->bindParam(':category_id', $filters->category_id, PDO::PARAM_INT);
             }
-            if ($user_id) {
-                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            if ($filters->user_id) {
+                $stmt->bindParam(':user_id', $filters->user_id, PDO::PARAM_INT);
             }
-            if ($search) {
-                $searchWildcard = '%' . $search . '%';
+            if ($filters->search) {
+                $searchWildcard = '%' . $filters->search . '%';
                 $stmt->bindParam(':search', $searchWildcard, PDO::PARAM_STR);
             }
-            if ($engine_version) {
-                $stmt->bindParam(':engine_version', $engine_version, PDO::PARAM_STR);
+            if ($filters->engine_version) {
+                $stmt->bindParam(':engine_version', $filters->engine_version, PDO::PARAM_STR);
             }
-            if ($limit) {
-                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            if ($filters->limit && !$isCount) {
+                $stmt->bindParam(':limit', $filters->limit, PDO::PARAM_INT);
             }
-            if ($minPrice) {
-                $stmt->bindParam(':minPrice', $minPrice, PDO::PARAM_INT);
+            if ($filters->offset && !$isCount) {
+                $stmt->bindParam(':offset', $filters->offset, PDO::PARAM_INT);
             }
-            if ($maxPrice) {
-                $stmt->bindParam(':maxPrice', $maxPrice, PDO::PARAM_INT);
+            if ($filters->minPrice) {
+                $stmt->bindParam(':minPrice', $filters->minPrice, PDO::PARAM_INT);
+            }
+            if ($filters->maxPrice) {
+                $stmt->bindParam(':maxPrice', $filters->maxPrice, PDO::PARAM_INT);
             }
 
+            return $stmt;
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error: ' . $e->getMessage(), 500, $e);
+        }
+    }
+
+    public function countAssets(PDOStatement $stmt): int
+    {
+        try {
+            $stmt->execute();
+            return $stmt->fetch()[0];
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error: ' . $e->getMessage(), 500, $e);
+        }
+    }
+
+    /**
+     * @return ?Asset[]
+     */
+    public function getAssets(PDOStatement $stmt): array
+    {
+        try {
             $stmt->execute();
             $assets = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if (!$assets) {
@@ -140,7 +161,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                     $asset['preview_image'],
                     $asset['price'],
                     $asset['engine_version'],
-					new Category($asset['category_id'], $asset['category_name'], $asset['category_description'], $asset['category_asset_count']),
+                    new Category($asset['category_id'], $asset['category_name'], $asset['category_description'], $asset['category_asset_count']),
                     $asset['user_id'],
                     $asset['created_at'],
                     $asset['purchase_count']
@@ -252,7 +273,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                 $asset['preview_image'],
                 $asset['price'],
                 $asset['engine_version'],
-				new Category($asset['category_id'], $asset['category_name'], $asset['category_description'], $asset['category_asset_count']),
+                new Category($asset['category_id'], $asset['category_name'], $asset['category_description'], $asset['category_asset_count']),
                 $asset['user_id'],
                 $asset['created_at'],
                 $asset['purchase_count']

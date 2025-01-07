@@ -8,6 +8,7 @@ use Services\Session\SessionService;
 use UseCases\Asset\ChangeAssetPurchaseCountUseCase;
 use UseCases\Asset\GetAssetsPageUseCase;
 use UseCases\Asset\GetAssetUseCase;
+use UseCases\Asset\GetPaginationAssetUseCase;
 use UseCases\Category\GetAllCategoryUseCase;
 use UseCases\Category\GetCategoryUseCase;
 use UseCases\File\GetFileByIdUseCase;
@@ -30,6 +31,7 @@ class AssetsPageController
         private PurchaseAssetUseCase $purchaseAssetUseCase,
         private GetReviewsByAssetIdUseCase $getReviewsByAssetIdUseCase,
 		private CreateReviewUseCase $createReviewUseCase,
+		private GetPaginationAssetUseCase $getPaginationAssetUseCase,
     ) {}
 
     /**
@@ -39,6 +41,7 @@ class AssetsPageController
     {
         return [
             'assets' => $this->getAssetsPageUseCase->execute($filters),
+			'pages' => $this->getPaginationAssetUseCase->execute($filters),
             'categories' => $this->getAllCategoryUseCase->execute()
         ];
     }

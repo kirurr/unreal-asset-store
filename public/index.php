@@ -1,7 +1,7 @@
 <?php
-set_error_handler(function ($errno, $errstr, $errfile, $errline) {
-    throw new Exception($errstr, $errno);
-});
+/*set_error_handler(function ($errno, $errstr, $errfile, $errline) {*/
+/*    throw new Exception($errstr, $errno);*/
+/*});*/
 
 const BASE_PATH = __DIR__ . '/../html/';
 

@@ -3,27 +3,21 @@
 namespace Repositories\Asset;
 
 use Entities\Asset;
+use Entities\AssetFilters;
+use PDOStatement;
 
 interface AssetRepositoryInterface
 {
+	public function buildQuery(AssetFilters $filters, bool $isCount = false): PDOStatement;
+
     public function getById(string $id): ?Asset;
 
-    /**
-     * @return ?Asset[]
-     */
-	public function getAssets(
-		int $category_id = null,
-        int $user_id = null,
-		string $search = null,
-		string $engine_version = null,
-        int $interval = null,
-        bool $byNew = null,
-        bool $byPopular = null,
-        bool $asc = null,
-        int $minPrice = null,
-		int $maxPrice = null,
-		int $limit = null,
-    ): array;
+	/**
+	 * @return ?Asset[]
+	 */
+	public function getAssets(PDOStatement $stmt): array;
+
+	public function countAssets(PDOStatement $stmt): int;
      
     /**
      * @return ?Asset[]

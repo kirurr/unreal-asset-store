@@ -15,6 +15,7 @@ use UseCases\Asset\ChangeAssetPurchaseCountUseCase;
 use UseCases\Asset\GetAssetUseCase;
 use UseCases\Asset\GetAssetsPageUseCase;
 use UseCases\Asset\GetMainPageAssetsUseCase;
+use UseCases\Asset\GetPaginationAssetUseCase;
 use UseCases\Asset\GetTopAssetsUseCase;
 use UseCases\Category\GetAllCategoryUseCase;
 use UseCases\Category\GetCategoryUseCase;
@@ -77,7 +78,8 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
 					$this::get(ChangeAssetPurchaseCountUseCase::class),
 					$this::get(PurchaseAssetUseCase::class),
 					$this::get(GetReviewsByAssetIdUseCase::class),
-					$this::get(CreateReviewUseCase::class)
+					$this::get(CreateReviewUseCase::class),
+					$this::get(GetPaginationAssetUseCase::class),
                 );
             }
         );

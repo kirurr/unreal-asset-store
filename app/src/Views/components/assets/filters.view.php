@@ -1,10 +1,19 @@
+<?php
+use Entities\AssetFilters;
+use Entities\Category;
+
+/** @var Category[] $categories */
+/** @var array{ min: int, max: int } $prices */
+/** @var AssetFilters $filters */
+?>
+
 <form action="/assets" method="get">
 	<label for="category_id">Category</label>
 	<select name="category_id" id="category_id">
 		<option value="">All</option>
-		<?php foreach ($categories as $category) : ?>
+		<?php foreach ($categories as $category): ?>
 		<option 
-			<?php echo(($filters->category_id === $category->id) ? "selected" : "") ?>
+			<?php echo (($filters->category_id === $category->id) ? 'selected' : '') ?>
 			value="<?= $category->id ?>">
 			<?= $category->name ?>
 		</option>
@@ -21,27 +30,27 @@
 	<select name="interval" id="interval">
 		<option value="">All time</option>
 		<option 
-			<?php echo(($filters->interval === 1) ? "selected" : "") ?>
+			<?php echo (($filters->interval === 1) ? 'selected' : '') ?>
 			value="1">Last 24 hours
 		</option>
 		<option 
-			<?php echo(($filters->interval === 7) ? "selected" : "") ?>
+			<?php echo (($filters->interval === 7) ? 'selected' : '') ?>
 			value="7">Last 7 days
 		</option>
 		<option 
-			<?php echo(($filters->interval === 30) ? "selected" : "") ?>
+			<?php echo (($filters->interval === 30) ? 'selected' : '') ?>
 			value="30">Last 30 days
 		</option>
 	</select>
 
 	<label for="byNew">By New</label>
-	<input type="checkbox" name="byNew" id="byNew" <?= $filters->byNew ? "checked" : "" ?>>
+	<input type="checkbox" name="byNew" id="byNew" <?= $filters->byNew ? 'checked' : '' ?>>
 
 	<label for="byPopular">By Popular</label>
-	<input type="checkbox" name="byPopular" id="byPopular" <?= $filters->byPopular ? "checked" : "" ?>>
+	<input type="checkbox" name="byPopular" id="byPopular" <?= $filters->byPopular ? 'checked' : '' ?>>
 
 	<label for="asc">Ascending</label>
-	<input type="checkbox" name="asc" id="asc" <?= $filters->asc ? "checked" : "" ?>>
+	<input type="checkbox" name="asc" id="asc" <?= $filters->asc ? 'checked' : '' ?>>
 
 	<label for="minPrice">Min Price</label>
 	<input type="number" name="minPrice" id="minPrice" value="<?= $filters->minPrice ?? $prices['min'] ?>">

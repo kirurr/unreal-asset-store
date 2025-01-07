@@ -20,6 +20,7 @@ use UseCases\Asset\GetAssetsByUserPurhcasesUseCase;
 use UseCases\Asset\GetAssetsPageUseCase;
 use UseCases\Asset\GetAssetUseCase;
 use UseCases\Asset\GetMainPageAssetsUseCase;
+use UseCases\Asset\GetPaginationAssetUseCase;
 use UseCases\Asset\GetTopAssetsUseCase;
 use UseCases\Category\GetAllCategoryUseCase;
 use UseCases\Image\CreateImageUseCase;
@@ -99,6 +100,10 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
         $this->set(GetAssetsByUserPurhcasesUseCase::class, function () {
             return new GetAssetsByUserPurhcasesUseCase($this::get(AssetSQLiteRepository::class));
         });
+
+		$this->set(GetPaginationAssetUseCase::class, function () {
+			return new GetPaginationAssetUseCase($this::get(AssetSQLiteRepository::class));
+		});
 
         $this->set(
             AssetController::class, function () {

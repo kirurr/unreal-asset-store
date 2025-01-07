@@ -32,6 +32,10 @@ class AssetsRoutes extends Routes implements RoutesInterface
     {
         $this->router->get(
             $prefix . '/', function (array $slug) {
+				$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+				$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+				$offset = ($page - 1) * $limit;
+
                 $filters = new AssetFilters(
                     category_id: isset($_GET['category_id']) ? intval($_GET['category_id']) : null,
                     user_id: isset($_GET['user_id']) ? intval($_GET['user_id']) : null,
@@ -43,7 +47,8 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     asc: isset($_GET['asc']) ? htmlspecialchars($_GET['asc']) : null,
                     minPrice: isset($_GET['minPrice']) ? intval($_GET['minPrice']) : null,
                     maxPrice: isset($_GET['maxPrice']) ? intval($_GET['maxPrice']) : null,
-                    limit: isset($_GET['limit']) ? intval($_GET['limit']) : null
+                    limit: $limit,
+					offset: $offset
                 );
 
                 try {

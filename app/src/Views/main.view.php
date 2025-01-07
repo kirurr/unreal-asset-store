@@ -2,20 +2,24 @@
 
 use Entities\Asset;
 
-/** @var array{ id: int, name: string, email: string } $user */
-/** @var Asset[] $topAssets */
-/** @var Asset[] $moreAssets */
+/**
+ * @var array{ id: int, name: string, email: string } $user
+ */
+
+/**
+ * @var Asset[] $topAssets
+ */
+
+/**
+ * @var Asset[] $moreAssets
+ */
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="stylesheet" href="/style.css">
-		<script src="/js/colapsable.js" defer></script>
+		<? renderComponent('head'); ?>
 		<title>Unreal Asset Store</title>
 	</head>
 	<body>
@@ -23,10 +27,17 @@ use Entities\Asset;
 			<? renderComponent('navbar', ['user' => $user]);?>
 		</header>
 		<main>
-			<section class="section">
+			<section>
 				<? renderComponent('main/top-assets', ['assets' => $topAssets]);?>
 			</section>
-			<section class="section">
+			<section class="w-full max-w-full bg-secondary-bg-color">
+				<div class="max-w-screen-xl mx-auto"> 
+					<h2>register</h2>
+					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis eum, earum nihil perferendis consectetur eligendi sapiente ea recusandae est dignissimos!</p>
+					<button>Register</button>
+				</div>
+			</section>
+			<section id="more-assets">
 				<? renderComponent('main/more-assets', ['assets' => $moreAssets]);?>
 			</section>
 		</main>
