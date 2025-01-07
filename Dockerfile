@@ -4,17 +4,9 @@ FROM php:8.3-apache
 # Копируем custom-php.ini в директорию для конфигурации PHP
 COPY custom-php.ini /usr/local/etc/php/conf.d/
 
-# Копируем содержимое текущей директории в папку /var/www/html в контейнере
-COPY ./app /var/www/html/
-COPY ./public /var/www/public/
-
 COPY ./apache-vhost.conf /etc/apache2/sites-available/000-default.conf
 
 # устанавливаем composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-RUN composer install
-RUN composer dump-autoload
 
 RUN apt-get update && apt-get install -y \
 	unzip \
@@ -26,8 +18,11 @@ RUN docker-php-ext-install pdo pdo_sqlite
 
 RUN a2enmod rewrite
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 # Делаем папку доступной для веб-сервера Apache
-RUN chown -R www-data:www-data /var/www /var/www/html /var/www/public
+RUN chown -R www-data:www-data /var/www 
 
 COPY ./tailwind.config.js /var/www/tailwind.config.js
 WORKDIR /var/www/
@@ -39,4 +34,8 @@ RUN chmod +x tailwindcss-linux-x64
 COPY ./tailwind.sh /var/www/tailwind.sh
 
 RUN chmod +x tailwind.sh
+
+COPY ./composer.sh /var/www/composer.sh
+
+RUN chmod +x composer.sh
 
