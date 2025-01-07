@@ -6,7 +6,6 @@ use Controllers\ReviewController;
 use Core\ContainerInterface;
 use Core\ServiceContainer;
 use Repositories\Review\SQLiteReviewRepository;
-use Services\Session\SessionService;
 use Services\Validation\ReviewValidationService;
 use UseCases\Review\CreateReviewUseCase;
 use UseCases\Review\DeleteReviewUseCase;
@@ -41,7 +40,6 @@ class ReviewContainer extends ServiceContainer implements ContainerInterface
         $this->set(CreateReviewUseCase::class, function () {
             return new CreateReviewUseCase(
                 $this::get(SQLiteReviewRepository::class),
-                $this::get(SessionService::class),
             );
         });
 

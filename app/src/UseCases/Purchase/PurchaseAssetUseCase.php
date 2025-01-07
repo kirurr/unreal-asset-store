@@ -12,7 +12,6 @@ use DomainException;
 class PurchaseAssetUseCase
 {
     public function __construct(
-        private SessionService $sessionService,
         private PurchaseRepositoryInterface $repository,
         private AssetRepositoryInterface $assetRepository,
     ) {}
@@ -21,7 +20,8 @@ class PurchaseAssetUseCase
     {
         try {
             $asset = $this->assetRepository->getById($id);
-            $user = $this->sessionService->getUser();
+			$session = SessionService::getInstance();
+			$user = $session->getUser();
 
             if (!$asset) {
                 throw new DomainException('Asset not found');

@@ -11,7 +11,6 @@ use Router\Router;
 use Router\Routes\RoutesInterface;
 
 use Router\Routes\Routes;
-use Services\Session\SessionService;
 
 class MainProfileRoutes extends Routes implements RoutesInterface
 {
@@ -39,7 +38,7 @@ class MainProfileRoutes extends Routes implements RoutesInterface
                 {
                     $this->handleException($e);
                 }
-            }, [(new IsUserMiddleware(ServiceContainer::get(SessionService::class)))]
+            }, [(new IsUserMiddleware())]
         );
 
     }

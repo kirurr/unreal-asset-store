@@ -4,7 +4,6 @@ namespace Controllers;
 
 use Entities\AssetFilters;
 use Entities\File;
-use Services\Session\SessionService;
 use UseCases\Asset\ChangeAssetPurchaseCountUseCase;
 use UseCases\Asset\GetAssetsPageUseCase;
 use UseCases\Asset\GetAssetUseCase;
@@ -24,7 +23,6 @@ class AssetsPageController
         private GetAssetsPageUseCase $getAssetsPageUseCase,
         private GetAssetUseCase $getAssetUseCase,
         private GetCategoryUseCase $getCategoryUseCase,
-        private SessionService $sessionService,
         private GetFilesUseCase $getFilesUseCase,
         private GetFileByIdUseCase $getFileUseCase,
         private ChangeAssetPurchaseCountUseCase $changeAssetPurchaseCountUseCase,
@@ -52,14 +50,13 @@ class AssetsPageController
     public function getAssetPageData(string $id): array
     {
         $asset = $this->getAssetUseCase->execute($id);
-        $category = $this->getCategoryUseCase->execute($asset->category_id);
+        $category = $this->getCategoryUseCase->execute($asset->category->id);
         $reviews = $this->getReviewsByAssetIdUseCase->execute($id);
 
         return [
             'asset' => $asset,
             'category' => $category,
             'reviews' => $reviews,
-            'user' => $this->sessionService->getUser()
         ];
     }
 
@@ -76,7 +73,6 @@ class AssetsPageController
             'asset' => $asset,
             'category' => $category,
             'files' => $files,
-            'user' => $this->sessionService->getUser()
         ];
     }
 

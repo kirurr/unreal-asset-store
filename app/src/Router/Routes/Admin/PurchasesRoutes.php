@@ -11,7 +11,6 @@ use Router\Middlewares\IsUserAdminMiddleware;
 use Router\Routes\Routes;
 use Router\Routes\RoutesInterface;
 use Router\Router;
-use Services\Session\SessionService;
 
 class PurchasesRoutes extends Routes implements RoutesInterface
 {
@@ -36,7 +35,7 @@ class PurchasesRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
 		$this->router->delete(
@@ -58,7 +57,7 @@ class PurchasesRoutes extends Routes implements RoutesInterface
 				} catch (Exception $e) {
 					$this->handleException($e);
 				}
-			}, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+			}, [new IsUserAdminMiddleware()]
 		);
     }
 }

@@ -2,16 +2,14 @@
 
 namespace UseCases\User;
 
-use Services\Session\SessionInterface;
+use Services\Session\SessionService;
 
 class SignOutUserUseCase
 {
-    public function __construct(
-        private SessionInterface $session
-    ) {}
 
     public function execute(): void
     {
-        $this->session->deleteUser();
+		$session = SessionService::getInstance();
+		$session->deleteUser();
     }
 }

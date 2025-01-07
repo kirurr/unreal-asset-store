@@ -5,8 +5,6 @@ namespace Core\Dependencies;
 use Controllers\ProfileController;
 use Core\ContainerInterface;
 use Core\ServiceContainer;
-
-use Services\Session\SessionService;
 use UseCases\Asset\GetAllAssetUseCase;
 use UseCases\Asset\GetAssetsByUserPurhcasesUseCase;
 use UseCases\Review\GetReviewsByUserIdUseCase;
@@ -19,7 +17,6 @@ class ProfileContainer extends ServiceContainer implements ContainerInterface
         $this->set(
             ProfileController::class, function () {
                 return new ProfileController(
-                    $this::get(SessionService::class),
                     $this::get(GetUserUseCase::class),
                     $this::get(GetAllAssetUseCase::class),
 					$this::get(GetAssetsByUserPurhcasesUseCase::class),

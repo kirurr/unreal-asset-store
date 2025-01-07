@@ -1,4 +1,5 @@
 <?php
+session_start();
 /*set_error_handler(function ($errno, $errstr, $errfile, $errline) {*/
 /*    throw new Exception($errstr, $errno);*/
 /*});*/
@@ -20,6 +21,9 @@ $method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 
 try {
     $router->route($uri, $method);
+} catch (DomainException $e) {
+	http_response_code(404);
+	redirect('/');
 } catch (Throwable $e) {
     http_response_code(500);
 	//TODO: log error and not show it to user

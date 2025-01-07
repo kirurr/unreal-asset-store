@@ -9,7 +9,6 @@ use DomainException;
 use Exception;
 use Router\Middlewares\IsUserMiddleware;
 use Router\Router;
-use Services\Session\SessionService;
 use Services\Validation\UserValidationService;
 
 class AuthRoutes extends Routes implements RoutesInterface
@@ -33,7 +32,7 @@ class AuthRoutes extends Routes implements RoutesInterface
                 } 
 
                 redirect('/');
-            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserMiddleware()]
         );
 
         $this->router->get(
@@ -43,7 +42,7 @@ class AuthRoutes extends Routes implements RoutesInterface
                 }
 
                 redirect('/');
-            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserMiddleware()]
         );
 
         $this->router->post(
@@ -79,7 +78,7 @@ class AuthRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserMiddleware()]
         );
 
         $this->router->post(
@@ -118,14 +117,14 @@ class AuthRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserMiddleware()]
         );
 
         $this->router->get(
             $prefix . '/signout/', function () {
                 $this->authController->signOut();
                 redirect('/');
-            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserMiddleware()]
         );
     }
 }

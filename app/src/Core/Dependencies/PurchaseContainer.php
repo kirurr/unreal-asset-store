@@ -7,12 +7,10 @@ use Core\ContainerInterface;
 use Core\ServiceContainer;
 use Repositories\Asset\AssetSQLiteRepository;
 use Repositories\Purchase\SQLitePurchaseRepository;
-use Services\Session\SessionService;
 use UseCases\Purchase\DeletePurchaseUseCase;
 use UseCases\Purchase\GetPurchasesUseCase;
 use UseCases\Purchase\IsUserPurchasedAssetUseCase;
 use UseCases\Purchase\PurchaseAssetUseCase;
-use PDO;
 
 class PurchaseContainer extends ServiceContainer implements ContainerInterface
 {
@@ -28,7 +26,6 @@ class PurchaseContainer extends ServiceContainer implements ContainerInterface
 
         $this->set(PurchaseAssetUseCase::class, function () {
             return new PurchaseAssetUseCase(
-                $this::get(SessionService::class),
                 $this::get(SQLitePurchaseRepository::class),
                 $this::get(AssetSQLiteRepository::class),
             );

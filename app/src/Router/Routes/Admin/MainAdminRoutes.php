@@ -4,10 +4,8 @@ namespace Router\Routes\Admin;
 
 use Core\Errors\MiddlewareException;
 use Router\Middlewares\IsUserAdminMiddleware;
-use Core\ServiceContainer;
 use Router\Router;
 use Router\Routes\Routes;
-use Services\Session\SessionService;
 use Router\Routes\RoutesInterface;
 
 class MainAdminRoutes extends Routes implements RoutesInterface {
@@ -21,7 +19,7 @@ class MainAdminRoutes extends Routes implements RoutesInterface {
 					redirect('/');
                 }
 				redirect('/admin/categories');
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 	}
 }

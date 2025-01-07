@@ -1,5 +1,7 @@
 <?php
 
+use Services\Session\SessionService;
+
 use Entities\Asset;
 use Entities\Category;
 use Entities\User;
@@ -12,14 +14,16 @@ use Entities\User;
  * @var Review[] $reviews
  * @var array{ previousData: array{ review: string, is_positive: bool, positive: string, negative: string }, errors: array, errorMessage: string } $review
  */
+
+$session = SessionService::getInstance();
+$user = $session->getUser();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>asset <?= $asset->name ?></title>
+	<? renderComponent('head'); ?>
 </head>
 <body>
 	<h1>asset <?= $asset->name ?></h1>

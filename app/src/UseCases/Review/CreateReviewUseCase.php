@@ -11,7 +11,6 @@ class CreateReviewUseCase
 {
     public function __construct(
         private ReviewRepositoryInterface $reviewRepository,
-        private SessionService $sessionService,
     ) {}
 
     /**
@@ -25,7 +24,8 @@ class CreateReviewUseCase
         bool $is_positive
     ): void {
         try {
-            $user_id = $this->sessionService->getUser()['id'];
+			$session = SessionService::getInstance();
+			$user_id = $session->getUser()['id'];
 
             $this->reviewRepository->create(
                 $asset_id,

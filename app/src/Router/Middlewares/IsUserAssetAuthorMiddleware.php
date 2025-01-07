@@ -2,21 +2,20 @@
 
 namespace Router\Middlewares;
 use Core\Errors\MiddlewareException;
-
-use Services\Session\SessionInterface;
+use Services\Session\SessionService;
 use UseCases\Asset\GetAssetUseCase;
 
 class IsUserAssetAuthorMiddleware extends Middleware
 {
     public function __construct(
-        private SessionInterface $session,
         private GetAssetUseCase $getAssetUseCase
     ) {
     }
 
     public function __invoke(array $slug = []): void
     {
-        if(!$this->session->hasUser()) {
+		$session = SessionService::getInstance();
+        if(!$session->hasUser()) {
             throw new MiddlewareException('User is not logged in');
         };
 
@@ -25,7 +24,7 @@ class IsUserAssetAuthorMiddleware extends Middleware
 			throw new MiddlewareException('Asset not found');
 		}
 
-        if($asset->user_id !== $this->session->getUser()['id']) {
+        if($asset->user_id !== $session->getUser()['id']) {
             throw new MiddlewareException('User is not author of asset');
         }
 

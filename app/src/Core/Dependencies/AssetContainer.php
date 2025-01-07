@@ -43,7 +43,6 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
                 return new CreateAssetUseCase(
                     $this::get(AssetSQLiteRepository::class),
                     $this::get(CategorySQLiteRepository::class),
-                    $this::get(SessionService::class)
                 );
             }
         );
@@ -118,7 +117,6 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
                     $this::get(UpdateImageUseCase::class),
                     $this::get(DeleteImageUseCase::class),
                     $this::get(GetImagesForAssetUseCase::class),
-                    $this->get(SessionService::class),
                 );
             }
         );

@@ -40,7 +40,7 @@ class CategoriesRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->get(
@@ -49,7 +49,7 @@ class CategoriesRoutes extends Routes implements RoutesInterface
                     redirect('/');
                 }
                 renderView('admin/categories/create');
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->post(
@@ -85,7 +85,7 @@ class CategoriesRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
         $this->router->get(
             $prefix . '/{id}/', function (array $slug, ?MiddlewareException  $middleware) {
@@ -101,7 +101,7 @@ class CategoriesRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->put(
@@ -133,7 +133,7 @@ class CategoriesRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->delete(
@@ -155,7 +155,7 @@ class CategoriesRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
     }

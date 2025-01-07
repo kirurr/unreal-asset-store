@@ -3,17 +3,14 @@
 namespace Router\Middlewares;
 
 use Core\Errors\MiddlewareException;
-use Services\Session\SessionInterface;
+use Services\Session\SessionService;
 
 class IsUserAdminMiddleware extends Middleware
 {
-    public function __construct(
-        private SessionInterface $session
-    ) {}
-
     public function __invoke(array $slug = []): void
     {
-        $user = $this->session->getUser();
+		$session = SessionService::getInstance();
+        $user = $session->getUser();
         if (!$user) {
             throw new MiddlewareException('User is not logged in');
         }

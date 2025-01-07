@@ -3,7 +3,7 @@
 namespace Router\Middlewares;
 
 use Core\Errors\MiddlewareException;
-use Services\Session\SessionInterface;
+use Services\Session\SessionService;
 use UseCases\Asset\GetAssetUseCase;
 use UseCases\File\GetFileByIdUseCase;
 use UseCases\Purchase\IsUserPurchasedAssetUseCase;
@@ -11,7 +11,6 @@ use UseCases\Purchase\IsUserPurchasedAssetUseCase;
 class IsUserPurchasedAssetMiddleware extends Middleware
 {
     public function __construct(
-        private SessionInterface $session,
         private GetFileByIdUseCase $getFileByIdUseCase,
         private IsUserPurchasedAssetUseCase $isUserPurchasedAssetUseCase,
         private GetAssetUseCase $getAssetUseCase
@@ -29,7 +28,8 @@ class IsUserPurchasedAssetMiddleware extends Middleware
         }
 
 
-        if (!$this->session->hasUser()) {
+		$session = SessionService::getInstance();
+        if (!$session->hasUser()) {
             throw new MiddlewareException('User is not logged in');
         };
 

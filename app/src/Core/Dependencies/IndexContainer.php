@@ -44,12 +44,6 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
         }
 
         $this->set(
-            SessionService::class, function () {
-                return new SessionService();
-            }
-        );
-
-        $this->set(
             FilesystemFilesService::class, function () {
                 return new FilesystemFilesService();
             }
@@ -58,7 +52,6 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
         $this->set(
             MainPageController::class, function () {
                 return new MainPageController(
-                    $this::get(SessionService::class),
                     $this::get(GetTopAssetsUseCase::class),
                     $this::get(GetMainPageAssetsUseCase::class)
                 );
@@ -72,7 +65,6 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
                     $this::get(GetAssetsPageUseCase::class),
                     $this::get(GetAssetUseCase::class),
 					$this::get(GetCategoryUseCase::class),
-					$this::get(SessionService::class),
 					$this::get(GetFilesUseCase::class),
 					$this::get(GetFileByIdUseCase::class),
 					$this::get(ChangeAssetPurchaseCountUseCase::class),

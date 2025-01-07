@@ -9,7 +9,6 @@ use Router\Middlewares\IsUserAdminMiddleware;
 use Router\Routes\Routes;
 use Router\Routes\RoutesInterface;
 use Router\Router;
-use Services\Session\SessionService;
 use Services\Validation\ReviewValidationService;
 use DomainException;
 use Exception;
@@ -39,7 +38,7 @@ class ReviewsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->get(
@@ -53,7 +52,7 @@ class ReviewsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->put(
@@ -94,7 +93,7 @@ class ReviewsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->delete(
@@ -108,7 +107,7 @@ class ReviewsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
     }
 }

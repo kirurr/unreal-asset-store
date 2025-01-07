@@ -12,7 +12,6 @@ use Router\Middlewares\IsUserAdminMiddleware;
 use Core\ServiceContainer;
 use Router\Router;
 use Router\Routes\Routes;
-use Services\Session\SessionService;
 use Router\Routes\RoutesInterface;
 use Services\Validation\AssetValidationService;
 
@@ -42,7 +41,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
 
                 $data = $this->assetController->getAdminAssetsPageData();
                 renderView('admin/assets/index', $data);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->get(
@@ -53,7 +52,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
 
                 $data = $this->assetController->getCreatePageData();
                 renderView('admin/assets/create', $data);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
         $this->router->post(
             $prefix . '/create/', function (array $slug, ?MiddlewareException  $middleware) {
@@ -114,7 +113,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
         $this->router->get(
             $prefix . '/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
@@ -132,7 +131,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     $this->handleException($e);
                 }
 
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->put(
@@ -187,7 +186,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
 
@@ -209,7 +208,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
         
         // IMAGES
@@ -220,7 +219,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 }
                 $data = $this->imageController->getImagesPageData($slug['id']);
                 renderView('admin/assets/images/index', $data);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->post(
@@ -259,7 +258,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
         
 
@@ -292,7 +291,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->put(
@@ -337,7 +336,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->delete(
@@ -364,7 +363,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         // FILES
@@ -380,7 +379,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 } 
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->get(
@@ -390,7 +389,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 }
 
                 renderView('admin/assets/files/create', ['asset_id' => $slug['id']]);
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->post(
@@ -440,7 +439,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 } 
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->get(
@@ -454,7 +453,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 } 
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->put(
@@ -509,7 +508,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->delete(
@@ -523,7 +522,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
     }
 }

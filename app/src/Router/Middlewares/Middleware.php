@@ -4,9 +4,6 @@ namespace Router\Middlewares;
 
 abstract class Middleware
 {
-    public function __construct(
-        private string $name
-    ) {}
     /**
      * @param array<string,mixed> $slug
      */

@@ -10,7 +10,6 @@ use Router\Middlewares\IsUserAdminMiddleware;
 use Core\ServiceContainer;
 use Router\Router;
 use Router\Routes\Routes;
-use Services\Session\SessionService;
 use Router\Routes\RoutesInterface;
 use Services\Validation\UserValidationService;
 
@@ -46,7 +45,7 @@ class UserRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->get(
@@ -67,7 +66,7 @@ class UserRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->put(
@@ -109,7 +108,7 @@ class UserRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
 
         $this->router->delete(
@@ -134,7 +133,7 @@ class UserRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserAdminMiddleware()]
         );
     }
 }

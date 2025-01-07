@@ -12,7 +12,6 @@ use Router\Middlewares\IsUserAssetAuthorMiddleware;
 use Core\ServiceContainer;
 use Router\Middlewares\IsUserMiddleware;
 use Router\Routes\Routes;
-use Services\Session\SessionService;
 use Router\Routes\RoutesInterface;
 use UseCases\Asset\GetAssetUseCase;
 use Services\Validation\AssetValidationService;
@@ -44,7 +43,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
 
                 $data = $this->assetController->getAdminAssetsPageData();
                 renderView('profile/assets/index', $data);
-            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserMiddleware()]
         );
 
         $this->router->get(
@@ -55,7 +54,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
 
                 $data = $this->assetController->getCreatePageData();
                 renderView('profile/assets/create', $data);
-            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserMiddleware()]
         );
         $this->router->post(
             $prefix . '/create/', function (array $slug, ?MiddlewareException  $middleware) {
@@ -115,7 +114,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserMiddleware(ServiceContainer::get(SessionService::class))]
+            }, [new IsUserMiddleware()]
         );
         $this->router->get(
             $prefix . '/{id}/', function (array $slug, ?MiddlewareException   $middleware) {
@@ -133,7 +132,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     $this->handleException($e);
                 }
 
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->put(
@@ -190,7 +189,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
 
 
@@ -212,7 +211,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
         
         // IMAGES
@@ -223,7 +222,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 }
                 $data = $this->imageController->getImagesPageData($slug['id']);
                 renderView('profile/assets/images/index', $data);
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->post(
@@ -262,7 +261,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
         
 
@@ -295,7 +294,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->put(
@@ -340,7 +339,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->delete(
@@ -368,7 +367,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         // FILES
@@ -384,7 +383,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 } 
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->get(
@@ -394,7 +393,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 }
 
                 renderView('profile/assets/files/create', ['asset_id' => $slug['id']]);
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->post(
@@ -444,7 +443,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 } 
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->get(
@@ -458,7 +457,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 } 
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->put(
@@ -513,7 +512,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
 
         $this->router->delete(
@@ -527,7 +526,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(SessionService::class), ServiceContainer::get(GetAssetUseCase::class))]
+            }, [new IsUserAssetAuthorMiddleware(ServiceContainer::get(GetAssetUseCase::class))]
         );
     }
 }

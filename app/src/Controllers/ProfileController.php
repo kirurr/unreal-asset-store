@@ -11,7 +11,6 @@ use UseCases\User\GetUserUseCase;
 class ProfileController
 {
     public function __construct(
-        private SessionService $session,
         private GetUserUseCase $getUserUseCase,
         private GetAllAssetUseCase $getAllAssetUseCase,
 		private GetAssetsByUserPurhcasesUseCase $getAssetsByUserPurhcasesUseCase,
@@ -23,9 +22,10 @@ class ProfileController
      */
     public function getProfileData(): array
     {
-        $session = $this->session->getUser();
+		$session = SessionService::getInstance();
+        $sessionUser = $session->getUser();
 
-        $user = $this->getUserUseCase->execute((int) $session['id']);
+        $user = $this->getUserUseCase->execute((int) $sessionUser['id']);
         $assets = $this->getAllAssetUseCase->execute(user_id: $user->id);
         $purchased_assets = $this->getAssetsByUserPurhcasesUseCase->execute($user->id);
 

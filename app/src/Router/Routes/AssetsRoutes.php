@@ -8,7 +8,6 @@ use Core\ServiceContainer;
 use Entities\AssetFilters;
 use Router\Middlewares\IsUserPurchasedAssetMiddleware;
 use Router\Router;
-use Services\Session\SessionService;
 use Services\Validation\ReviewValidationService;
 use UseCases\Asset\GetAssetUseCase;
 use UseCases\File\GetFileByIdUseCase;
@@ -88,7 +87,6 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     $this->handleException($e);
                 }
             }, [new IsUserPurchasedAssetMiddleware(
-                ServiceContainer::get(SessionService::class),
                 ServiceContainer::get(GetFileByIdUseCase::class),
                 ServiceContainer::get(IsUserPurchasedAssetUseCase::class),
                 ServiceContainer::get(GetAssetUseCase::class),
@@ -110,7 +108,6 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     $this->handleException($e);
                 }
             }, [new IsUserPurchasedAssetMiddleware(
-                ServiceContainer::get(SessionService::class),
                 ServiceContainer::get(GetFileByIdUseCase::class),
                 ServiceContainer::get(IsUserPurchasedAssetUseCase::class),
                 ServiceContainer::get(GetAssetUseCase::class),
@@ -136,7 +133,6 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     $this->handleException($e);
                 }
             }, [new IsUserPurchasedAssetMiddleware(
-                ServiceContainer::get(SessionService::class),
                 ServiceContainer::get(GetFileByIdUseCase::class),
                 ServiceContainer::get(IsUserPurchasedAssetUseCase::class),
                 ServiceContainer::get(GetAssetUseCase::class),
@@ -158,7 +154,6 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     $this->handleException($e);
                 }
             }, [new IsUserPurchasedAssetMiddleware(
-                ServiceContainer::get(SessionService::class),
                 ServiceContainer::get(GetFileByIdUseCase::class),
                 ServiceContainer::get(IsUserPurchasedAssetUseCase::class),
                 ServiceContainer::get(GetAssetUseCase::class),
@@ -189,7 +184,6 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     $this->handleException($e);
                 }
             }, [new IsUserPurchasedAssetMiddleware(
-                ServiceContainer::get(SessionService::class),
                 ServiceContainer::get(GetFileByIdUseCase::class),
                 ServiceContainer::get(IsUserPurchasedAssetUseCase::class),
                 ServiceContainer::get(GetAssetUseCase::class),
@@ -241,7 +235,6 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     $this->handleException($e);
                 }
             }, [new IsUserPurchasedAssetMiddleware(
-                ServiceContainer::get(SessionService::class),
                 ServiceContainer::get(GetFileByIdUseCase::class),
                 ServiceContainer::get(IsUserPurchasedAssetUseCase::class),
                 ServiceContainer::get(GetAssetUseCase::class),

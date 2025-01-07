@@ -19,7 +19,8 @@ abstract class Routes
 
     protected function handleException(Exception $e): void
     {
-        http_response_code(500);
-        renderView('error', ['error' => $e->getMessage()]);
+        /*http_response_code(500);*/
+        /*renderView('error', ['error' => $e->getMessage()]);*/
+		throw $e;
     }
 }
