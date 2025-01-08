@@ -43,6 +43,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     interval: isset($_GET['interval']) ? intval($_GET['interval']) : null,
                     byNew: isset($_GET['byNew']) ? htmlspecialchars($_GET['byNew']) : null,
                     byPopular: isset($_GET['byPopular']) ? htmlspecialchars($_GET['byPopular']) : null,
+					byFree: isset($_GET['byFree']) ? htmlspecialchars($_GET['byFree']) : null,
                     asc: isset($_GET['asc']) ? htmlspecialchars($_GET['asc']) : null,
                     minPrice: isset($_GET['minPrice']) ? intval($_GET['minPrice']) : null,
                     maxPrice: isset($_GET['maxPrice']) ? intval($_GET['maxPrice']) : null,

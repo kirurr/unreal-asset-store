@@ -13,6 +13,7 @@ use UseCases\Category\GetAllCategoryUseCase;
 use UseCases\Category\EditCategoryUseCase;
 use UseCases\Category\GetCategoryUseCase;
 use Repositories\Category\CategorySQLiteRepository;
+use UseCases\Category\GetTrendingCategoriesUseCase;
 
 class CategoryContainer extends ServiceContainer implements ContainerInterface
 {
@@ -54,6 +55,14 @@ class CategoryContainer extends ServiceContainer implements ContainerInterface
                 );
             }
         );
+
+		$this->set(
+			GetTrendingCategoriesUseCase::class, function () {
+				return new GetTrendingCategoriesUseCase(
+					$this::get(CategorySQLiteRepository::class)
+				);
+			}
+		);
 
         $this->set(
             CategoryController::class, function () {

@@ -1,23 +1,39 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const toggles = document.querySelectorAll(".sublist-toggle");
+  document.addEventListener("click", (e) => {
+    let target = e.target;
+    const toggles = document.querySelectorAll(".sublist-toggle");
 
-  for (const toggle of toggles) {
-    toggle.addEventListener("click", (e) => {
-      e.preventDefault();
-      const sublist = toggle.nextElementSibling;
-
+    if (target.classList.contains("sublist-toggle")) {
+			e.preventDefault();
+      const sublist = target.nextElementSibling;
       sublist.classList.toggle("open");
+      toggleLinksTabIndex(sublist);
+
       for (const otherToggle of toggles) {
-        if (otherToggle !== toggle) {
+        if (otherToggle !== target) {
           const sublist = otherToggle.nextElementSibling;
+
           sublist.classList.remove("open");
+          toggleLinksTabIndex(sublist);
         }
       }
-    });
-
-    toggle.addEventListener("mouseleave", () => {
-      const sublist = toggle.nextElementSibling;
-      sublist.classList.remove("open");
-    });
-  }
+    } else {
+      for (const toggle of toggles) {
+        const sublist = toggle.nextElementSibling;
+        sublist.classList.remove("open");
+        toggleLinksTabIndex(sublist);
+      }
+    }
+  });
 });
+
+function toggleLinksTabIndex(sublist) {
+  const links = sublist.querySelectorAll("a");
+  for (const link of links) {
+    if (sublist.classList.contains("open")) {
+      link.tabIndex = 0;
+    } else {
+      link.tabIndex = -1;
+    }
+  }
+}

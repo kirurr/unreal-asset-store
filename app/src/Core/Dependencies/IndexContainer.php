@@ -19,6 +19,7 @@ use UseCases\Asset\GetPaginationAssetUseCase;
 use UseCases\Asset\GetTopAssetsUseCase;
 use UseCases\Category\GetAllCategoryUseCase;
 use UseCases\Category\GetCategoryUseCase;
+use UseCases\Category\GetTrendingCategoriesUseCase;
 use UseCases\File\GetFileByIdUseCase;
 use UseCases\File\GetFilesUseCase;
 use UseCases\Purchase\PurchaseAssetUseCase;
@@ -53,7 +54,8 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
             MainPageController::class, function () {
                 return new MainPageController(
                     $this::get(GetTopAssetsUseCase::class),
-                    $this::get(GetMainPageAssetsUseCase::class)
+					$this::get(GetMainPageAssetsUseCase::class),
+					$this::get(GetTrendingCategoriesUseCase::class)
                 );
             }
         );

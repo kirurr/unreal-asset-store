@@ -9,8 +9,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<? renderComponent('head'); ?>
 	<title>assets</title>
 </head>
 	<body>
@@ -18,6 +17,9 @@
 		<?php renderComponent('assets/filters', ['categories' => $categories, 'filters' => $filters, 'prices' => $prices, 'pages' => $pages]) ?>
 		<?php renderComponent('assets/pagination', ['pages' => $pages]) ?>
 		<ul>
+			<?php if (!$assets): ?>
+				<li>No assets found</li>
+			<?php endif; ?>
 			<?php foreach ($assets as $asset): ?>
 				<li>
 					<h2><?= $asset->name ?></h2>

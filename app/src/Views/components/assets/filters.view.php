@@ -49,6 +49,9 @@ use Entities\Category;
 	<label for="byPopular">By Popular</label>
 	<input type="checkbox" name="byPopular" id="byPopular" <?= $filters->byPopular ? 'checked' : '' ?>>
 
+	<label for="byFree">By Free</label>
+	<input type="checkbox" name="byFree" id="byFree" <?= $filters->byFree ? 'checked' : '' ?>>
+
 	<label for="asc">Ascending</label>
 	<input type="checkbox" name="asc" id="asc" <?= $filters->asc ? 'checked' : '' ?>>
 

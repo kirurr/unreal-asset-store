@@ -68,11 +68,16 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         if ($filters->interval) {
             $conditions[] = "created_at >= strftime('%s', 'now', '-$filters->interval days') AND created_at < strftime('%s', 'now')";
         }
-        if ($filters->minPrice) {
-            $conditions[] = 'price >= :minPrice';
-        }
-        if ($filters->maxPrice) {
-            $conditions[] = 'price <= :maxPrice';
+        if ($filters->byFree) {
+            $conditions[] = 'price <= 0';
+        } else {
+            if ($filters->minPrice) {
+                $conditions[] = 'price >= :minPrice';
+            }
+
+            if ($filters->maxPrice) {
+                $conditions[] = 'price <= :maxPrice';
+            }
         }
 
         if ($conditions) {
@@ -116,11 +121,14 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
             if ($filters->offset && !$isCount) {
                 $stmt->bindParam(':offset', $filters->offset, PDO::PARAM_INT);
             }
-            if ($filters->minPrice) {
-                $stmt->bindParam(':minPrice', $filters->minPrice, PDO::PARAM_INT);
-            }
-            if ($filters->maxPrice) {
-                $stmt->bindParam(':maxPrice', $filters->maxPrice, PDO::PARAM_INT);
+
+            if (!$filters->byFree) {
+                if ($filters->minPrice) {
+                    $stmt->bindParam(':minPrice', $filters->minPrice, PDO::PARAM_INT);
+                }
+                if ($filters->maxPrice) {
+                    $stmt->bindParam(':maxPrice', $filters->maxPrice, PDO::PARAM_INT);
+                }
             }
 
             return $stmt;
@@ -254,9 +262,14 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
 
     public function getAssetsByUserPurchases(int $user_id): array
     {
-        $stmt = $this->pdo->prepare(
-            'SELECT asset.* FROM purchase JOIN user ON purchase.user_id = user.id JOIN asset ON purchase.asset_id = asset.id WHERE user.id = :user_id'
-        );
+        $query = "SELECT asset.*,
+\tcategory.id as category_id,
+\tcategory.name as category_name,
+\tcategory.description as category_description,
+\tcategory.asset_count as category_asset_count
+FROM asset
+JOIN category ON asset.category_id = category.id JOIN purchase on purchase.asset_id = asset.id WHERE purchase.user_id = :user_id";
+        $stmt = $this->pdo->prepare($query);
         $stmt->execute(['user_id' => $user_id]);
         $assets = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (!$assets) {

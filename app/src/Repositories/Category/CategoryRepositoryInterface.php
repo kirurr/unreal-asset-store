@@ -11,7 +11,7 @@ interface CategoryRepositoryInterface
 	/**
 	 * @return ?Category[]
 	 */
-    public function getAll(bool $by_popular = false): array;
+    public function getAll(bool $by_popular = false, int $limit = null): array;
     public function create(string $name, string $description): void;
     public function update(Category $category): void;
     public function delete(int $id): void;

@@ -41,15 +41,21 @@ class CategorySQLiteRepository implements CategoryRepositoryInterface
         }
     }
 
-    public function getAll(bool $by_popular = false): array
+    public function getAll(bool $by_popular = false, int $limit = null): array
     {
         try {
             $query = 'SELECT * FROM category';
             if ($by_popular) {
                 $query .= ' ORDER BY asset_count DESC';
             }
+			if ($limit) {
+				$query .= ' LIMIT :limit';
+			}
 
             $stmt = $this->pdo->prepare($query);
+			if ($limit) {
+				$stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+			}
             $stmt->execute();
             $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if (!$categories) {

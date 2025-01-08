@@ -12,6 +12,7 @@ class AssetFilters
         public ?int $interval = null,
         public ?bool $byNew = null,
         public ?bool $byPopular = null,
+		public ?bool $byFree = null,
         public ?bool $asc = null,
         public ?int $minPrice = null,
         public ?int $maxPrice = null,

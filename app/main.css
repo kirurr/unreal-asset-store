@@ -57,15 +57,27 @@
   }
 
   .sublist {
-    position: absolute;
-    display: none;
+		@apply absolute bg-secondary-bg-color p-4 rounded-lg shadow-lg z-10;
   }
+
+	.button { 
+		@apply block size-fit bg-secondary-bg-color text-font-color text-xl font-semibold py-2 px-4 rounded-xl transition-colors;
+	}
+	.button:hover {
+		@apply bg-secondary-bg-color/70 text-font-color/70;
+	}
+
+	.sublist {
+		opacity: 0;
+		pointer-events: none;
+		transform: translateY(-10px);
+		transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+	}
 
   .sublist.open {
-    display: block;
+		pointer-events: auto;
+		transform: translateY(0);
+		opacity: 1;
   }
-
-  .sublist-wrapper:hover .sublist {
-    display: block;
-  }
+	
 }

@@ -29,6 +29,11 @@ $currentLink = $links[$_GET['variant'] ?? 'today'];
 		<?php endforeach; ?>
 	</ul>
 	<ul class="grid grid-cols-4 mt-2 gap-4">
+		<?php if (count($assets) === 0): ?>
+			<li class="col-span-4 flex flex-col items-center justify-center">
+				<p>No assets found</p>
+			</li>
+		<?php endif; ?>
 		<?php foreach ($assets as $asset): ?>
 			<li class="aspect-square relative flex flex-col">
 				<img src="<?= $asset->preview_image ?>" class="absolute inset-0 size-full" alt="<?= $asset->name ?>">

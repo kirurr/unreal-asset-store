@@ -1,6 +1,7 @@
 <?php
 
 use Entities\Asset;
+use Entities\Category;
 
 /**
  * @var array{ id: int, name: string, email: string } $user
@@ -13,6 +14,11 @@ use Entities\Asset;
 /**
  * @var Asset[] $moreAssets
  */
+
+/** 
+* @var Category[] $trendingCategories
+*/
+
 ?>
 
 
@@ -24,7 +30,7 @@ use Entities\Asset;
 	</head>
 	<body>
 		<header class="header">
-			<? renderComponent('navbar', ['user' => $user]);?>
+			<? renderComponent('navbar', ['categories' => $trendingCategories]); ?>
 		</header>
 		<main>
 			<section>
@@ -41,8 +47,6 @@ use Entities\Asset;
 				<? renderComponent('main/more-assets', ['assets' => $moreAssets]);?>
 			</section>
 		</main>
-		<footer>
-
-		</footer>
+	<? renderComponent('footer'); ?>
 	</body>	
 </html>
