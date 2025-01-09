@@ -20,7 +20,7 @@ class GetTopAssetsUseCase
     public function execute(): array
     {
         try {
-            $stmt = $this->repository->buildQuery(new AssetFilters(byNew: true, byPopular: true, limit: 5));
+            $stmt = $this->repository->buildQuery(new AssetFilters(byNew: true, byPopular: true, limit: 4));
             return $this->repository->getAssets($stmt);
         } catch (RuntimeException $e) {
             throw new Exception(

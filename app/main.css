@@ -107,6 +107,14 @@
 		@apply inline-flex items-center rounded-md bg-green-50/80 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20
 	}
 
+	.slides {
+		transition: all 0.5s ease-in-out;
+	}
+
+	.thumbnail.active {
+		@apply ring-2 ring-accent-color;
+	}
+
   .sublist {
     opacity: 0;
     pointer-events: none;

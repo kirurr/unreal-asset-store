@@ -26,6 +26,7 @@ use Entities\Category;
 <html lang="en">
 	<head>
 		<? renderComponent('head'); ?>
+		<script src="/js/carousel.js" defer></script>
 		<title>Unreal Asset Store</title>
 	</head>
 	<body>
