@@ -3,7 +3,7 @@ use Entities\Category;
 
 /** @var Category $categories */
 ?>
-<footer class="bg-secondary-bg-color text-font-color/40">
+<footer class="bg-secondary-bg-color/70 text-font-color/60">
 	<section class="py-8 grid grid-cols-3 divide-x-2 divide-bg-color/40">
 		<div class="px-4">
 			<h3>Assets</h3>

@@ -8,7 +8,7 @@ $topAsset = $assets[0] ?? null;
 <div>
 	<div class="flex gap-4 h-[35rem]">
 		<div class="w-[80%]">
-			<div class="size-full flex flex-col relative rounded-xl overflow-hidden">
+			<div class="size-full flex flex-col relative rounded-xl overflow-hidden shadow-lg">
 				<?php if ($topAsset): ?>
 				<div class="size-full absolute z-10 bg-gradient-to-tr from-bg-color via-transparent to-transparent"></div>
 				<img class="size-full absolute object-cover" src="<?= $topAsset->preview_image ?>" alt="<?= $topAsset->name ?>">
@@ -28,7 +28,7 @@ $topAsset = $assets[0] ?? null;
                 continue;
             } ?>
 		
-			<div class="relative flex flex-col rounded-xl overflow-hidden">
+			<div class="relative flex flex-col rounded-xl overflow-hidden shadow-lg">
 				<div class="size-full absolute z-10 bg-gradient-to-tr from-bg-color via-transparent to-transparent"></div>
 				<img class="object-cover size-full absolute" src="<?= $asset->preview_image ?>" alt="<?= $asset->name ?>">
 				<div class="mt-auto w-full p-4">
