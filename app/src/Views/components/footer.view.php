@@ -1,11 +1,15 @@
 <?php
+
 use Entities\Category;
+use Services\Session\SessionService;
 
 /** @var Category $categories */
+$session = SessionService::getInstance();
+$user = $session->getUser();
 ?>
 <footer class="bg-secondary-bg-color/70 text-font-color/60">
-	<section class="py-8 grid grid-cols-3 divide-x-2 divide-bg-color/40">
-		<div class="px-4">
+	<section class="py-8 grid grid-cols-4 justify-items-center">
+		<div>
 			<h3>Assets</h3>
 			<ul>
 				<li><a class="hover:text-font-color/50 transition-colors" href="/assets">All assets</a></li>
@@ -15,7 +19,7 @@ use Entities\Category;
 				<li><a class="hover:text-font-color/50 transition-colors" href="/assets?byFree=on">Free assets</a></li>
 			</ul>
 		</div>
-		<div class="px-4">
+		<div>
 			<h3>Categories</h3>
 			<ul>
 				<?php foreach ($categories as $category): ?>
@@ -24,12 +28,30 @@ use Entities\Category;
 				<li><a class="hover:text-font-color/50 transition-colors" href="/categories">Browse all categories</a></li>
 			</ul>
 		</div>
-		<div class="px-4">
-			<h3>About</h3>
-			<ul>
-				<li><a class="hover:text-font-color/50 transition-colors" href="/about">About</a></li>
-				<li><a class="hover:text-font-color/50 transition-colors" href="/privacy">Privacy</a></li>
-				<li><a class="hover:text-font-color/50 transition-colors" href="/terms">Terms</a></li>
+		<div>
+			<div>
+				<h3>About</h3>
+				<ul>
+					<li><a class="hover:text-font-color/50 transition-colors" href="/about">About</a></li>
+					<li><a class="hover:text-font-color/50 transition-colors" href="/privacy">Privacy</a></li>
+					<li><a class="hover:text-font-color/50 transition-colors" href="/terms">Terms</a></li>
+				</ul>
+			</div>
 		</div>
+			<div>
+				<?php if ($user): ?>
+				<h3>Account</h3>
+				<ul>
+					<li><a class="hover:text-font-color/50 transition-colors" href="/logout">Logout</a></li>
+					<li><a class="hover:text-font-color/50 transition-colors" href="/profile">Profile</a></li>
+				</ul>
+				<?php else: ?>
+				<h3>Account</h3>
+				<ul>
+					<li><a class="hover:text-font-color/50 transition-colors" href="/login">Login</a></li>
+					<li><a class="hover:text-font-color/50 transition-colors" href="/signup">Register</a></li>
+				</ul>
+				<?php endif; ?>
+			</div>
 	</section>
 </footer>

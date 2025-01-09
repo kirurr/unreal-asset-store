@@ -68,7 +68,7 @@ $currentLink = $links[$_GET['variant'] ?? 'today'];
 			<?php endforeach; ?>
 		</ul>
 		<div class="mt-8">
-			<a class="block mx-auto bg-accent-color/80 text-secondary-font-color button text-lg p-2" href="/assets?<?= $currentLink['uri'] ?>"> See all assets</a>
+<a class="block mx-auto button accent text-lg p-2" href="/assets?<?= $currentLink['uri'] ?>"> See more <?php echo(strtolower($currentLink['text'])) ?></a>
 		</div>
 
 	</div>

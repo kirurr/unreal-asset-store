@@ -41,8 +41,8 @@ use Entities\Category;
 				<div class="max-w-screen-xl mx-auto flex justify-evenly items-center"> 
 					<h2>Join our growing community</h2>
 					<div class="flex flex-col gap-4 items-center">
+						<a href="/signup" class="button text-[1.7rem] p-4 accent">Register</a>
 						<p class="text-xl">Already have an account? <a class="link" href="/login">Login</a></p>
-						<a href="/signup" class="button accent">Register</a>
 					</div>
 				</div>
 			</section>
