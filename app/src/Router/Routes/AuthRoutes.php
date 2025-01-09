@@ -90,8 +90,8 @@ class AuthRoutes extends Routes implements RoutesInterface
 
                 [$errors, $data] = $this->userValidationService->validateSignUp(
                     $_POST['name'] ?? '',
+                    $_POST['password'] ?? '',
                     $_POST['email'] ?? '',
-                    $_POST['password'] ?? ''
                 );
 
                 try {

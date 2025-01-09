@@ -91,7 +91,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                         $data[ 'engine_version' ],
                         $data[ 'category_id' ]
                     );
-                    redirect('/profile/assets/');
+                    redirect('/profile/');
                 } catch (DomainException $e) {
                     $pageData = $this->assetController->getCreatePageData();
                         

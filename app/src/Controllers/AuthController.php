@@ -21,7 +21,7 @@ class AuthController
 
     public function signUp(string $name, string $email, string $password): void
     {
-            $this->signUpUseCase->execute($name, $email, $password);
+		$this->signUpUseCase->execute($name, $email, $password);
     }
 
     public function signOut(): void

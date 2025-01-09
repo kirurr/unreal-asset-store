@@ -17,7 +17,7 @@ class Asset
         public int $price,
         public string $engine_version,
 		public Category $category,
-        public int $user_id,
+		public User $user,
         public int $created_at,
         public int $purchase_count = 0,
     ) {

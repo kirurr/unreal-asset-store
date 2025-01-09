@@ -39,7 +39,7 @@ class AssetController
     {
 		$session = SessionService::getInstance();
 		if ($session->hasUser()) {
-			return ['assets' => $this->getAllUseCase->execute(user_id: $session->getUser()['id'])];
+			return ['assets' => $this->getAllUseCase->execute()];
 		}	
         return ['assets' => $this->getAllUseCase->execute()];
     }

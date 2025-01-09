@@ -15,6 +15,7 @@ use UseCases\File\GetFilesUseCase;
 use UseCases\Purchase\PurchaseAssetUseCase;
 use UseCases\Review\CreateReviewUseCase;
 use UseCases\Review\GetReviewsByAssetIdUseCase;
+use UseCases\User\GetUserUseCase;
 
 class AssetsPageController
 {
@@ -30,6 +31,7 @@ class AssetsPageController
         private GetReviewsByAssetIdUseCase $getReviewsByAssetIdUseCase,
 		private CreateReviewUseCase $createReviewUseCase,
 		private GetPaginationAssetUseCase $getPaginationAssetUseCase,
+		private GetUserUseCase $getUserUseCase
     ) {}
 
     /**
@@ -37,10 +39,14 @@ class AssetsPageController
      */
     public function getAssetsPageData(AssetFilters $filters): array
     {
+		if ($filters->user_id) {
+			$user = $this->getUserUseCase->execute($filters->user_id);
+		}
         return [
             'assets' => $this->getAssetsPageUseCase->execute($filters),
 			'pages' => $this->getPaginationAssetUseCase->execute($filters),
-            'categories' => $this->getAllCategoryUseCase->execute()
+            'categories' => $this->getAllCategoryUseCase->execute(),
+			'user' => $user ?? null
         ];
     }
 

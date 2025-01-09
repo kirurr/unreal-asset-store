@@ -25,6 +25,7 @@ use UseCases\File\GetFilesUseCase;
 use UseCases\Purchase\PurchaseAssetUseCase;
 use UseCases\Review\CreateReviewUseCase;
 use UseCases\Review\GetReviewsByAssetIdUseCase;
+use UseCases\User\GetUserUseCase;
 
 class IndexContainer extends ServiceContainer implements ContainerInterface
 {
@@ -74,6 +75,7 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
 					$this::get(GetReviewsByAssetIdUseCase::class),
 					$this::get(CreateReviewUseCase::class),
 					$this::get(GetPaginationAssetUseCase::class),
+					$this::get(GetUserUseCase::class)
                 );
             }
         );

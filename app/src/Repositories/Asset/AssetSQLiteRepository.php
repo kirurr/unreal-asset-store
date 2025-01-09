@@ -5,6 +5,7 @@ namespace Repositories\Asset;
 use Entities\Asset;
 use Entities\AssetFilters;
 use Entities\Category;
+use Entities\User;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -19,7 +20,8 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
     public function getById(string $id): ?Asset
     {
         try {
-            $stmt = $this->pdo->prepare('SELECT asset.*, category.id as category_id, category.name as category_name, category.description as category_description, category.asset_count as category_asset_count FROM asset JOIN category ON asset.category_id = category.id WHERE asset.id = :id');
+            $query = "SELECT asset.*, \tcategory.id as category_id, category.name as category_name, category.description as category_description, category.asset_count as category_asset_count, \tuser.id as user_id, user.name as user_name, user.email as user_email, user.password as user_password, user.role as user_role FROM asset JOIN category ON asset.category_id = category.id JOIN user ON asset.user_id = user.id WHERE asset.id = :id";
+            $stmt = $this->pdo->prepare($query);
             $stmt->execute(['id' => $id]);
             $asset = $stmt->fetch(PDO::FETCH_ASSOC);
             if (!$asset) {
@@ -35,7 +37,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                 $asset['price'],
                 $asset['engine_version'],
                 new Category($asset['category_id'], $asset['category_name'], $asset['category_description'], $asset['category_asset_count']),
-                $asset['user_id'],
+				new User($asset['user_id'], $asset['user_name'], $asset['user_email'], $asset['user_password'], $asset['user_role']),
                 $asset['created_at'],
                 $asset['purchase_count']
             );
@@ -47,7 +49,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
     public function buildQuery(AssetFilters $filters, bool $isCount = false): PDOStatement
     {
         if (!$isCount) {
-            $query = 'SELECT asset.*, category.id as category_id, category.name as category_name, category.description as category_description, category.asset_count as category_asset_count FROM asset JOIN category ON asset.category_id = category.id';
+            $query = "SELECT asset.*, \tcategory.id as category_id, category.name as category_name, category.description as category_description, category.asset_count as category_asset_count, \tuser.id as user_id, user.name as user_name, user.email as user_email, user.password as user_password, user.role as user_role FROM asset JOIN category ON asset.category_id = category.id JOIN user ON asset.user_id = user.id";
         } else {
             $query = 'SELECT COUNT(*) FROM asset';
         }
@@ -170,7 +172,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                     $asset['price'],
                     $asset['engine_version'],
                     new Category($asset['category_id'], $asset['category_name'], $asset['category_description'], $asset['category_asset_count']),
-                    $asset['user_id'],
+					new User($asset['user_id'], $asset['user_name'], $asset['user_email'], $asset['user_password'], $asset['user_role']),
                     $asset['created_at'],
                     $asset['purchase_count']
                 ),
@@ -262,13 +264,18 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
 
     public function getAssetsByUserPurchases(int $user_id): array
     {
-        $query = "SELECT asset.*,
-\tcategory.id as category_id,
-\tcategory.name as category_name,
-\tcategory.description as category_description,
-\tcategory.asset_count as category_asset_count
+$query = "SELECT asset.*,
+	category.id as category_id,
+	category.name as category_name,
+	category.description as category_description,
+	category.asset_count as category_asset_count,
+	user.id as user_id,
+	user.name as user_name,
+	user.email as user_email,
+	user.password as user_password,
+	user.role as user_role
 FROM asset
-JOIN category ON asset.category_id = category.id JOIN purchase on purchase.asset_id = asset.id WHERE purchase.user_id = :user_id";
+JOIN category ON asset.category_id = category.id JOIN purchase on purchase.asset_id = asset.id JOIN user on asset.user_id = user.id WHERE purchase.user_id = :user_id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(['user_id' => $user_id]);
         $assets = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -287,7 +294,7 @@ JOIN category ON asset.category_id = category.id JOIN purchase on purchase.asset
                 $asset['price'],
                 $asset['engine_version'],
                 new Category($asset['category_id'], $asset['category_name'], $asset['category_description'], $asset['category_asset_count']),
-                $asset['user_id'],
+				new User($asset['user_id'], $asset['user_name'], $asset['user_email'], $asset['user_password'], $asset['user_role']),
                 $asset['created_at'],
                 $asset['purchase_count']
             ),
