@@ -50,7 +50,7 @@ use Entities\Category;
 			<?php if ($isEdit): ?>
 				<?php if (isset($previousData['category_id']) && $previousData['category_id'] === $category->id): ?>
 					selected
-				<?php elseif ($category->id === $asset->category_id): ?>
+				<?php elseif ($category->id === $asset->category->id): ?>
 					selected
 				<?php endif; ?>
 			<?php else: ?>

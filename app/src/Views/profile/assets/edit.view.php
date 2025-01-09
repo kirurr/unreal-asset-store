@@ -37,7 +37,7 @@ use Entities\Category;
                 'previousData' => $previousData ?? [],
                 'errors' => $errors ?? [],
                 'asset' => $asset,
-                'action' => "/admin/assets/{$asset->id}",
+                'action' => "/profile/assets/{$asset->id}",
                 'isEdit' => true,
                 'method' => 'put'
             ]) ?>

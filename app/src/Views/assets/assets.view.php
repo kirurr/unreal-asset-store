@@ -1,9 +1,20 @@
 <?php
+
+use Entities\User;
+use Entities\AssetFilters;
+use Entities\Category;
+
 /** @var Asset[] $assets */
 /** @var Category[] $categories */
 /** @var array{ min: int, max: int } $prices */
 /** @var AssetFilters $filters */
 /** @var int $pages */
+/** @var User $user */
+
+if ($filters->category_id) {
+	$categoryIndex = array_search($filters->category_id, array_column($categories, 'id'));
+	$category = $categories[$categoryIndex];
+}
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +25,14 @@
 </head>
 	<body>
 		<h1>Assets</h1>
+		<?php if($user): ?>
+			<p>by author <?= $user->name ?></p>
+		<?php endif; ?>
+
+		<?php if(isset($category)): ?>
+			<p>by category <?= $category->name ?></p>
+		<?php endif; ?>
+			
 		<?php renderComponent('assets/filters', ['categories' => $categories, 'filters' => $filters, 'prices' => $prices, 'pages' => $pages]) ?>
 		<?php renderComponent('assets/pagination', ['pages' => $pages]) ?>
 		<ul>

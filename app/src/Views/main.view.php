@@ -49,6 +49,6 @@ use Entities\Category;
 				<? renderComponent('main/more-assets', ['assets' => $moreAssets]);?>
 			</section>
 		</main>
-	<? renderComponent('footer'); ?>
+		<? renderComponent('footer', ['categories' => $trendingCategories]); ?>
 	</body>	
 </html>

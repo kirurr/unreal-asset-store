@@ -1,9 +1,8 @@
 <?php
 session_start();
-/*set_error_handler(function ($errno, $errstr, $errfile, $errline) {*/
-/*    throw new Exception($errstr, $errno);*/
-/*});*/
-
+set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+    throw new Exception($errstr, $errno);
+}, E_ALL);
 const BASE_PATH = __DIR__ . '/../html/';
 
 require BASE_PATH . 'vendor/autoload.php';
@@ -25,8 +24,8 @@ try {
 	http_response_code(404);
 	redirect('/');
 } catch (Throwable $e) {
-    http_response_code(500);
 	//TODO: log error and not show it to user
-    renderView('error', ['error' => $e->getMessage()]);
+	   renderView('error', ['error' => $e->getMessage()]);
+	throw $e;
 }
 restore_error_handler();
