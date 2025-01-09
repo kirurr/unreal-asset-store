@@ -53,31 +53,72 @@
   }
 
   section {
-    @apply mx-auto py-8 max-w-screen-xl;
+		@apply mx-auto py-16 max-w-screen-xl;
   }
 
   .sublist {
-		@apply absolute bg-secondary-bg-color p-4 rounded-lg shadow-lg z-10;
+    @apply absolute bg-secondary-bg-color p-4 rounded-lg shadow-lg z-10;
   }
 
-	.button { 
-		@apply block size-fit bg-secondary-bg-color text-font-color text-xl font-semibold py-2 px-4 rounded-xl transition-colors;
-	}
-	.button:hover {
-		@apply bg-secondary-bg-color/70 text-font-color/70;
+  .button {
+    @apply block size-fit bg-secondary-bg-color text-font-color text-xl font-semibold py-2 px-4 rounded-xl transition-colors shadow-lg;
+  }
+
+  .button.accent {
+    @apply bg-accent-color text-secondary-font-color;
+  }
+
+  .button.accent:hover {
+    @apply bg-accent-color/80 text-secondary-font-color/80;
+  }
+  .button:hover {
+    @apply bg-secondary-bg-color/70 text-font-color/70;
+  }
+
+  .link {
+    @apply text-accent-color underline underline-offset-2 decoration-2 decoration-accent-color transition-colors;
+  }
+
+  .link:hover {
+    @apply text-accent-color/70 decoration-accent-color/70;
+  }
+
+	.more-assets-list {
+		@apply bg-secondary-bg-color rounded-xl shadow-lg transition-colors;
 	}
 
-	.sublist {
-		opacity: 0;
-		pointer-events: none;
-		transform: translateY(-10px);
-		transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+	.more-assets-list:hover {
+		@apply bg-accent-color/50;
 	}
+
+	.more-assets-list.active {
+		@apply bg-accent-color text-secondary-font-color;
+	}
+
+	.more-assets-list.active:hover {
+		@apply bg-accent-color/70;
+	}
+
+	.badge {
+		@apply inline-flex items-center rounded-md bg-gray-50/50 px-2 py-1 text-xs font-medium text-font-color ring-1 ring-inset ring-gray-500/50;
+	}
+
+	.badge.green {
+		@apply inline-flex items-center rounded-md bg-green-50/80 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20
+	}
+
+  .sublist {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition:
+      opacity 0.2s ease-in-out,
+      transform 0.2s ease-in-out;
+  }
 
   .sublist.open {
-		pointer-events: auto;
-		transform: translateY(0);
-		opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    opacity: 1;
   }
-	
 }

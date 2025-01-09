@@ -36,11 +36,13 @@ use Entities\Category;
 			<section>
 				<? renderComponent('main/top-assets', ['assets' => $topAssets]);?>
 			</section>
-			<section class="w-full max-w-full bg-secondary-bg-color">
-				<div class="max-w-screen-xl mx-auto"> 
-					<h2>register</h2>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis eum, earum nihil perferendis consectetur eligendi sapiente ea recusandae est dignissimos!</p>
-					<button>Register</button>
+			<section class="w-full max-w-full bg-secondary-bg-color py-8">
+				<div class="max-w-screen-xl mx-auto flex justify-evenly items-center"> 
+					<h2>Join our growing community</h2>
+					<div class="flex flex-col gap-4 items-center">
+						<p class="text-xl">Already have an account? <a class="link" href="/login">Login</a></p>
+						<a href="/signup" class="button accent">Register</a>
+					</div>
 				</div>
 			</section>
 			<section id="more-assets">
