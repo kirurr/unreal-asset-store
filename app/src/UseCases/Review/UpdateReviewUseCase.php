@@ -17,6 +17,7 @@ class UpdateReviewUseCase
      */
     public function execute(
         int $id,
+		string $title,
         string $review_content,
         bool $is_positive,
         string $positive,
@@ -24,6 +25,7 @@ class UpdateReviewUseCase
     ): void {
         try {
             $review= $this->reviewRepository->getById($id);
+			$review->title = $title;
             $review->review = $review_content;
             $review->is_positive = $is_positive;
             $review->positive = $positive;

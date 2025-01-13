@@ -14,13 +14,14 @@ class SQLiteReviewRepository implements ReviewRepositoryInterface
         private PDO $pdo
     ) {}
 
-    public function create(string $asset_id, string $user_id, string $review, string $positive, string $negative, bool $is_positive): void
+    public function create(string $asset_id, string $user_id, string $title, string $review, string $positive, string $negative, bool $is_positive): void
     {
         try {
-            $stmt = $this->pdo->prepare('INSERT INTO review (asset_id, user_id, review, positive, negative, is_positive) VALUES (?, ?, ?, ?, ?, ?)');
+            $stmt = $this->pdo->prepare('INSERT INTO review (asset_id, user_id, title, review, positive, negative, is_positive) VALUES (?, ?, ?, ?, ?, ?)');
             $stmt->execute([
                 $asset_id,
                 $user_id,
+				$title,
                 $review,
                 $positive,
                 $negative,
@@ -65,6 +66,7 @@ class SQLiteReviewRepository implements ReviewRepositoryInterface
                         $result['user_password'],
                         $result['user_role']
                     ),
+					$result['title'],
                     $result['review'],
                     $result['positive'] ?? '',
                     $result['negative'] ?? '',
@@ -105,6 +107,7 @@ class SQLiteReviewRepository implements ReviewRepositoryInterface
                         $item['user_password'],
                         $item['user_role']
                     ),
+					$item['title'],
                     $item['review'],
                     $item['positive'] ?? '',
                     $item['negative'] ?? '',
@@ -145,6 +148,7 @@ class SQLiteReviewRepository implements ReviewRepositoryInterface
                         $item['user_password'],
                         $item['user_role']
                     ),
+					$item['title'],
                     $item['review'],
                     $item['positive'] ?? '',
                     $item['negative'] ?? '',
@@ -185,6 +189,7 @@ class SQLiteReviewRepository implements ReviewRepositoryInterface
                         $item['user_password'],
                         $item['user_role']
                     ),
+					$item['title'],
                     $item['review'],
                     $item['positive'] ?? '',
                     $item['negative'] ?? '',
@@ -202,8 +207,9 @@ class SQLiteReviewRepository implements ReviewRepositoryInterface
         try {
             $this
                 ->pdo
-                ->prepare('UPDATE review SET review = ?, positive = ?, negative = ?, is_positive = ? WHERE id = ?')
+                ->prepare('UPDATE review SET title = ?, review = ?, positive = ?, negative = ?, is_positive = ? WHERE id = ?')
                 ->execute([
+					$review->title,
                     $review->review,
                     $review->positive,
                     $review->negative,

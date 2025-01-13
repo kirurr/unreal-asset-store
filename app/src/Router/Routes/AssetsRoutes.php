@@ -198,6 +198,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 }
 
                 [$errors, $data] = $this->reviewValidationService->validate(
+					$_POST['title'] ?? '',
                     $_POST['review'] ?? '',
                     $_POST['is_positive'] ?? '',
                     $_POST['positive'] ?? '',
@@ -209,7 +210,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                         throw new DomainException('One or more fields are invalid');
                     }
 
-                    $this->assetsPageController->createReview($slug['id'], $data['review'], $data['is_positive'], $data['positive'], $data['negative']);
+                    $this->assetsPageController->createReview($slug['id'], $data['title'], $data['review'], $data['is_positive'], $data['positive'], $data['negative']);
                     redirect('/assets/' . $slug['id'] . '/');
                 } catch (DomainException $e) {
                     $pageData = $this->assetsPageController->getAssetPageData(
@@ -223,6 +224,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
 
                     $pageData['review'] = [
                         'previousData' => [
+							'title' => $data['title'],
                             'review' => $data['review'],
                             'is_positive' => $data['is_positive'],
                             'positive' => $data['positive'],

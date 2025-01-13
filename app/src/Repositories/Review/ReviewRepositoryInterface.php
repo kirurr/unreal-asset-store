@@ -9,6 +9,7 @@ interface ReviewRepositoryInterface
     public function create(
 		string $asset_id,
 		string $user_id,
+		string $title,
 		string $review,
 		string $positive,
 		string $negative,

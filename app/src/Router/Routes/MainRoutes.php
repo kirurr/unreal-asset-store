@@ -22,9 +22,9 @@ class MainRoutes extends Routes implements RoutesInterface
     {
         $this->router->get(
             $prefix . '/', function () {
-                $query = isset($_GET['variant']) ? htmlspecialchars($_GET['variant']) : 'today';
+                $query = isset($_GET['variant']) ? htmlspecialchars($_GET['variant']) : 'new-week';
 
-                $variant = (Variant::tryFrom($query) ?? Variant::NEW_TODAY);
+                $variant = (Variant::tryFrom($query) ?? Variant::NEW_WEEK);
 
                 try {
                     $data = $this->mainPageController->getMainPageData($variant);

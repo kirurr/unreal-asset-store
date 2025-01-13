@@ -1,8 +1,8 @@
 <?php
 session_start();
-set_error_handler(function ($errno, $errstr, $errfile, $errline) {
-    throw new Exception($errstr, $errno);
-}, E_ALL);
+/*set_error_handler(function ($errno, $errstr, $errfile, $errline) {*/
+/*    throw new Exception($errstr, $errno);*/
+/*}, E_ALL);*/
 const BASE_PATH = __DIR__ . '/../html/';
 
 require BASE_PATH . 'vendor/autoload.php';

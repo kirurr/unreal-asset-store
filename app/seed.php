@@ -101,6 +101,7 @@ try {
 		id INTEGER PRIMARY KEY,
 		asset_id TEXT NOT NULL,
 		user_id INTEGER NOT NULL,
+		title TEXT NOT NULL,
 		review TEXT NOT NULL,
 		positive TEXT,
 		negative TEXT,

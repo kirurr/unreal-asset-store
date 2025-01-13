@@ -37,7 +37,7 @@ class IsUserPurchasedAssetMiddleware extends Middleware
 			return;
         }
 
-        if (!$this->isUserPurchasedAssetUseCase->execute($asset->id, $this->session->getUser()['id'])) {
+        if (!$this->isUserPurchasedAssetUseCase->execute($asset->id, $session->getUser()['id'])) {
             throw new MiddlewareException('User is not purchased asset');
         }
 

@@ -18,6 +18,7 @@ class CreateReviewUseCase
      */
     public function execute(
         string $asset_id,
+		string $title,
         string $review,
         string $positive,
         string $negative,
@@ -30,6 +31,7 @@ class CreateReviewUseCase
             $this->reviewRepository->create(
                 $asset_id,
                 $user_id,
+				$title,
                 $review,
                 $positive,
                 $negative,

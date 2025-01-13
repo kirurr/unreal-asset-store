@@ -57,7 +57,7 @@
         <form action="/admin/assets/<?php echo $asset_id ?>/images/" method="post" enctype="multipart/form-data">
             <h2>add new images</h2>
             <input type="hidden" name="_method" value="post">
-            <input type="hidden" name="last_order" value="<?php $images[array_key_last($images)]->images_order?>">
+            <input type="hidden" name="last_order" value="<?php $images[array_key_last($images)]->image_order?>">
             <input type="file" name="images[]" multiple>
             <button type="submit">add images</button>
         </form>

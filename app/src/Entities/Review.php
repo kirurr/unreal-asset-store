@@ -8,6 +8,7 @@ class Review
         public int $id,
         public string $asset_id,
 		public User $user,
+		public string $title,
         public string $review,
         public ?string $positive,
         public ?string $negative,

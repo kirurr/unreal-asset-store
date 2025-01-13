@@ -10,6 +10,7 @@ use UseCases\Asset\GetAssetUseCase;
 use UseCases\Asset\GetPaginationAssetUseCase;
 use UseCases\Category\GetAllCategoryUseCase;
 use UseCases\Category\GetCategoryUseCase;
+use UseCases\Category\GetTrendingCategoriesUseCase;
 use UseCases\File\GetFileByIdUseCase;
 use UseCases\File\GetFilesUseCase;
 use UseCases\Purchase\PurchaseAssetUseCase;
@@ -31,7 +32,8 @@ class AssetsPageController
         private GetReviewsByAssetIdUseCase $getReviewsByAssetIdUseCase,
 		private CreateReviewUseCase $createReviewUseCase,
 		private GetPaginationAssetUseCase $getPaginationAssetUseCase,
-		private GetUserUseCase $getUserUseCase
+		private GetUserUseCase $getUserUseCase,
+		private GetTrendingCategoriesUseCase $getTrendingCategoriesUseCase
     ) {}
 
     /**
@@ -63,6 +65,7 @@ class AssetsPageController
             'asset' => $asset,
             'category' => $category,
             'reviews' => $reviews,
+			'trendingCategories' => $this->getTrendingCategoriesUseCase->execute(),
         ];
     }
 
@@ -109,8 +112,8 @@ class AssetsPageController
         $this->purchaseAssetUseCase->execute($id);
     }
 
-	public function createReview(string $id, string $review, bool $is_positive, string $positive, string $negative): void
+	public function createReview(string $id, string $title, string $review, bool $is_positive, string $positive, string $negative): void
 	{
-		$this->createReviewUseCase->execute($id, $review, $positive, $negative, $is_positive);
+		$this->createReviewUseCase->execute($id, $title, $review, $positive, $negative, $is_positive);
 	}
 }

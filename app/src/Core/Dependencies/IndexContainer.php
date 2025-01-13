@@ -8,7 +8,6 @@ use Controllers\MainPageController;
 use Core\ContainerInterface;
 use Core\ServiceContainer;
 use Services\Files\FilesystemFilesService;
-use Services\Session\SessionService;
 use Exception;
 use PDO;
 use UseCases\Asset\ChangeAssetPurchaseCountUseCase;
@@ -75,7 +74,8 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
 					$this::get(GetReviewsByAssetIdUseCase::class),
 					$this::get(CreateReviewUseCase::class),
 					$this::get(GetPaginationAssetUseCase::class),
-					$this::get(GetUserUseCase::class)
+					$this::get(GetUserUseCase::class),
+					$this::get(GetTrendingCategoriesUseCase::class)
                 );
             }
         );
