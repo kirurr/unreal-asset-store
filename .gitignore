@@ -4,3 +4,5 @@ storage/unreal-asset-store.db
 storage/files/
 style.css
 tailwindcss
+build.log
+tailwindcss.exe

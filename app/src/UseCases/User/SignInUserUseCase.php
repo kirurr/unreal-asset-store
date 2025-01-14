@@ -19,10 +19,10 @@ class SignInUserUseCase
         try {
             $user = $this->repository->getByEmail($email);
             if (!$user) {
-                throw new DomainException('Invalid credentials');
+                throw new DomainException('Invalid credentials: user is not found');
             }
             if (!$user->checkPassword($password)) {
-                throw new DomainException('Invalid credentials');
+                throw new DomainException('Invalid credentials: password is incorrect');
             }
 
 			$session = SessionService::getInstance();

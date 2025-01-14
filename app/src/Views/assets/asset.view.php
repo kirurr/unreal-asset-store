@@ -73,7 +73,7 @@ $assetDate->setTimestamp($asset->created_at);
 
 						<?php elseif (!isset($user)): ?>
 						<p class="mb-2 text-font-color/70">You need to be logged in to purchase this asset</p>
-						<a class="link mx-auto block w-fit" href="/auth/login">Sign in</a>
+						<a class="link mx-auto block w-fit" href="/signin">Sign in</a>
 						<?php endif; ?>
 					</div>
 				</div>
@@ -189,7 +189,7 @@ $assetDate->setTimestamp($asset->created_at);
 				<?php else: ?>
 				<div class="text-center mt-8">
 					<p class="text-font-color/70">You need to be logged in to add a review</p>
-					<a class="link mx-auto block w-fit" href="/auth/login">Sign in</a>
+					<a class="link mx-auto block w-fit" href="/signin">Sign in</a>
 				</div>
 				<?php endif; ?>
 			</section>

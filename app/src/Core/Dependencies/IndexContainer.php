@@ -2,6 +2,7 @@
 
 namespace Core\Dependencies;
 
+use Controllers\AuthPagesController;
 use Controllers\AssetsPageController;
 use Controllers\CategoriesPageController;
 use Controllers\MainPageController;
@@ -85,5 +86,11 @@ class IndexContainer extends ServiceContainer implements ContainerInterface
 				$this::get(GetAllCategoryUseCase::class),
 			);
 		});
+
+        $this->set(AuthPagesController::class, function () {
+            return new AuthPagesController(
+                $this::get(GetTrendingCategoriesUseCase::class)
+            );
+        });
     }
 }

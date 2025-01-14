@@ -99,6 +99,13 @@ textarea {
     @apply outline-accent-color outline-2 outline-offset-2;
   }
 
+  .input:not(:placeholder-shown):valid {
+    @apply outline-green-500 outline-2 outline-offset-2;
+  }
+  .input:not(:placeholder-shown):invalid {
+    @apply outline-red-500 outline-2 outline-offset-2;
+  }
+
 	.textarea {
 		@apply block w-full rounded-xl shadow-lg outline outline-2 outline-offset-2 outline-transparent py-1 px-2 text-secondary-font-color/70 transition-all bg-font-color;
 	}
@@ -113,6 +120,10 @@ textarea {
 
   .select:focus {
     @apply outline-accent-color outline-2 outline-offset-2;
+  }
+
+  .error {
+    @apply !outline-red-500 outline-2 outline-offset-2;
   }
 
   .link {
