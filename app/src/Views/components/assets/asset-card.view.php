@@ -6,7 +6,7 @@ use Entities\Asset;
 ?>
 <li class="relative flex flex-col rounded-xl overflow-hidden shadow-lg">
     <a href="/assets/<?= $asset->id ?>/" tabindex="-1" class="h-[55%] hover:scale-105 transition-all">
-        <img src="<?= $asset->preview_image ?>" class="size-full min-h-[15rem] object-cover" alt="<?= $asset->name ?>">
+        <img src="<?= $asset->preview_image ?>" class="size-full min-h-[15rem] object-cover" alt="image for asset: <?= $asset->name ?>">
     </a>
     <div class="bg-bg-color/40 h-[45%] p-2 flex flex-col gap-4 relative z-10">
         <div>

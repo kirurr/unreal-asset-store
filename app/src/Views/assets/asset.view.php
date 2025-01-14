@@ -81,8 +81,8 @@ $assetDate->setTimestamp($asset->created_at);
 					<p class="text-font-color/70">Downloaded <?= $asset->purchase_count ?> times</p>
 				</div>
 			</aside>
-			<section class="col-start-1 row-start-1">
-				<div class="flex gap-4 bg-secondary-bg-color/70 rounded-xl p-4">
+			<section class="col-start-1 row-start-1 size-full">
+				<div class="flex gap-4 bg-secondary-bg-color/70 rounded-xl p-4 size-full">
 					<div class="flex flex-col">
 						<div id="main-carousel" class="max-h-[30rem] splide size-full">
 							<div class="splide__track rounded-xl overflow-hidden size-full">
