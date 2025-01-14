@@ -17,11 +17,11 @@
 	<script src="/js/auth.js" defer></script>
 </head>
 
-<body>
+<body class="flex flex-col h-screen justify-between">
 	<header>
 		<?php renderComponent('navbar', ['categories' => $categories]); ?>
 	</header>
-	<main class="flex flex-col items-center justify-center h-[70vh]">
+	<main class="flex flex-col items-center justify-center">
 
 		<form class="text-center w-[20rem] bg-secondary-bg-color/50 p-4 rounded-xl shadow-lg" id="sign-up-form" method="post" action="/signup">
 			<h1>Sign up</h1>

@@ -2,12 +2,13 @@
 
 use Entities\Asset;
 use Entities\Category;
-use Entities\User;
 use Entities\File;
+use Entities\User;
 
 /**
  * @var Asset $asset
  * @var Category $category
+ * @var Category[] $trendingCategories
  * @var User $user
  * @var File[] $files
  */
@@ -15,20 +16,30 @@ use Entities\File;
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>files for asset</title>
-</head>
-<body>
+	<head>
+		<?php renderComponent('head'); ?>
+		<title>files for asset</title>
+	</head>
+	<body class="flex flex-col h-screen justify-between">
 		<header>
-			<?php renderComponent('navbar'); ?>
+			<?php renderComponent('navbar', ['categories' => $trendingCategories]); ?>
 		</header>
-		<h1>files for asset</h1>
-		<a href="/assets/<?= $asset->id ?>">back to asset</a>
-		<?php foreach ($files as $file): ?>
-			<h2><?= $file->name ?></h2>
-		<a href="/assets/<?= $asset->id ?>/files/<?= $file->id ?>" download> download </a>
-		<?php endforeach; ?>
-</body>
+		<main>
+			<section>
+				<div class="text-center">
+					<h1>files for <?= $asset->name ?></h1>
+					<a class="link" href="/assets/<?= $asset->id ?>">back to asset</a>
+				</div>
+				<ul class="mt-8 flex flex-col gap-4">
+					<?php foreach ($files as $file): ?>
+					<li class="rounded-xl shadow-lg bg-secondary-bg-color/70 p-4">
+						<h2><?= $file->name ?></h2>
+						<a href="/assets/<?= $asset->id ?>/files/<?= $file->id ?>" download> download </a>
+					</li>
+					<?php endforeach; ?>
+				</ul>
+			</section>
+		</main>
+		<?php renderComponent('footer', ['categories' => $trendingCategories]); ?>
+	</body>
 </html>

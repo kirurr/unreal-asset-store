@@ -70,18 +70,19 @@ class AssetsPageController
     }
 
     /**
-     * @return array{ asset: Asset, category: Category, files: File[] }
+     * @return array{ asset: Asset, category: Category, files: File[], trendingCategories: Category[] }
      */
     public function getFilesPageData(string $id): array
     {
         $asset = $this->getAssetUseCase->execute($id);
-        $category = $this->getCategoryUseCase->execute($asset->category_id);
+        $category = $this->getCategoryUseCase->execute($asset->category->id);
         $files = $this->getFilesUseCase->execute($id);
 
         return [
             'asset' => $asset,
             'category' => $category,
             'files' => $files,
+			'trendingCategories' => $this->getTrendingCategoriesUseCase->execute(),
         ];
     }
 
@@ -103,6 +104,7 @@ class AssetsPageController
         $asset = $this->getAssetUseCase->execute($id);
 
         return [
+			'categories' => $this->getTrendingCategoriesUseCase->execute(),
             'asset' => $asset,
         ];
     }

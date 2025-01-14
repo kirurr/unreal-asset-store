@@ -19,11 +19,11 @@ use Entities\Category;
 	<script src="/js/auth.js" defer></script>
 </head>
 
-<body>
+<body class="flex flex-col h-screen justify-between">
 	<header>
 		<?php renderComponent('navbar', ['categories' => $categories]); ?>
 	</header>
-	<main class="flex flex-col items-center justify-center h-[70vh]">
+	<main class="flex flex-col items-center justify-center">
 		<form id="sign-in-form" method="post" action="/signin" class="text-center w-[20rem] bg-secondary-bg-color/50 p-4 rounded-xl shadow-lg">
 			<h1>sign in</h1>
 
