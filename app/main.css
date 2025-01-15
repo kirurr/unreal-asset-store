@@ -20,7 +20,7 @@ textarea {
   }
 
   body {
-    @apply text-font-color bg-bg-color bg-gradient-to-br from-bg-color to-secondary-bg-color;
+    @apply text-font-color bg-bg-color bg-gradient-to-br from-bg-color to-secondary-bg-color flex flex-col min-h-screen justify-between;
   }
 
   h1,
@@ -29,6 +29,8 @@ textarea {
   h4,
   h5,
   h6,
+  .more-assets-list,
+  thead th,
   button {
     font-family: "Rubik", serif;
     font-optical-sizing: auto;
@@ -127,7 +129,7 @@ textarea {
   }
 
   .link {
-    @apply text-accent-color underline underline-offset-2 decoration-2 decoration-accent-color outline outline-transparent outline-offset-2 outline-2 rounded transition-all;
+    @apply text-accent-color underline underline-offset-2 decoration-2 outline outline-transparent outline-offset-2 outline-2 rounded transition-all;
   }
 
   .link:hover {

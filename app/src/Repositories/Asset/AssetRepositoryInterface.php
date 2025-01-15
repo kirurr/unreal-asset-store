@@ -31,4 +31,5 @@ interface AssetRepositoryInterface
      * @return ?Asset[]
      */
     public function getAssetsByUserPurchases(int $user_id): array;
+    public function getAssetsByUserReviews(int $user_id): array;
 }

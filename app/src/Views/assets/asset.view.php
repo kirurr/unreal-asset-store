@@ -118,13 +118,13 @@ $assetDate->setTimestamp($asset->created_at);
 				<h2>Reviews</h2>
 				<ul>
 					<?php foreach ($reviews as $review): ?>
-					<?php
-						$reviewDate = new DateTime();
-						$reviewDate->setTimestamp($asset->created_at);
-					?>
 					<li class="my-4 shadow-lg bg-secondary-bg-color/50 p-4 rounded-xl">
 						<h3><?= $review->title ?></h3>
 						<p class="text-font-color/70 text-sm">by <?= $review->user->name ?></p>
+						<?php
+							$reviewDate = new DateTime();
+							$reviewDate->setTimestamp($review->created_at);
+						?>
 						<p class="text-font-color/70 text-sm mb-2"><?= $reviewDate->format('d M Y') ?></p>
 						<p><?= $review->review ?></p>
 

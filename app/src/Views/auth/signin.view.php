@@ -19,7 +19,7 @@ use Entities\Category;
 	<script src="/js/auth.js" defer></script>
 </head>
 
-<body class="flex flex-col h-screen justify-between">
+<body>
 	<header>
 		<?php renderComponent('navbar', ['categories' => $categories]); ?>
 	</header>

@@ -5,6 +5,7 @@ namespace Repositories\Asset;
 use Entities\Asset;
 use Entities\AssetFilters;
 use Entities\Category;
+use Entities\Review;
 use Entities\User;
 use PDO;
 use PDOException;
@@ -37,7 +38,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                 $asset['price'],
                 $asset['engine_version'],
                 new Category($asset['category_id'], $asset['category_name'], $asset['category_description'], $asset['category_asset_count']),
-				new User($asset['user_id'], $asset['user_name'], $asset['user_email'], $asset['user_password'], $asset['user_role']),
+                new User($asset['user_id'], $asset['user_name'], $asset['user_email'], $asset['user_password'], $asset['user_role']),
                 $asset['created_at'],
                 $asset['purchase_count']
             );
@@ -172,7 +173,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
                     $asset['price'],
                     $asset['engine_version'],
                     new Category($asset['category_id'], $asset['category_name'], $asset['category_description'], $asset['category_asset_count']),
-					new User($asset['user_id'], $asset['user_name'], $asset['user_email'], $asset['user_password'], $asset['user_role']),
+                    new User($asset['user_id'], $asset['user_name'], $asset['user_email'], $asset['user_password'], $asset['user_role']),
                     $asset['created_at'],
                     $asset['purchase_count']
                 ),
@@ -264,7 +265,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
 
     public function getAssetsByUserPurchases(int $user_id): array
     {
-$query = "SELECT asset.*,
+        $query = "SELECT asset.*,
 	category.id as category_id,
 	category.name as category_name,
 	category.description as category_description,
@@ -294,11 +295,73 @@ JOIN category ON asset.category_id = category.id JOIN purchase on purchase.asset
                 $asset['price'],
                 $asset['engine_version'],
                 new Category($asset['category_id'], $asset['category_name'], $asset['category_description'], $asset['category_asset_count']),
-				new User($asset['user_id'], $asset['user_name'], $asset['user_email'], $asset['user_password'], $asset['user_role']),
+                new User($asset['user_id'], $asset['user_name'], $asset['user_email'], $asset['user_password'], $asset['user_role']),
                 $asset['created_at'],
                 $asset['purchase_count']
             ),
             $assets
+        );
+    }
+
+    /** @return array{ array{ asset: Asset, review: Review } } */
+    public function getAssetsByUserReviews(int $user_id): array
+    {
+        $query = "SELECT 
+	asset.*,
+	category.id as category_id,
+	category.name as category_name,
+	category.description as category_description,
+	category.asset_count as category_asset_count,
+	user.id as user_id,
+	user.name as user_name,
+	user.email as user_email,
+	user.password as user_password,
+	user.role as user_role,
+	review.id as review_id,
+	review.is_positive as review_is_positive,
+	review.negative as review_negative,
+	review.positive as review_positive,
+	review.review as review_review,
+	review.title as review_title,
+	review.created_at as review_created_at
+	FROM review
+	JOIN asset on asset.id = review.asset_id JOIN user on user.id = review.user_id JOIN category on asset.category_id = category.id WHERE review.user_id = :user_id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['user_id' => $user_id]);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (!$result) {
+            return [];
+        }
+
+        return array_map(
+            fn($item) => [
+                new Asset(
+                    $item['id'],
+                    $item['name'],
+                    $item['info'],
+                    $item['description'],
+                    [],
+                    $item['preview_image'],
+                    $item['price'],
+                    $item['engine_version'],
+                    new Category($item['category_id'], $item['category_name'], $item['category_description'], $item['category_asset_count']),
+                    new User($item['user_id'], $item['user_name'], $item['user_email'], $item['user_password'], $item['user_role']),
+                    $item['created_at'],
+                    $item['purchase_count']
+                ),
+                new Review(
+                    $item['review_id'],
+                    $item['id'],
+                    new User($item['user_id'], $item['user_name'], $item['user_email'], $item['user_password'], $item['user_role']),
+                    $item['review_title'],
+                    $item['review_review'],
+                    $item['review_positive'],
+                    $item['review_negative'],
+                    $item['review_created_at'],
+                    $item['review_is_positive']
+                )
+            ],
+            $result
         );
     }
 }

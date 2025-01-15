@@ -9,7 +9,6 @@ use Repositories\Asset\AssetSQLiteRepository;
 use Repositories\Category\CategorySQLiteRepository;
 use Repositories\Image\SQLiteImageRepository;
 use Repositories\Purchase\SQLitePurchaseRepository;
-use Services\Session\SessionService;
 use Services\Validation\AssetValidationService;
 use UseCases\Asset\ChangeAssetPurchaseCountUseCase;
 use UseCases\Asset\CreateAssetUseCase;
@@ -17,6 +16,7 @@ use UseCases\Asset\DeleteAssetUseCase;
 use UseCases\Asset\EditAssetUseCase;
 use UseCases\Asset\GetAllAssetUseCase;
 use UseCases\Asset\GetAssetsByUserPurhcasesUseCase;
+use UseCases\Asset\GetAssetsByUserReviewsUseCase;
 use UseCases\Asset\GetAssetsPageUseCase;
 use UseCases\Asset\GetAssetUseCase;
 use UseCases\Asset\GetMainPageAssetsUseCase;
@@ -103,6 +103,10 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
 		$this->set(GetPaginationAssetUseCase::class, function () {
 			return new GetPaginationAssetUseCase($this::get(AssetSQLiteRepository::class));
 		});
+
+        $this->set(GetAssetsByUserReviewsUseCase::class, function() {
+			return new GetAssetsByUserReviewsUseCase($this::get(AssetSQLiteRepository::class));
+        });
 
         $this->set(
             AssetController::class, function () {

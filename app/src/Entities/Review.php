@@ -12,7 +12,7 @@ class Review
         public string $review,
         public ?string $positive,
         public ?string $negative,
-        public string $created_at,
+        public int $created_at,
         public bool $is_positive,
     ) {}
 }

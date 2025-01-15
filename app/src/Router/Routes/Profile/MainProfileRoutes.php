@@ -29,7 +29,8 @@ class MainProfileRoutes extends Routes implements RoutesInterface
                     redirect('/');
                 }
 
-                $data = $this->profileController->getProfileData();
+                $asset = $_GET['assets'] ?? "created";
+                $data = $this->profileController->getProfileData($asset);
                 try 
                 {
                     renderView('profile/index', $data);

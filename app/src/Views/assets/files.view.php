@@ -22,7 +22,7 @@ use Entities\User;
 	<title>files for asset</title>
 </head>
 
-<body class="flex flex-col h-screen justify-between">
+<body>
 	<header>
 		<?php renderComponent('navbar', ['categories' => $trendingCategories]); ?>
 	</header>
