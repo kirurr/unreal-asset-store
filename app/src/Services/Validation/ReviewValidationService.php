@@ -21,6 +21,10 @@ class ReviewValidationService
         $vnegative = htmlspecialchars(trim($negative));
 
         $errors = [];
+        if (empty($title)) {
+            $errors['title'] = 'Title cannot be empty';
+        }
+
         if (empty($review)) {
             $errors['review'] = 'Review cannot be empty';
         }

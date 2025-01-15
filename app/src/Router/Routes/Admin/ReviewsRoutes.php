@@ -62,6 +62,7 @@ class ReviewsRoutes extends Routes implements RoutesInterface
                 }
 
                 [$errors, $data] = $this->reviewValidationService->validate(
+                    $_POST['title'] ?? '',
                     $_POST['review'] ?? '',
                     $_POST['is_positive'] ?? '',
                     $_POST['positive'] ?? '',
@@ -72,7 +73,7 @@ class ReviewsRoutes extends Routes implements RoutesInterface
                         throw new DomainException('One or more fields are invalid');
                     }
 
-                    $this->reviewController->updateReview($slug['id'], $data['review'], $data['is_positive'], $data['positive'], $data['negative']);
+                    $this->reviewController->updateReview($slug['id'], $data['title'], $data['review'], $data['is_positive'], $data['positive'], $data['negative']);
                     redirect('/admin/reviews');
                 } catch (DomainException $e) {
                     $pageData = $this->reviewController->getReviewPageData($slug['id']);
@@ -80,12 +81,7 @@ class ReviewsRoutes extends Routes implements RoutesInterface
                     renderView(
                         'admin/reviews/edit', [
                             'review' => $pageData['review'],
-                            'previousData' => [
-                                'review' => $data['review'],
-                                'is_positive' => $data['is_positive'],
-                                'positive' => $data['positive'],
-                                'negative' => $data['negative']
-                            ],
+                            'previousData' => $data,
                             'errorMessage' => $e->getMessage(),
                             'errors' => $errors
                         ]

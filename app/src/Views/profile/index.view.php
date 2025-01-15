@@ -92,6 +92,11 @@ $currentLink = $_GET['assets'] ?? 'created';
 									<th class="p-4 text-start">
 										created
 									</th>
+									<?php if ($currentLink === 'purchased'): ?>
+										<th class="p-4 text-start">
+											user
+										</th>
+									<?php endif; ?>
 									<th class="p-4 text-start">
 										category
 									</th>
@@ -124,6 +129,11 @@ $currentLink = $_GET['assets'] ?? 'created';
 											?>
 											<?= $date->format('d M Y') ?>
 										</td>
+										<?php if ($currentLink === 'purchased'): ?>
+											<td class="p-4">
+												<a class="link" href="/assets?=user_id=<?= $asset->user->id ?>"><?= $asset->user->name ?></a>
+											</td>
+										<?php endif; ?>
 										<td class="p-4">
 											<a class="link" href="/assets?category_id=<?= $asset->category->id ?>"><?= $asset->category->name ?></a>
 										</td>
@@ -146,70 +156,79 @@ $currentLink = $_GET['assets'] ?? 'created';
 				</div>
 			</div>
 		</section>
-		<section>
+		<section id="reviews">
 			<h2>Your reviews</h2>
 			<div>
 				<div class="bg-secondary-bg-color/50 p-2 rounded-xl shadow-lg">
 					<div>
-						<table class="table-auto w-full divide-y-2 divide-font-color/20">
-							<thead>
-								<tr>
-									<th class="p-4 text-start">
-										asset
-									</th>
-									<th class="p-4 text-start">
-										title
-									</th>
-									<th class="p-4 text-start">
-										review
-									</th>
-									<th class="p-4 text-start">
-										positive
-									</th>
-									<th class="p-4 text-start">
-										negative
-									</th>
-									<th class="p-4 text-start">
-										is positive?
-									</th>
-									<th class="p-4 text-start">
-										created
-									</th>
-									<th class="p-4">
-
-									</th>
-								</tr>
-							</thead>
-							<tbody class="divide-y-2 divide-font-color/5">
-								<?php foreach ($reviews as $item): ?>
-									<?php
-									[$asset, $review] = $item;
-									?>
+						<?php if (count($reviews) > 0): ?>
+							<table class="table-auto w-full divide-y-2 divide-font-color/20">
+								<thead>
 									<tr>
-										<td class="p-4"><?= $asset->name ?></td>
-										<td class="p-4"><?= $review->title ?></td>
-										<td class="p-4"><?= $review->review ?></td>
-										<td class="p-4"><?= $review->positive ?></td>
-										<td class="p-4"><?= $review->negative ?></td>
-										<?php if ($review->is_positive): ?>
-											<td class="p-4 text-green-500/70">positive</td>
-										<?php else: ?>
-											<td class="p-4 text-red-500/70">negative</td>
-										<?php endif; ?>
-										<td class="p-4">
-											<?php
-											$reviewDate = new DateTime();
-											$reviewDate->setTimestamp($review->created_at);
-											?>
-											<?= $reviewDate->format('d M Y') ?>
-										</td>
-										<td class="p-4">
-											<a class="link" href="/assets/<?= $asset->id ?>">View</a>
-										</td>
+										<th class="p-4 text-start">
+											asset
+										</th>
+										<th class="p-4 text-start">
+											title
+										</th>
+										<th class="p-4 text-start">
+											review
+										</th>
+										<th class="p-4 text-start">
+											positive
+										</th>
+										<th class="p-4 text-start">
+											negative
+										</th>
+										<th class="p-4 text-start">
+											is positive?
+										</th>
+										<th class="p-4 text-start">
+											created
+										</th>
+										<th class="p-4">
+
+										</th>
 									</tr>
-								<?php endforeach; ?>
-							</tbody>
-						</table>
+								</thead>
+								<tbody class="divide-y-2 divide-font-color/5">
+									<?php foreach ($reviews as $item): ?>
+										<?php
+										[$asset, $review] = $item;
+										?>
+										<tr>
+											<td class="p-4"><?= $asset->name ?></td>
+											<td class="p-4"><?= $review->title ?></td>
+											<td class="p-4"><?= $review->review ?></td>
+											<td class="p-4"><?= $review->positive ?></td>
+											<td class="p-4"><?= $review->negative ?></td>
+											<?php if ($review->is_positive): ?>
+												<td class="p-4 text-green-500/70">positive</td>
+											<?php else: ?>
+												<td class="p-4 text-red-500/70">negative</td>
+											<?php endif; ?>
+											<td class="p-4">
+												<?php
+												$reviewDate = new DateTime();
+												$reviewDate->setTimestamp($review->created_at);
+												?>
+												<?= $reviewDate->format('d M Y') ?>
+											</td>
+											<td class="p-4 flex gap-2">
+												<a class="link" href="/profile/reviews/<?= $review->id ?>">Edit</a>
+												<form action="/profile/reviews/<?= $review->id ?>/" method="post">
+													<input type="hidden" name="_method" value="DELETE">
+													<button type="submit" class="link text-red-500/80" href="/assets/<?= $asset->id ?>">Delete</button>
+												</form>
+												<a class="link" href="/assets/<?= $asset->id ?>">View</a>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						<?php else: ?>
+							<p class="text-center">You haven't reviewed any assets yet.</p>
+						<?php endif; ?>
 					</div>
 				</div>
 			</div>

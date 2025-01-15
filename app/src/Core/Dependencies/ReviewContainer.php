@@ -6,6 +6,7 @@ use Controllers\ReviewController;
 use Core\ContainerInterface;
 use Core\ServiceContainer;
 use Repositories\Review\SQLiteReviewRepository;
+use Router\Middlewares\IsUserReviewAuthorMiddleware;
 use Services\Validation\ReviewValidationService;
 use UseCases\Review\CreateReviewUseCase;
 use UseCases\Review\DeleteReviewUseCase;

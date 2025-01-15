@@ -43,8 +43,8 @@ class ReviewController
 		$this->deleteReviewUseCase->execute($id);
 	}
 
-	public function updateReview(int $id, string $review, bool $is_positive, string $positive, string $negative): void
+	public function updateReview(int $id, string $title, string $review, bool $is_positive, string $positive, string $negative): void
 	{
-		$this->updateReviewUseCase->execute($id, $review, $is_positive, $positive, $negative);
+		$this->updateReviewUseCase->execute($id, $title, $review, $is_positive, $positive, $negative);
 	}
 }
