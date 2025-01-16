@@ -30,7 +30,7 @@ use Entities\Category;
 
 	<div>
 		<label class="label" for="description">description</label>
-		<textarea required name="description" id="description"><?= retrieveData($previousData, $asset, 'description') ?></textarea>
+		<textarea name="description" id="description"><?= retrieveData($previousData, $asset, 'description') ?></textarea>
 		<span><?= $errors['description'] ?? '' ?></span>
 	</div>
 
@@ -45,7 +45,7 @@ use Entities\Category;
 
 			<div class="mt-4">
 				<label class="label" for="price">price</label>
-				<input required class="input" placeholder="Keep empty if your asset is free" type="number" name="price" id="price" value="<?= retrieveData($previousData, $asset, 'price') ?>">
+				<input class="input" placeholder="Keep empty if your asset is free" type="number" name="price" id="price" value="<?= retrieveData($previousData, $asset, 'price') ?? '' ?>">
 				<span><?= $errors['price'] ?? '' ?></span>
 			</div>
 		</div>

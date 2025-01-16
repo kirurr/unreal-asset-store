@@ -19,35 +19,27 @@ function redirect(string $url) {
 function retrieveData(array $previousData, mixed $object, string $name): mixed
 {
     if (isset($previousData[$name])) {
-        return $previousData[$name];
+        return $previousData[$name] === 0 ? '' : $previousData[$name];
     } elseif (isset($object->$name)) {
-        return $object->{$name};
+        return $object->{$name} === 0 ? '' : $object->{$name};
     }
 	return '';
 }
 
 function generatePagination(int $currentPage, int $totalPages, ?int $maxVisiblePages = 5): array {
     $pagination = [];
-
-    // Определяем границы для отображения страниц
     $half = floor($maxVisiblePages / 2);
     $start = max(1, $currentPage - $half);
     $end = min($totalPages, $currentPage + $half);
-
-    // Добавляем многоточия в начале
     if ($start > 1) {
         $pagination[] = '<';
         if ($start > 2) {
             $pagination[] = '...';
         }
     }
-
-    // Добавляем номера страниц
     for ($i = $start; $i <= $end; $i++) {
 		$pagination[] = $i;
     }
-
-    // Добавляем многоточия в конце
     if ($end < $totalPages) {
         if ($end < $totalPages - 1) {
             $pagination[] = '...';

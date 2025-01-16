@@ -8,6 +8,7 @@ use Core\ServiceContainer;
 use Services\Files\FilesystemFilesService;
 use UseCases\Asset\EditAssetUseCase;
 use UseCases\Asset\GetAssetUseCase;
+use UseCases\Category\GetTrendingCategoriesUseCase;
 use UseCases\Image\CreateImageUseCase;
 use Repositories\Image\SQLiteImageRepository;
 use UseCases\Image\GetImageUseCase;
@@ -54,7 +55,8 @@ class ImageContainer extends ServiceContainer implements ContainerInterface {
                     $this::get(UpdateImageUseCase::class),
                     $this::get(GetImageUseCase::class),
                     $this::get(EditAssetUseCase::class),
-                    $this::get(GetAssetUseCase::class)
+					$this::get(GetAssetUseCase::class),
+					$this::get(GetTrendingCategoriesUseCase::class)
                 );
             }
         );

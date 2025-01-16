@@ -24,7 +24,7 @@ class MainProfileRoutes extends Routes implements RoutesInterface
     public function __construct(Router $router)
     {
         parent::__construct($router);
-        $this->reviewValidationService = ServiceContainer::get(reviewValidationService::class);
+        $this->reviewValidationService = ServiceContainer::get(ReviewValidationService::class);
         $this->profileController = ServiceContainer::get(ProfileController::class);
     }
 

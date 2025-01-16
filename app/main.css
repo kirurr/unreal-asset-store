@@ -7,7 +7,7 @@
 }
 
 textarea {
-	resize: none;
+  resize: none;
 }
 
 @layer base {
@@ -71,7 +71,7 @@ textarea {
   }
 
   .button {
-    @apply block size-fit bg-secondary-bg-color text-font-color text-xl font-semibold py-2 px-4 rounded-xl transition-all shadow-lg outline outline-2 outline-offset-2 outline-transparent;
+    @apply block size-fit bg-accent-color/30 text-font-color text-xl font-semibold py-2 px-4 rounded-xl transition-all shadow-lg outline outline-2 outline-offset-2 outline-transparent;
   }
 
   .button.accent {
@@ -83,16 +83,16 @@ textarea {
   }
 
   .button:hover {
-    @apply bg-secondary-bg-color/70 text-font-color/70;
+    @apply bg-accent-color/50;
   }
 
   .button:focus {
     @apply outline-accent-color outline-2 outline-offset-2;
   }
 
-	.label {
-@apply block text-sm/6 font-medium text-font-color;
-	}
+  .label {
+    @apply block text-sm/6 font-medium text-font-color;
+  }
 
   .input {
     @apply block w-full rounded-xl outline shadow-lg outline-2 outline-offset-2 outline-transparent py-1 px-2 text-secondary-font-color/70 transition-all bg-font-color;
@@ -109,13 +109,13 @@ textarea {
     @apply block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none;
   }
 
-	.textarea {
-		@apply block w-full rounded-xl shadow-lg outline outline-2 outline-offset-2 outline-transparent py-1 px-2 text-secondary-font-color/70 transition-all bg-font-color;
-	}
+  .textarea {
+    @apply block w-full rounded-xl shadow-lg outline outline-2 outline-offset-2 outline-transparent py-1 px-2 text-secondary-font-color/70 transition-all bg-font-color;
+  }
 
-	.textarea:focus {
-		@apply outline-accent-color outline-2 outline-offset-2;
-	}
+  .textarea:focus {
+    @apply outline-accent-color outline-2 outline-offset-2;
+  }
 
   .select {
     @apply block w-full rounded-xl outline outline-2 shadow-lg outline-offset-2 outline-transparent py-1 px-2 text-secondary-font-color/70 transition-all bg-font-color;
@@ -172,9 +172,6 @@ textarea {
     opacity: 1;
   }
 
-  .filters-details {
-  }
-
   .filters-details::details-content {
     overflow: hidden;
     block-size: 0;
@@ -202,14 +199,14 @@ textarea {
     padding-block: 1rem;
   }
 
-	.splide__slide.thumbnail.is-active {
-		@apply border-accent-color;
-	}
+  .splide__slide.thumbnail.is-active {
+    @apply !border-accent-color;
+  }
 
-	.asset-grid {
-		display: grid;
-		grid-template-columns: 1fr auto;
-		grid-template-rows: auto;
-		gap: 1rem;
-	}
+  .asset-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto;
+    gap: 1rem;
+  }
 }

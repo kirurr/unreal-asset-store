@@ -29,7 +29,8 @@ class ProfileContainer extends ServiceContainer implements ContainerInterface
                     $this::get(GetTrendingCategoriesUseCase::class),
                     $this::get(GetReviewByIdUseCase::class),
                     $this::get(UpdateReviewUseCase::class),
-                    $this::get(DeleteReviewUseCase::class)
+                    $this::get(DeleteReviewUseCase::class), 
+
                 );
             }
         );

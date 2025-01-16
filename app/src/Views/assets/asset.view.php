@@ -28,6 +28,7 @@ $assetDate->setTimestamp($asset->created_at);
 		<title>asset <?= $asset->name ?></title>
 		<? renderComponent('head'); ?>
 		<script src="/js/splide/splide.min.js"></script>
+		<link rel="stylesheet" href="/js/splide/splide.min.css">
 		<script src="/js/asset-carousel.js" defer></script>
 	</head>
 	<body>
@@ -96,11 +97,11 @@ $assetDate->setTimestamp($asset->created_at);
 							</div>
 						</div>
 						<?php if (count($asset->images) > 1): ?>
-						<div id="thumbnails-carousel" class="splide size-full">
-							<div class="splide__track h-fit py-2 size-full overflow-x-hidden">
-								<ul class="splide__list size-full flex">
+						<div id="thumbnails-carousel" class="splide mt-4">
+							<div class="splide__track">
+								<ul class="splide__list">
 									<?php foreach ($asset->images as $image): ?>
-									<li class="splide__slide border-2 border-solid border-transparent h-[6rem] thumbnail rounded-xl overflow-hidden">
+									<li class="splide__slide border-2 border-transparent rounded-lg overflow-hidden thumbnail">
 										<img class="size-full object-cover" src="<?= $image->path ?>" alt="<?= $asset->name ?>">
 									</li>
 									<?php endforeach; ?>

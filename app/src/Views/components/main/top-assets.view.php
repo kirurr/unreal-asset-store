@@ -27,7 +27,7 @@ use Entities\Asset;
 			<div class="splide__track size-full">
 				<ul class="splide__list size-full grid grid-cols-1 grid-rows-4 gap-4">
 					<?php foreach ($assets as $key => $asset): ?>
-					<li class="splide__slide thumbnail transition-all relative flex flex-col rounded-xl overflow-hidden shadow-lg">
+					<li class="splide__slide thumbnail transition-all border-2 border-transparent relative flex flex-col rounded-xl overflow-hidden shadow-lg">
 						<div class="size-full absolute z-10 bg-gradient-to-tr from-bg-color via-transparent to-transparent"></div>
 						<img class="object-cover size-full absolute" src="<?= $asset->preview_image ?>" alt="<?= $asset->name ?>">
 						<div class="mt-auto w-full p-4">

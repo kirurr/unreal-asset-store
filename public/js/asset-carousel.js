@@ -9,7 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   try {
     const thumbnail = new Splide("#thumbnails-carousel", {
-      fixedWidth: 150,
+			autoWidth: true,
+			height: 80,
+			gap: 4,
       arrows: false,
       autoplay: true,
       rewind: true,

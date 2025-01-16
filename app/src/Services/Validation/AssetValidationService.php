@@ -303,18 +303,16 @@ class AssetValidationService
             $errors['description'] = 'Description is required';
         }
 
-        if (empty($vfile_name)) {
-            $errors['file'] = 'File is required';
-        } else {
+        if (!empty($vfile_name)) {
             $fileErrors = $this->checkFile($vfile_name);
             if ($fileErrors) {
                 $errors['file'] = $fileErrors;
             }
+			if (empty($vpath)) {
+				$errors['path'] = 'Path is required';
+			}
         }
 
-        if (empty($vpath)) {
-            $errors['path'] = 'Path is required';
-        }
         if (empty($vold_path)) {
             $errors['old_path'] = 'Old path is required';
         }

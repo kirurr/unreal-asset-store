@@ -35,13 +35,14 @@ use Entities\User;
 			<ul class="mt-8 flex flex-col gap-4 mx-auto w-2/3">
 				<?php foreach ($files as $file): ?>
 					<li class="rounded-xl shadow-lg bg-secondary-bg-color/70 p-4 flex divide-x-2 divide-font-color/20">
-						<div class="w-[75%]">
+						<div class="w-2/3">
 							<h2><?= $file->name ?></h2>
 							<p class=" text-font-color/70"><?= $file->description ?></p>
 						</div>
-						<div class="w-[25%] px-2">
+						<div class="w-1/3 px-2">
 							<p class=" text-font-color/70">version: <?= $file->version ?></p>
-							<p class=" text-font-color/70">size: <?= formatBytes($file->size) ?></p>
+							<p class=" text-font-color/70">uploaded: <?= $file->GetFormatedCreatedAt() ?></p>
+							<p class=" text-font-color/70">size: <?= $file->getFormatedSize() ?></p>
 							<a class="mt-8 link" href="/assets/<?= $asset->id ?>/files/<?= $file->id ?>" download> download </a>
 						</div>
 					</li>

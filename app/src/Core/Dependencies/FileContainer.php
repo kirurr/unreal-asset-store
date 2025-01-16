@@ -6,6 +6,8 @@ use Controllers\FileController;
 use Core\ContainerInterface;
 
 use Core\ServiceContainer;
+use UseCases\Asset\GetAssetUseCase;
+use UseCases\Category\GetTrendingCategoriesUseCase;
 use UseCases\File\CreateFileUseCase;
 use Services\Files\FilesystemFilesService;
 use UseCases\File\DeleteFileUseCase;
@@ -52,7 +54,9 @@ class FileContainer extends ServiceContainer implements ContainerInterface {
                     $this::get(CreateFileUseCase::class),
                     $this::get(GetFileByIdUseCase::class),
                     $this::get(UpdateFileUseCase::class),
-                    $this::get(DeleteFileUseCase::class)
+                    $this::get(DeleteFileUseCase::class),
+                    $this::get(GetTrendingCategoriesUseCase::class),
+					$this::get(GetAssetUseCase::class)
                 );
             }
         );
