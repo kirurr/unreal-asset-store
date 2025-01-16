@@ -53,7 +53,9 @@ try {
 		category_id INTEGER NOT NULL,
 		user_id INTEGER NOT NULL,
 		created_at INTEGER DEFAULT (strftime('%s', 'now')),
-		purchase_count INTEGER DEFAULT 0
+		purchase_count INTEGER DEFAULT 0,
+		FOREIGN KEY (category_id) REFERENCES category (id),
+		FOREIGN KEY (user_id) REFERENCES user (id)
 	)");
 
 	echo "Created assets table\n";
@@ -64,7 +66,8 @@ try {
 		id INTEGER PRIMARY KEY,
 		asset_id TEXT NOT NULL,
 		image_order INTEGER NOT NULL,
-		path TEXT NOT NULL
+		path TEXT NOT NULL,
+		FOREIGN KEY (asset_id) REFERENCES asset (id)
 	)");
 
 	echo "Created images table\n";
@@ -79,7 +82,8 @@ try {
 		version TEXT NOT NULL,
 		description TEXT NOT NULL,
 		size INTEGER NOT NULL,
-		created_at INTEGER DEFAULT (strftime('%s', 'now'))
+		created_at INTEGER DEFAULT (strftime('%s', 'now')),
+		FOREIGN KEY (asset_id) REFERENCES asset (id)
 	)");
 
 	echo "Created files table\n";
@@ -90,7 +94,9 @@ try {
 		id INTEGER PRIMARY KEY,
 		asset_id TEXT NOT NULL,
 		user_id INTEGER NOT NULL,
-		purchase_date INTEGER DEFAULT (strftime('%s', 'now'))
+		purchase_date INTEGER DEFAULT (strftime('%s', 'now')),
+		FOREIGN KEY (asset_id) REFERENCES asset (id),
+		FOREIGN KEY (user_id) REFERENCES user (id)
 	)");
 
 	echo "Created purchases table\n";
@@ -106,7 +112,9 @@ try {
 		positive TEXT,
 		negative TEXT,
 		created_at INTEGER DEFAULT (strftime('%s', 'now')),
-		is_positive BOOLEAN DEFAULT FALSE
+		is_positive BOOLEAN DEFAULT FALSE,
+		FOREIGN KEY (asset_id) REFERENCES asset (id),
+		FOREIGN KEY (user_id) REFERENCES user (id)
 	)");
 
 	echo "Created reviews table\n";
