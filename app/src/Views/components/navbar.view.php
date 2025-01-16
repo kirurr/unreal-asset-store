@@ -58,6 +58,4 @@ $user = $session->getUser();
 			<? endif ?>
 		</div>
 	</ul>
-
-
 </nav>
