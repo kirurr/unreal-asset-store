@@ -105,6 +105,10 @@ textarea {
     @apply outline-red-500 outline-2 outline-offset-2;
   }
 
+  .file-input {
+    @apply block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none;
+  }
+
 	.textarea {
 		@apply block w-full rounded-xl shadow-lg outline outline-2 outline-offset-2 outline-transparent py-1 px-2 text-secondary-font-color/70 transition-all bg-font-color;
 	}

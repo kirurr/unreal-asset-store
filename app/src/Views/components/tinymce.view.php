@@ -9,7 +9,8 @@ tinymce.init({
 	license_key: 'gpl',
 	plugins: 'image code lists link autoresize',
 	menubar: 'file edit insert view format table tools help',
-	autoresize_bottom_margin: 50,
-	toolbar_sticky: true
+	autoresize_bottom_margin: 100,
+	toolbar_sticky: true,
+	resize: true
 });
 </script>

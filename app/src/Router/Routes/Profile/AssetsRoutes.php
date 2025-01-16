@@ -41,8 +41,9 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     redirect('/');
                 }
 
-                $data = $this->assetController->getAdminAssetsPageData();
-                renderView('profile/assets/index', $data);
+                // $data = $this->assetController->getAdminAssetsPageData();
+                // renderView('profile/assets/index', $data);
+                redirect('/profile/');
             }, [new IsUserMiddleware()]
         );
 
@@ -164,7 +165,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                         $data[ 'category_id' ],
                     );
 
-                    redirect('/profile/assets/');
+                    redirect('/profile/');
                 } catch (DomainException $e) {
 
                     $pageData = $this->assetController->getEditPageData($slug['id']);
@@ -200,7 +201,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } 
                 try {
                     $this->assetController->delete($slug['id']);
-                    redirect('/profile/assets');
+                    redirect('/profile/');
                 } catch (DomainException $e) {
                     http_response_code(400);
                     renderView(
@@ -275,7 +276,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
 
                 try {
                     if ($errors) {
-                        throw new DomainException(['image_id']);
+                        throw new DomainException($errors['image_id']);
                     }
 
                     $this->imageController->updatePreviewImage($slug['id'], $data[ 'image_id' ]);

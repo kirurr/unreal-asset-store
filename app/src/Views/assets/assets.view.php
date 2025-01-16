@@ -15,11 +15,10 @@ if ($filters->category_id) {
 	$category = $categories[$categoryIndex];
 }
 
-$trendingCategories = array_slice($categories, 0, 4);
-usort($trendingCategories, function ($a, $b) {
+usort($categories, function ($a, $b) {
 	return $b->asset_count <=> $a->asset_count;
 });
-
+$trendingCategories = array_slice($categories, 0, 4);
 ?>
 
 <!DOCTYPE html>

@@ -18,7 +18,7 @@ class MainAdminRoutes extends Routes implements RoutesInterface {
                 if ($middleware) {
 					redirect('/');
                 }
-				redirect('/admin/categories');
+				redirect('/admin/assets');
             }, [new IsUserAdminMiddleware()]
         );
 	}

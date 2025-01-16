@@ -1,4 +1,5 @@
 <?php
+
 use Entities\Asset;
 use Entities\Category;
 
@@ -17,38 +18,55 @@ use Entities\Category;
 /**
  * @var array{ name: string, info: sting, description: string, price: string, engine_version: string, category_id: string } $previousData  
  */
+
+usort($categories, function ($a, $b) {
+    return $b->asset_count <=> $a->asset_count;
+});
+$trendingCategories = array_slice($categories, 0, 4);
 ?>
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<?php renderComponent('tinymce', ['selector' => '#description']) ?>
-        <title>Unreal Asset Store</title>
-    </head>
-    <body>
-		<h1>edit asset <?= $asset->name ?></h1>
-        <a href="/profile/assets/<?php echo $asset->id ?>/images/">images</a>
-        <a href="/profile/assets/<?php echo $asset->id ?>/files/">files</a>
-		<?php renderComponent('assets/form',
-            [
-                'categories' => $categories,
-                'previousData' => $previousData ?? [],
-                'errors' => $errors ?? [],
-                'asset' => $asset,
-                'action' => "/profile/assets/{$asset->id}",
-                'isEdit' => true,
-                'method' => 'put'
-            ]) ?>
-		<div>
-			<span>preview image</span>
-			<img src="<?php echo $asset->preview_image ?>" alt="preview image">
-		</div>
 
-        <a href="/profile/">back</a>
-        <form action="/profile/assets/<?php echo $asset->id ?>/" method="post">
-            <input type="hidden" name="_method" value="delete">
-            <button type="submit">delete</button>
-        </form>
-    </body>
+<head>
+    <?php renderComponent('head'); ?>
+    <?php renderComponent('tinymce', ['selector' => '#description']) ?>
+    <title>Unreal Asset Store</title>
+</head>
+
+<body>
+    <header>
+        <?php renderComponent('navbar', ['categories' => $trendingCategories]); ?>
+    </header>
+    <main>
+        <section>
+            <div class="flex items-center">
+                <h1>you are editing <?= $asset->name ?></h1>
+                <div class="ml-auto">
+                    <a class="link" href="/profile/assets/<?php echo $asset->id ?>/images/">Edit images</a>
+                    <a class="link" href="/profile/assets/<?php echo $asset->id ?>/files/">Edit files</a>
+                </div>
+            </div>
+            <?php renderComponent(
+                'assets/form',
+                [
+                    'categories' => $categories,
+                    'previousData' => $previousData ?? [],
+                    'errors' => $errors ?? [],
+                    'asset' => $asset,
+                    'action' => "/profile/assets/{$asset->id}",
+                    'isEdit' => true,
+                    'method' => 'put'
+                ]
+            ) ?>
+            <div class="flex gap-4 justify-center">
+                <a class="link" href="/profile/">back</a>
+                <a class="link" href="/profile/assets/<?= $asset->id ?>">reset</a>
+                <form action="/profile/assets/<?php echo $asset->id ?>/" method="post">
+                    <input type="hidden" name="_method" value="delete">
+                    <button class="link text-red-500/80" type="submit">delete</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <?php renderComponent('footer', ['categories' => $trendingCategories]); ?>
+</body>
