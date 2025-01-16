@@ -5,7 +5,6 @@ $session = SessionService::getInstance();
 
 /** @var array{ id: int, name: string, email: string } $user */
 /** @var Category[] $categories */
-
 $user = $session->getUser();
 ?>
 
@@ -41,20 +40,29 @@ $user = $session->getUser();
 				</a>
 				<ul class="sublist">
 					<?php foreach ($categories as $category): ?>
-						<li><a href="/assets/?category_id=<?= $category->id ?>"><?= $category->name ?></a></li>
+					<li><a href="/assets/?category_id=<?= $category->id ?>"><?= $category->name ?></a></li>
 					<?php endforeach; ?>
 					<li><a href="/categories">All categories</a></li>
 				</ul>
 			</li>
 		</div>
-		<div class="justify-self-end flex gap-6">
+		<div class="justify-self-end flex gap-6 items-center">
+			<form action="assets" method="get" class="flex items-center gap-2">
+				<input name="search"  type="text" placeholder="Search assets" class="input">
+				<button type="submit" class="button">
+					<svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+					</svg>
+					<span class="sr-only">Search</span>
+				</button>
+			</form>
 			<? if($user): ?>
-					<? if($user['role'] === 'admin'): ?>
-					<li><a href="/admin" class="font-semibold">Admin</a></li>
-					<? endif ?>
-				<li><a href="/profile" class="font-semibold">Profile</a></li>
+			<? if($user['role'] === 'admin'): ?>
+			<li><a href="/admin" class="font-semibold">Admin</a></li>
+			<? endif ?>
+			<li><a href="/profile" class="font-semibold">Profile</a></li>
 			<? else:?>
-				<li><a href="/signin" class="font-semibold">Sign in</a></li>
+			<li><a href="/signin" class="font-semibold">Sign in</a></li>
 			<? endif ?>
 		</div>
 	</ul>
