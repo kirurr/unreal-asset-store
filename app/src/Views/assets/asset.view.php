@@ -37,8 +37,8 @@ $assetDate->setTimestamp($asset->created_at);
 	<header>
 		<?php renderComponent('navbar', ['categories' => $trendingCategories]) ?>
 	</header>
-	<main class="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_auto] grid-rows-[auto] gap-4">
-		<aside class="lg:col-start-2 lg:row-span-1 row-start-2 lg:w-[20rem] flex flex-col gap-2 lgmy-16 lg:top-0 lg:sticky">
+	<main class="max-w-screen-xl lg:w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_auto] grid-rows-[auto] gap-4">
+		<aside class="lg:col-start-2 lg:row-span-1 row-start-2 lg:w-[20rem] flex flex-col gap-2 lg:my-16 lg:top-0 lg:sticky">
 			<div class="p-4 rounded-xl shadow-lg bg-bg-color/40">
 				<h1><?= $asset->name ?></h1>
 				<p class="text-font-color/70">Category: <a class="link" href="/assets?category_id=<?= $asset->category->id ?>"><?= $asset->category->name ?></a></p>
@@ -84,7 +84,7 @@ $assetDate->setTimestamp($asset->created_at);
 				<p class="text-font-color/70">Downloaded <?= $asset->purchase_count ?> times</p>
 			</div>
 		</aside>
-		<section class="col-start-1 row-start-1 size-full">
+		<section class="col-span-1 row-start-1 size-full flex-grow flex-1">
 			<div class="flex gap-4 lg:bg-secondary-bg-color/70 lg:rounded-xl lg:p-4 size-full">
 				<div class="flex flex-col w-full">
 					<div id="main-carousel" class="max-h-[30rem] splide size-full">
