@@ -11,23 +11,29 @@ use Entities\Review;
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<?php renderComponent('head'); ?>
 	<title>edit review</title>
 </head>
 
-<body>
-	<h1>edit review</h1>
-	<?php renderComponent(
-		'reviews/form',
-		[
-			'review' => $review,
-			'errors' => $errors,
-			'previousData' => $previousData,
-			'errorMessage' => $errorMessage,
-			'path' => '/admin/reviews/'
-		]
-	); ?>
+<body class="justify-normal">
+	<header>
+		<?php renderComponent('admin/navbar'); ?>
+	</header>
+	<main>
+		<section>
+			<h1 class="text-center">edit review</h1>
+			<?php renderComponent(
+				'reviews/form',
+				[
+					'review' => $review,
+					'errors' => $errors ?? [],
+					'previousData' => $previousData ?? [],
+					'errorMessage' => $errorMessage ?? '',
+					'path' => '/admin/reviews/'
+				]
+			); ?>
+		</section>
+	</main>
 </body>
 
 </html>

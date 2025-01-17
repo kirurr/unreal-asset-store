@@ -11,39 +11,50 @@ use Entities\Purchase;
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>purchases</title>
+	<?php renderComponent('head'); ?>
+	<title>purchases</title>
 </head>
-<body>
-	<h1>purchases</h1>
-	<table>
-		<thead>
-			<tr>
-				<th>id</th>
-				<th>asset_id</th>
-				<th>user_id</th>
-				<th>created_at</th>
-				<th>action</th>
-			</tr>
-		</thead>
-		<tbody>
-			<?php foreach ($purchases as $purchase): ?>
-				<tr>
-					<td><?= $purchase->id ?></td>
-					<td><?= $purchase->asset_id ?></td>
-					<td><?= $purchase->user_id ?></td>
-					<td><?= $purchase->purchase_date ?></td>
-					<td>
-						<form action="/admin/purchases/<?= $purchase->id ?>/" method="post">
-							<input type="hidden" name="_method" value="DELETE">
-							<button type="submit">delete</button>
-						</form>
-					</td>
-				</tr>
-			<?php endforeach; ?>
-		</tbody>
-	</table>
+
+<body class="justify-normal">
+	<header>
+		<?php renderComponent('admin/navbar'); ?>
+	</header>
+	<main>
+		<section>
+<div class="p-2 rounded-xl shadow-lg bg-secondary-bg-color/50 max-w-screen-md mx-auto">
+			<h1>purchases</h1>
+			<table>
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>asset</th>
+						<th>user</th>
+						<th>created</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ($purchases as $purchase): ?>
+						<tr>
+							<td><?= $purchase->id ?></td>
+							<td><a href="/assets/<?= $purchase->asset_id ?>/" class="lvink">view asset</a></td>
+							<td><a href="/assets?user_id=<?= $purchase->user_id ?>">view assets by user</a></td>
+							<td><?= $purchase->getFormatedPurchaseDate() ?></td>
+							<td>
+								<form action="/admin/purchases/<?= $purchase->id ?>/" method="post">
+									<input type="hidden" name="_method" value="DELETE">
+									<button class="link text-red-500/80 hover:text-red-500/50" type="submit">delete</button>
+								</form>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+</div>
+		</section>
+	</main>
 </body>
+
 </html>

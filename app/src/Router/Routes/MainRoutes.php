@@ -34,5 +34,27 @@ class MainRoutes extends Routes implements RoutesInterface
                 }
             }
         );
+
+        $this->router->get(
+            $prefix . '/about/', function () {
+                try {
+                    $data = $this->mainPageController->getAboutPageData();
+                    renderView('about', $data);
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }   
+        );
+
+        $this->router->get(
+            $prefix . '/terms/', function () {
+                try {
+                    $data = $this->mainPageController->getTermsPageData();
+                    renderView('terms', $data);
+                } catch (Exception $e) {
+                    $this->handleException($e);
+                }
+            }   
+        );
     }
 }

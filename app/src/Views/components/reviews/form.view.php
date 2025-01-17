@@ -37,7 +37,7 @@ use Entities\Review;
     </div>
 
     <label class="inline-flex items-center cursor-pointer">
-        <input class="sr-only peer" type="checkbox" name="byPopular" id="byPopular"
+        <input class="sr-only peer" type="checkbox" name="is_positive" id="is_positive"
             <?php if (isset($previousData['is_positive'])): ?>
             <?= $previousData['is_positive'] ? 'checked' : '' ?>
             <?php else: ?>
@@ -49,5 +49,5 @@ use Entities\Review;
 
     <span><?= $errors['is_positive'] ?? '' ?></span>
     <?= $errorMessage ?? '' ?>
-    <input class="button accent mx-auto" type="submit" value="update review">
+    <button class="button accent mx-auto" type="submit">submit</button>
 </form>

@@ -17,15 +17,15 @@ class SQLiteReviewRepository implements ReviewRepositoryInterface
     public function create(string $asset_id, string $user_id, string $title, string $review, string $positive, string $negative, bool $is_positive): void
     {
         try {
-            $stmt = $this->pdo->prepare('INSERT INTO review (asset_id, user_id, title, review, positive, negative, is_positive) VALUES (?, ?, ?, ?, ?, ?)');
+            $stmt = $this->pdo->prepare("INSERT INTO review (asset_id, user_id, title, review, positive, negative, is_positive) VALUES (:asset_id, :user_id, :title, :review, :positive, :negative, :is_positive)");
             $stmt->execute([
-                $asset_id,
-                $user_id,
-				$title,
-                $review,
-                $positive,
-                $negative,
-                $is_positive
+                'asset_id' => $asset_id,
+                'user_id' => $user_id,
+				'title' => $title,
+                'review' => $review,
+                'positive' => $positive,
+                'negative' => $negative,
+                'is_positive' => $is_positive
             ]);
         } catch (PDOException $e) {
             throw new RuntimeException('Database error: ' . $e->getMessage());

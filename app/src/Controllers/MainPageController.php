@@ -14,8 +14,9 @@ class MainPageController
 		private GetMainPageAssetsUseCase $getMainPageAssetsUseCase,
 		private GetTrendingCategoriesUseCase $getTrendingCategoriesUseCase
     ) {}
+
     /**
-     * @return array{ user: User }
+     * @return array{ trendingCategories: Category[], topAssets: Asset[], moreAssets: Asset[] }
      */
     public function getMainPageData(Variant $moreAssetsVariant): array
     {
@@ -24,5 +25,21 @@ class MainPageController
 			'topAssets' => $this->getTopAssetsUseCase->execute(),
 			'moreAssets' => $this->getMainPageAssetsUseCase->execute($moreAssetsVariant),
 		];
+    }
+
+    /** @return array{ trendingCategories: Category[] } */
+    public function getAboutPageData(): array
+    {
+        return [
+          'trendingCategories' => $this->getTrendingCategoriesUseCase->execute(),
+        ];
+    }
+
+    /** @return array{ trendingCategories: Category[] } */
+    public function getTermsPageData(): array
+    {
+        return [
+          'trendingCategories' => $this->getTrendingCategoriesUseCase->execute(),
+        ];
     }
 }

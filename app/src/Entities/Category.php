@@ -10,5 +10,4 @@ class Category
         public string $description,
 		public int $asset_count
     ) {}
-
 }

@@ -14,6 +14,7 @@ use UseCases\File\GetFileByIdUseCase;
 use UseCases\Purchase\IsUserPurchasedAssetUseCase;
 use DomainException;
 use Exception;
+use Router\Middlewares\IsUserMiddleware;
 
 class AssetsRoutes extends Routes implements RoutesInterface
 {
@@ -210,7 +211,14 @@ class AssetsRoutes extends Routes implements RoutesInterface
                         throw new DomainException('One or more fields are invalid');
                     }
 
-                    $this->assetsPageController->createReview($slug['id'], $data['title'], $data['review'], $data['is_positive'], $data['positive'], $data['negative']);
+                    $this->assetsPageController->createReview(
+                        $slug['id'],
+                        $data['title'],
+                        $data['review'],
+                        $data['is_positive'],
+                        $data['positive'],
+                        $data['negative']
+                    );
                     redirect('/assets/' . $slug['id'] . '/');
                 } catch (DomainException $e) {
                     $pageData = $this->assetsPageController->getAssetPageData(
@@ -237,11 +245,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserPurchasedAssetMiddleware(
-                ServiceContainer::get(GetFileByIdUseCase::class),
-                ServiceContainer::get(IsUserPurchasedAssetUseCase::class),
-                ServiceContainer::get(GetAssetUseCase::class),
-            )]
+            }, [new IsUserMiddleware()]
         );
     }
 }

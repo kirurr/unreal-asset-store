@@ -2,6 +2,8 @@
 
 namespace Entities;
 
+use DateTime;
+
 class Review
 {
     public function __construct(
@@ -15,4 +17,12 @@ class Review
         public int $created_at,
         public bool $is_positive,
     ) {}
+
+    public function getFormatedCreatedAt(): string
+    {
+        $date = new DateTime();
+        $date->setTimestamp($this->created_at);
+
+        return $date->format('d M Y');
+    }
 }

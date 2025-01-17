@@ -1,4 +1,5 @@
 <?php
+
 use Entities\Asset;
 use Entities\User;
 
@@ -17,48 +18,66 @@ use Entities\User;
 /**
  * @var array $errors 
  */
+$previousData =  $previousData ?? [];
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php renderComponent('head'); ?>
     <title>Edit User</title>
 </head>
-    <body>
-        <h1>Edit User</h1>
-        <form action="/admin/users/<?php echo $user->id ?>" method="post">
-            <input type="hidden" name="_method" value="put">
-            <label for="name">name</label>
-            <input type="text" name="name" value="<?php echo $previousData['name'] ?? $user->name ?>">
-            <span><?php echo $errors['name'] ?? '' ?></span>
-            <label for="email">email</label>
-            <input type="text" name="email" value="<?php echo $previousData['email'] ?? $user->email ?>">
-            <span><?php echo $errors['email'] ?? '' ?></span>
-            <label for="password">new password</label>
-            <input type="text" name="password">
-            <span><?php echo $errors['password'] ?? '' ?></span>
-            <label for="role">role</label>
-            <select name="role">
-                <option value="admin" <?php echo $user->role === 'admin' ? 'selected' : '' ?>>admin</option>
-                <option value="user" <?php echo $user->role === 'user' ? 'selected' : '' ?>>user</option>
-            </select>
-            <span><?php echo $errors['role'] ?? '' ?></span>
-            <button type="submit">save</button>
-        </form>
-        <?php echo $errorMessage ?? '' ?>
-        <a href="/admin/users">back</a>
-        <form action="/admin/users/<?php echo $user->id ?>/" method="post">
-            <input type="hidden" name="_method" value="delete">
-            <button type="submit">delete</button>
-        </form>
-        <h2>Assets</h2>
-        <div>
-            <?php foreach ($assets as $asset): ?>
-            <img src="<?php echo $asset->preview_image ?>" alt="<?php echo $asset->name ?>">
-            <a href="/admin/assets/<?php echo $asset->id ?>"><?php echo $asset->name ?></a>
-            <?php endforeach; ?>
-        </div>
-    </body>
+
+<body class="justify-normal">
+    <header>
+        <?php renderComponent('admin/navbar'); ?>
+    </header>
+    <main>
+        <section>
+            <div class="p-2 mx-auto max-w-screen-sm shadow-lg rounded-xl bg-secondary-bg-color/50">
+                <h1 class="text-center">edit user <?= $user->name ?></h1>
+                <form action="/admin/users/<?php echo $user->id ?>" method="post" class="flex flex-col gap-4 items-center">
+                    <input type="hidden" name="_method" value="put">
+                    <div>
+                        <label class="label" for="name">name</label>
+                        <input type="text" class="input" name="name" value="<?= retrieveData($previousData, $user, 'name'); ?>">
+                        <span><?php echo $errors['name'] ?? '' ?></span>
+                    </div>
+
+                    <div>
+                        <label class="label" for="email">email</label>
+                        <input required class="input" type="text" name="email" value="<?= retrieveData($previousData, $user, 'email'); ?>">
+                        <span><?php echo $errors['email'] ?? '' ?></span>
+                    </div>
+                    <div>
+                        <label class="label" for="password">new password</label>
+                        <input type="text" class="input" name="password">
+                        <span><?php echo $errors['password'] ?? '' ?></span>
+                    </div>
+
+                    <div>
+                        <label class="label" for="role">role</label>
+                        <select class="select" name="role">
+                            <option value="admin" <?php echo $user->role === 'admin' ? 'selected' : '' ?>>admin</option>
+                            <option value="user" <?php echo $user->role === 'user' ? 'selected' : '' ?>>user</option>
+                        </select>
+                        <span><?php echo $errors['role'] ?? '' ?></span>
+                    </div>
+                    <button class="button accent" type="submit">submit</button>
+                </form>
+                <?php echo $errorMessage ?? '' ?>
+                <div class="flex gap-4 justify-center mt-4">
+                    <a class="link" href="/admin/users">back</a>
+                    <form action="/admin/users/<?php echo $user->id ?>/" method="post">
+                        <input type="hidden" name="_method" value="delete">
+                        <button class="link text-red-500/80 hover:text-red-500/50" type="submit">delete</button>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+    </main>
+</body>
+
 </html>

@@ -10,6 +10,22 @@ textarea {
   resize: none;
 }
 
+table {
+  @apply table-auto w-full divide-y-2 divide-font-color/20;
+}
+
+th {
+  @apply p-4 text-start;
+}
+
+tbody {
+  @apply divide-y-2 divide-font-color/5;
+}
+
+td {
+  @apply p-4;
+}
+
 @layer base {
   body {
     font-family: "Roboto Mono", serif;
@@ -86,7 +102,7 @@ textarea {
     @apply bg-accent-color/50;
   }
 
-  .button:focus {
+  .button:focus-visible {
     @apply outline-accent-color outline-2 outline-offset-2;
   }
 
@@ -97,7 +113,8 @@ textarea {
   .input {
     @apply block w-full rounded-xl outline shadow-lg outline-2 outline-offset-2 outline-transparent py-1 px-2 text-secondary-font-color/70 transition-all bg-font-color;
   }
-  .input:focus {
+
+  .input:focus-visible {
     @apply outline-accent-color outline-2 outline-offset-2;
   }
 
@@ -105,15 +122,11 @@ textarea {
     @apply outline-red-500 outline-2 outline-offset-2;
   }
 
-  .file-input {
-    @apply block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none;
-  }
-
   .textarea {
     @apply block w-full rounded-xl shadow-lg outline outline-2 outline-offset-2 outline-transparent py-1 px-2 text-secondary-font-color/70 transition-all bg-font-color;
   }
 
-  .textarea:focus {
+  .textarea:focus-visible {
     @apply outline-accent-color outline-2 outline-offset-2;
   }
 
@@ -121,7 +134,7 @@ textarea {
     @apply block w-full rounded-xl outline outline-2 shadow-lg outline-offset-2 outline-transparent py-1 px-2 text-secondary-font-color/70 transition-all bg-font-color;
   }
 
-  .select:focus {
+  .select:focus-visible {
     @apply outline-accent-color outline-2 outline-offset-2;
   }
 
@@ -134,11 +147,27 @@ textarea {
   }
 
   .link:hover {
-    @apply text-accent-color/70 decoration-accent-color/70;
+    @apply text-accent-color/70;
   }
 
-  .link:focus {
+  .link:focus-visible {
     @apply outline-accent-color outline-2 outline-offset-2;
+  }
+
+  .link:active {
+    @apply text-accent-color/50;
+  }
+
+  .navbar-link {
+    @apply text-font-color hover:text-font-color/70 font-semibold transition-all outline outline-2 outline-offset-2 outline-transparent rounded;
+  }
+
+  .navbar-link:focus-visible {
+    @apply outline-accent-color;
+  }
+
+  .navbar-link:active {
+    @apply text-accent-color/50;
   }
 
   .more-assets-list {
@@ -191,11 +220,12 @@ textarea {
   .filters-summary {
     @apply cursor-pointer size-fit outline-transparent outline-2 outline-offset-2 outline transition-all rounded;
   }
-  .filters-summary:focus {
+
+  .filters-summary:focus-visible {
     @apply outline-accent-color outline-2 outline-offset-2;
   }
 
-  .filters-details > div {
+  .filters-details>div {
     padding-block: 1rem;
   }
 

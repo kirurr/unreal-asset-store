@@ -218,7 +218,7 @@ $currentLink = $_GET['assets'] ?? 'created';
 												<a class="link" href="/profile/reviews/<?= $review->id ?>">Edit</a>
 												<form action="/profile/reviews/<?= $review->id ?>/" method="post">
 													<input type="hidden" name="_method" value="DELETE">
-													<button type="submit" class="link text-red-500/80" href="/assets/<?= $asset->id ?>">Delete</button>
+													<button type="submit" class="link text-red-500/80"">Delete</button>
 												</form>
 												<a class="link" href="/assets/<?= $asset->id ?>">View</a>
 											</td>

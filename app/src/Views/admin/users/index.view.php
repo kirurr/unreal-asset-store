@@ -1,36 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<?php renderComponent('head'); ?>
 	<title>Users</title>
 </head>
-	<body>
-		<h1>Users</h1>
+
+<body class="justify-normal">
+	<header>
 		<?php renderComponent('admin/navbar'); ?>
-		<table>
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Name</th>
-					<th>Email</th>
-					<th>Role</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ($users as $user): ?>
-					<tr>
-						<td><?= $user->id ?></td>
-						<td><?= $user->name ?></td>
-						<td><?= $user->email ?></td>
-						<td><?= $user->role ?></td>
-						<td>
-							<a href="/admin/users/<?= $user->id ?>">Edit</a>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
-	</body>
+	</header>
+	<main>
+		<section>
+			<div class="mx-auto max-w-screen-md p-2 bg-secondary-bg-color/50 rounded-lg shadow-md">
+				<h1 class="text-center">Users</h1>
+				<table>
+					<thead>
+						<tr>
+							<th>id</th>
+							<th>name</th>
+							<th>email</th>
+							<th>role</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($users as $user): ?>
+							<tr>
+								<td><?= $user->id ?></td>
+								<td><?= $user->name ?></td>
+								<td><?= $user->email ?></td>
+								<td><?= $user->role ?></td>
+								<td>
+									<a class="link" href="/admin/users/<?= $user->id ?>">Edit</a>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</main>
+</body>
+
 </html>

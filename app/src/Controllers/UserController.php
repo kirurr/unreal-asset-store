@@ -34,7 +34,6 @@ class UserController
     {
         return [
         'user' => $this->getUserUseCase->execute($id),
-        'assets' => $this->getAllAssetUseCase->execute(user_id: $id)
         ];
     }
 

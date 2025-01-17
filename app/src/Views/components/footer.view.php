@@ -33,7 +33,6 @@ $user = $session->getUser();
 				<h3>About</h3>
 				<ul>
 					<li><a class="hover:text-font-color/50 transition-colors" href="/about">About</a></li>
-					<li><a class="hover:text-font-color/50 transition-colors" href="/privacy">Privacy</a></li>
 					<li><a class="hover:text-font-color/50 transition-colors" href="/terms">Terms</a></li>
 				</ul>
 			</div>
