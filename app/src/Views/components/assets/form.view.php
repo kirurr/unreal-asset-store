@@ -51,7 +51,17 @@ use Entities\Category;
 				<label class="label" for="images">images</label>
 				<input class="w-full" accept="image/*" type="file" name="images[]" id="images" multiple>
 				<p class="hidden lg:block">You can upload multiple images and change them later</p>
-				<span><?= $errors['images'] ?? '' ?></span>
+				<span>
+					<?php if (isset($errors['images'])): ?>
+						<?php if (is_string($errors['images'])): ?>
+							<?= $errors['images']; ?>
+						<?php else: ?>
+							<?php foreach ($errors['images'] as $error): ?>
+								<?= $error ?><br>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					<?php endif; ?>
+				</span>
 			</div>
 		<?php endif; ?>
 
