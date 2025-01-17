@@ -272,7 +272,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
 
                 try {
                     if ($errors) {
-                        throw new DomainException(['image_id']);
+                        throw new DomainException($errors['image_id']);
                     }
 
                     $this->imageController->updatePreviewImage($slug['id'], $data[ 'image_id' ]);
@@ -375,7 +375,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
 
                 try {
                     $data = $this->fileController->getMainPageData($slug['id']);
-                    renderView('admin/assets/files/index', ['files' => $data['files'], 'asset_id' => $slug['id']]);
+                    renderView('admin/assets/files/index', [...$data, 'asset_id' => $slug['id']]);
                 } catch (Exception $e) {
                     $this->handleException($e);
                 } 
@@ -388,7 +388,8 @@ class AssetsRoutes extends Routes implements RoutesInterface
                     redirect('/');
                 }
 
-                renderView('admin/assets/files/create', ['asset_id' => $slug['id']]);
+                $data = $this->fileController->getMainPageData($slug['id']);
+                renderView('admin/assets/files/create', ['asset_id' => $slug['id'], ...$data]);
             }, [new IsUserAdminMiddleware()]
         );
 
@@ -420,18 +421,13 @@ class AssetsRoutes extends Routes implements RoutesInterface
                         $data[ 'path' ],
                     );
 
-                    redirect("/admin/assets/" . $slug['id'] . "$/iles");
+                    redirect("/admin/assets/" . $slug['id'] . "$/files");
                 } catch (DomainException $e) {
                     http_response_code(400);
                     renderView(
                         'admin/assets/files/create', [
                         'errorMessage' => $e->getMessage(),
-                        'previousData' => [
-                        'name' => $data[ 'name' ],
-                        'version' => $data[ 'version' ],
-                        'description' => $data[ 'description' ],
-                        'file_name' => $data[ 'file_name' ],
-                        ],
+                        'previousData' => $data,
                         'asset_id' => $slug['id'],
                         'errors' => $errors,
                         ]
@@ -449,7 +445,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                 }
                 try {
                     $data = $this->fileController->getEditPageData($slug['id'], $slug['file_id']);
-                    renderView('admin/assets/files/edit', ['file' => $data['file'], 'asset_id' => $slug['id']]);
+                    renderView('admin/assets/files/edit', [...$data, 'asset_id' => $slug['id']]);
                 } catch (Exception $e) {
                     $this->handleException($e);
                 } 
@@ -496,12 +492,7 @@ class AssetsRoutes extends Routes implements RoutesInterface
                         'errors' => $errors,
                         'file' => $pageData['file'],
                         'asset_id' => $slug['id'],
-                        'previousData' => [
-                        'name' => $data[ 'name' ],
-                        'version' => $data[ 'version' ],
-                        'description' => $data[ 'description' ],
-                        'file_name' => $data[ 'file_name' ],
-                        ],
+                        'previousData' => $data,
                         'errorMessage' => $e->getMessage()
                         ]
                     );

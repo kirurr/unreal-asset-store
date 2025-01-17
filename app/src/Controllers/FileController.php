@@ -25,7 +25,7 @@ class FileController
     }
 
     /**
-     * @return array{ files: File[], categories: Category[] }
+     * @return array{ files: File[], categories: Category[], asset: Asset }
      */
     public function getMainPageData(string $id): array
     {    

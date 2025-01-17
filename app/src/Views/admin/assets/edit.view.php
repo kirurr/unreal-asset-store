@@ -12,16 +12,23 @@ use Entities\Category;
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Unreal Asset Store</title>
-		<?php renderComponent('tinymce', ['selector' => '#description']) ?>
+        <?php renderComponent('head'); ?>
+        <?php renderComponent('tinymce', ['selector' => '#description']) ?>
     </head>
-    <body>
-        <h1>edit asset</h1>
-        <a href="/admin/assets/<?php echo $asset->id ?>/images/">images</a>
-        <a href="/admin/assets/<?php echo $asset->id ?>/files/">files</a>
+    <body class="justify-normal">
+<header>
+    <?php renderComponent('admin/navbar'); ?>
+</header>
+<main>
+    <section>
+        <div class="flex items-center">
+                <h1>you are editing <?= $asset->name ?></h1>
+                <div class="ml-auto">
+                    <a class="link" href="/admin/assets/<?= $asset->id ?>/images/">Edit images</a>
+                    <a class="link" href="/admin/assets/<?= $asset->id ?>/files/">Edit files</a>
+                </div>
+            </div>
 		<?php renderComponent('assets/form',
             [
                 'categories' => $categories,
@@ -32,14 +39,14 @@ use Entities\Category;
                 'isEdit' => true,
                 'method' => 'put'
             ]) ?>
-        <div>
-            <span>preview image</span>
-            <img src="<?php echo $asset->preview_image ?>" alt="preview image">
-        </div>
-
-        <a href="/admin/assets">back</a>
-        <form action="/admin/assets/<?php echo $asset->id ?>/" method="post">
-            <input type="hidden" name="_method" value="delete">
-            <button type="submit">delete</button>
-        </form>
+<div class="flex gap-4 justify-center">
+                <a class="link" href="/admin/">back</a>
+                <a class="link" href="/admin/assets/<?= $asset->id ?>">reset</a>
+                <form action="/admin/assets/<?= $asset->id ?>/" method="post">
+                    <input type="hidden" name="_method" value="delete">
+                    <button class="link text-red-500/80" type="submit">delete</button>
+                </form>
+            </div>
+    </section>
+</main>
     </body>
