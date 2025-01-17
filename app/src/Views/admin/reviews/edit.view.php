@@ -32,6 +32,7 @@ use Entities\Review;
 					'path' => '/admin/reviews/'
 				]
 			); ?>
+			<a href="/admin/reviews/" class="link mx-auto block w-fit mt-4">back to reviews</a>
 		</section>
 	</main>
 </body>

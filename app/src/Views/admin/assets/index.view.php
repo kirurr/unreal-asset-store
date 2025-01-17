@@ -24,69 +24,71 @@ use Entities\Asset;
                     <h1>Assets</h1>
                     <a class="button accent ml-auto" href="/admin/assets/create">Create Asset</a>
                 </div>
-                <table class="table-auto w-full divide-y-2 divide-font-color/20">
-                    <thead>
-                        <tr>
-                            <th class="p-4 text-start">
-                                name
-                            </th>
-                            <th class="p-4 text-start">
-                                info
-                            </th>
-                            <th class="p-4 text-start">
-                                downloads
-                            </th>
-                            <th class="p-4 text-start">
-                                created
-                            </th>
-                            <th class="p-4 text-start">
-                                user
-                            </th>
-                            <th class="p-4 text-start">
-                                category
-                            </th>
-                            <th class="p-4 text-start">
-                                price
-                            </th>
-                            <th class="p-4">
-
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y-2 divide-font-color/5">
-                        <?php foreach ($assets as $asset): ?>
+                <div class="overflow-x-scroll">
+                    <table class="table-auto w-full divide-y-2 divide-font-color/20">
+                        <thead>
                             <tr>
-                                <td class="p-4"><?= $asset->name ?></td>
-                                <td class="p-4"><?= $asset->info ?></td>
-                                <td class="p-4">
-                                    <?= $asset->purchase_count ?>
-                                </td>
-                                <td class="p-4">
-                                    <?php
-                                    $date = new DateTime();
-                                    $date->setTimestamp($asset->created_at);
-                                    ?>
-                                    <?= $date->format('d M Y') ?>
-                                </td>
-                                <td class="p-4">
-                                    <a class="link" href="/assets?=user_id=<?= $asset->user->id ?>"><?= $asset->user->name ?></a>
-                                </td>
-                                <td class="p-4">
-                                    <a class="link" href="/assets?category_id=<?= $asset->category->id ?>"><?= $asset->category->name ?></a>
-                                </td>
-                                <?php if ($asset->price > 0): ?>
-                                    <td class="p-4"><?= $asset->price ?> USD</td>
-                                <?php else: ?>
-                                    <td class="p-4 text-green-500/70">Free asset</td>
-                                <?php endif; ?>
-                                <td class="p-4">
-                                    <a class="link" href="/admin/assets/<?= $asset->id ?>">Edit</a>
-                                    <a class="link" href="/assets/<?= $asset->id ?>">View</a>
-                                </td>
+                                <th class="p-4 text-start">
+                                    name
+                                </th>
+                                <th class="p-4 text-start">
+                                    info
+                                </th>
+                                <th class="p-4 text-start">
+                                    downloads
+                                </th>
+                                <th class="p-4 text-start">
+                                    created
+                                </th>
+                                <th class="p-4 text-start">
+                                    user
+                                </th>
+                                <th class="p-4 text-start">
+                                    category
+                                </th>
+                                <th class="p-4 text-start">
+                                    price
+                                </th>
+                                <th class="p-4">
+
+                                </th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="divide-y-2 divide-font-color/5">
+                            <?php foreach ($assets as $asset): ?>
+                                <tr>
+                                    <td class="p-4"><?= $asset->name ?></td>
+                                    <td class="p-4"><?= $asset->info ?></td>
+                                    <td class="p-4">
+                                        <?= $asset->purchase_count ?>
+                                    </td>
+                                    <td class="p-4">
+                                        <?php
+                                        $date = new DateTime();
+                                        $date->setTimestamp($asset->created_at);
+                                        ?>
+                                        <?= $date->format('d M Y') ?>
+                                    </td>
+                                    <td class="p-4">
+                                        <a class="link" href="/assets?=user_id=<?= $asset->user->id ?>"><?= $asset->user->name ?></a>
+                                    </td>
+                                    <td class="p-4">
+                                        <a class="link" href="/assets?category_id=<?= $asset->category->id ?>"><?= $asset->category->name ?></a>
+                                    </td>
+                                    <?php if ($asset->price > 0): ?>
+                                        <td class="p-4"><?= $asset->price ?> USD</td>
+                                    <?php else: ?>
+                                        <td class="p-4 text-green-500/70">Free asset</td>
+                                    <?php endif; ?>
+                                    <td class="p-4">
+                                        <a class="link" href="/admin/assets/<?= $asset->id ?>">Edit</a>
+                                        <a class="link" href="/assets/<?= $asset->id ?>">View</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </main>
@@ -94,4 +96,3 @@ use Entities\Asset;
 </body>
 
 </html>
-

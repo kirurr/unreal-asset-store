@@ -39,3 +39,6 @@ COPY ./composer.sh /var/www/composer.sh
 
 RUN chmod +x composer.sh
 
+COPY ./database.sh /var/www/database.sh
+
+RUN chmod +x database.sh

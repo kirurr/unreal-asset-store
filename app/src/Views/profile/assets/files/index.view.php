@@ -21,7 +21,7 @@ use Entities\File;
 		<main>
 			<section>
 				<div class="p-2 rounded-xl shadow-lg bg-secondary-bg-color/50">
-					<div class="flex items-center">
+					<div class="flex flex-col lg:flex-row items-center">
 						<h1>files for <?= $asset->name ?></h1>
 						<div class="ml-auto flex items-center gap-4">
 							<a class="link" href="/profile/assets/<?= $asset->id ?>/">back to asset</a>
@@ -29,6 +29,7 @@ use Entities\File;
 						</div>
 					</div>
 					<?php if(count($files) > 0): ?>
+					<div class="overflow-x-scroll">
 					<table class="table-auto w-full divide-y-2 divide-font-color/20">
 						<thead>
 							<tr>
@@ -63,6 +64,7 @@ use Entities\File;
 							<?php endforeach; ?>
 						</tbody>
 					</table>
+					</div>
 					<?php else: ?>
 						<p class="text-center">no files for this asset</p>
 					<?php endif; ?>

@@ -36,7 +36,7 @@ $trendingCategories = array_slice($categories, 0, 4);
     </header>
     <main>
         <section>
-            <h1>Create Asset</h1>
+            <h1 class="text-center lg:text-start">Create Asset</h1>
             <?php renderComponent(
                 'assets/form',
                 [
@@ -49,6 +49,7 @@ $trendingCategories = array_slice($categories, 0, 4);
                     'method' => 'post'
                 ]
             ) ?>
+            <a href="/profile/" class="link mx-auto block w-fit"> back</a>
         </section>
     </main>
     <?php renderComponent('footer', ['categories' => $trendingCategories]); ?>

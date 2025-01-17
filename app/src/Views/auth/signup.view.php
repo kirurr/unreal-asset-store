@@ -23,7 +23,7 @@
 	</header>
 	<main class="flex flex-col items-center justify-center">
 
-		<form class="text-center w-[20rem] bg-secondary-bg-color/50 p-4 rounded-xl shadow-lg" id="sign-up-form" method="post" action="/signup">
+		<form class="text-center w-[20rem] lg:bg-secondary-bg-color/50 p-4 rounded-xl shadow-lg" id="sign-up-form" method="post" action="/signup">
 			<h1>Sign up</h1>
 
 			<label for="name" class="label mt-4">Name</label>

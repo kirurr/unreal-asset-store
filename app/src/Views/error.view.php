@@ -5,15 +5,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php renderComponent('head'); ?>
     <title>Error</title>
 </head>
-<body>
-    <h1>Error</h1>
-    <p>An error occurred</p>
-		<?php if (isset($error)): ?>
-			<p><?= $error ?></p>
-		<?php endif; ?>
+<body class="items-center justify-center">
+    <main>
+        <section>
+            <h1>Error</h1>
+            <p>An error occurred</p>
+            <p><?= $error ?? '' ?></p>
+            <a href="/" class="link mt-4 block">back to site</a>
+        </section>
+    </main>
 </body>
 </html>

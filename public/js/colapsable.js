@@ -2,9 +2,16 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("click", (e) => {
     let target = e.target;
     const toggles = document.querySelectorAll(".sublist-toggle");
+    const menu = document.querySelector("#nav-menu");
+
+    if (target.id === 'mobile-menu-button' || target.parentElement.id === 'mobile-menu-button') {
+      menu.classList.toggle("open");
+    } else {
+      menu.classList.remove("open");
+    }
 
     if (target.classList.contains("sublist-toggle")) {
-			e.preventDefault();
+      e.preventDefault();
       const sublist = target.nextElementSibling;
       sublist.classList.toggle("open");
       toggleLinksTabIndex(sublist);

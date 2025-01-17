@@ -17,9 +17,9 @@ $currentLink = $links[$_GET['variant'] ?? 'new-week'];
 ?>
 
 <div>
-	<h1 class="mb-4">more ajsets</h1>
+	<h1 class="text-center lg:text-start mb-4">more assets</h1>
 	<div class="bg-secondary-bg-color/50 p-2 rounded-xl shadow-lg">
-		<ul class="flex gap-4 list-none mb-4">
+		<ul class="lg:flex grid grid-cols-2 grid-rows-2 gap-2 list-none mb-4">
 			<?php foreach ($links as $key => $value): ?>
 			<li class="more-assets-list <?= $value === $currentLink ? 'active' : '' ?>">
 				<a class="p-2 block" href="/?variant=<?= $key ?>#more-assets" >
@@ -28,7 +28,7 @@ $currentLink = $links[$_GET['variant'] ?? 'new-week'];
 			</li>
 			<?php endforeach; ?>
 		</ul>
-		<ul class="grid grid-cols-4 mt-6 gap-6">
+		<ul class="grid grid-cols-1 lg:grid-cols-4 mt-6 gap-6">
 			<?php if (count($assets) === 0): ?>
 			<li class="col-span-4 flex flex-col items-center justify-center">
 				<p>No assets found :(</p>

@@ -10,12 +10,16 @@ textarea {
   resize: none;
 }
 
+input[type="file"] {
+  width: 100%;
+}
+
 table {
   @apply table-auto w-full divide-y-2 divide-font-color/20;
 }
 
 th {
-  @apply p-4 text-start;
+  @apply p-4 text-start whitespace-nowrap;
 }
 
 tbody {
@@ -23,7 +27,7 @@ tbody {
 }
 
 td {
-  @apply p-4;
+  @apply p-4 whitespace-nowrap;
 }
 
 @layer base {
@@ -196,6 +200,22 @@ td {
   }
 
   .sublist.open {
+    pointer-events: auto;
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .mobile-menu {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition:
+      opacity 0.2s ease-in-out,
+      transform 0.2s ease-in-out;
+  }
+
+
+  .mobile-menu.open {
     pointer-events: auto;
     transform: translateY(0);
     opacity: 1;

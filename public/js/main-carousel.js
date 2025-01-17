@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		rewind    : true,
 		pagination: false,
 		isNavigation: true,
+		drag: false
 	});
 
 	main.sync(thumbnails);

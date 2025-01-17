@@ -37,8 +37,8 @@ $assetDate->setTimestamp($asset->created_at);
 	<header>
 		<?php renderComponent('navbar', ['categories' => $trendingCategories]) ?>
 	</header>
-	<main class="max-w-screen-xl mx-auto asset-grid">
-		<aside class="col-start-2 row-span-1 w-[20rem] flex flex-col gap-2 my-16 top-0 sticky">
+	<main class="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_auto] grid-rows-[auto] gap-4">
+		<aside class="lg:col-start-2 lg:row-span-1 row-start-2 lg:w-[20rem] flex flex-col gap-2 lgmy-16 lg:top-0 lg:sticky">
 			<div class="p-4 rounded-xl shadow-lg bg-bg-color/40">
 				<h1><?= $asset->name ?></h1>
 				<p class="text-font-color/70">Category: <a class="link" href="/asset?category_id=<?= $asset->category->id ?>"><?= $asset->category->name ?></a></p>
@@ -85,13 +85,13 @@ $assetDate->setTimestamp($asset->created_at);
 			</div>
 		</aside>
 		<section class="col-start-1 row-start-1 size-full">
-			<div class="flex gap-4 bg-secondary-bg-color/70 rounded-xl p-4 size-full">
+			<div class="flex gap-4 lg:bg-secondary-bg-color/70 lg:rounded-xl lg:p-4 size-full">
 				<div class="flex flex-col w-full">
 					<div id="main-carousel" class="max-h-[30rem] splide size-full">
-						<div class="splide__track rounded-xl overflow-hidden size-full">
+						<div class="splide__track lg:rounded-xl overflow-hidden size-full">
 							<ul class="splide__list relative size-full flex">
 								<?php foreach ($asset->images as $image): ?>
-									<li class="splide__slide min-w-full size-full rounded-xl overflow-hidden">
+									<li class="splide__slide min-w-full size-full lg:rounded-xl overflow-hidden">
 										<img class="size-full object-cover" src="<?= $image->path ?>" alt="<?= $asset->name ?>">
 									</li>
 								<?php endforeach; ?>
@@ -99,7 +99,7 @@ $assetDate->setTimestamp($asset->created_at);
 						</div>
 					</div>
 					<?php if (count($asset->images) > 1): ?>
-						<div id="thumbnails-carousel" class="splide mt-4">
+						<div id="thumbnails-carousel" class="hidden lg:block splide mt-4">
 							<div class="splide__track">
 								<ul class="splide__list">
 									<?php foreach ($asset->images as $image): ?>
@@ -114,11 +114,11 @@ $assetDate->setTimestamp($asset->created_at);
 				</div>
 			</div>
 		</section>
-		<section class="col-start-1 row-start-2">
+		<section class="col-start-1 row-start-3 lg:row-start-2">
 			<?= $asset->description ?>
 		</section>
-		<section class="col-start-1 row-start-3 w-full">
-			<h2>Reviews</h2>
+		<section class="col-start-1 row-start-4 lg:row-start-3 w-full">
+			<h2 class="text-center lg:text-start">Reviews</h2>
 			<ul>
 				<?php foreach ($reviews as $review): ?>
 					<li class="my-4 shadow-lg bg-secondary-bg-color/50 p-4 rounded-xl">
@@ -150,7 +150,7 @@ $assetDate->setTimestamp($asset->created_at);
 				<?php endforeach; ?>
 			</ul>
 			<?php if ($user): ?>
-				<form class="w-2/3 mx-auto p-4 rounded-xl shadow-lg bg-secondary-bg-color/50 mt-8" action="/assets/<?= $asset->id ?>/review" method="post">
+				<form class="lg:w-2/3 mx-auto p-4 rounded-xl shadow-lg bg-secondary-bg-color/50 mt-8" action="/assets/<?= $asset->id ?>/review" method="post">
 					<h3>add new review</h3>
 					<input type="hidden" name="_method" value="POST">
 

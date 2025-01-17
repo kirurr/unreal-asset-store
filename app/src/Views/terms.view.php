@@ -20,8 +20,8 @@ use Entities\Category;
     <header class="header">
         <? renderComponent('navbar', ['categories' => $trendingCategories]); ?>
     </header>
-    <main>
-        <section class="my-6 p-0">
+    <main class="text-center lg:text-start">
+        <section class="my-6 lg:mt-6 mt-12 p-0">
             <h1>Terms and Conditions</h1>
             <p>
                 At <strong>Unreal Asset Store</strong>, we are committed to protecting your privacy. This Privacy Policy

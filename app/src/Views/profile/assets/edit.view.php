@@ -39,9 +39,9 @@ $trendingCategories = array_slice($categories, 0, 4);
     </header>
     <main>
         <section>
-            <div class="flex items-center">
-                <h1>you are editing <?= $asset->name ?></h1>
-                <div class="ml-auto">
+            <div class="flex flex-col lg:flex-row items-center mb-4 lg:mb-0">
+                <h1 class="text-center lg:text-start">you are editing <?= $asset->name ?></h1>
+                <div class="lg:ml-auto">
                     <a class="link" href="/profile/assets/<?php echo $asset->id ?>/images/">Edit images</a>
                     <a class="link" href="/profile/assets/<?php echo $asset->id ?>/files/">Edit files</a>
                 </div>

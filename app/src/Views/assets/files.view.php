@@ -32,14 +32,14 @@ use Entities\User;
 				<h1>files for <?= $asset->name ?></h1>
 				<a class="link" href="/assets/<?= $asset->id ?>">back to asset</a>
 			</div>
-			<ul class="mt-8 flex flex-col gap-4 mx-auto w-2/3">
+			<ul class="mt-8 flex flex-col gap-4 mx-auto lg:w-2/3">
 				<?php foreach ($files as $file): ?>
-					<li class="rounded-xl shadow-lg bg-secondary-bg-color/70 p-4 flex divide-x-2 divide-font-color/20">
-						<div class="w-2/3">
+					<li class="rounded-xl shadow-lg bg-secondary-bg-color/70 p-4 flex flex-col lg:flex-row lg:divide-x-2 lg:divide-font-color/20">
+						<div class="lg:w-2/3">
 							<h2><?= $file->name ?></h2>
 							<p class=" text-font-color/70"><?= $file->description ?></p>
 						</div>
-						<div class="w-1/3 px-2">
+						<div class="lg:w-1/3 lg:px-2 mt-4 lg:mt-0 border-t-2 border-font-color/20 py-4 lg-py-0">
 							<p class=" text-font-color/70">version: <?= $file->version ?></p>
 							<p class=" text-font-color/70">uploaded: <?= $file->GetFormatedCreatedAt() ?></p>
 							<p class=" text-font-color/70">size: <?= $file->getFormatedSize() ?></p>
@@ -52,5 +52,4 @@ use Entities\User;
 	</main>
 	<?php renderComponent('footer', ['categories' => $trendingCategories]); ?>
 </body>
-
 </html>

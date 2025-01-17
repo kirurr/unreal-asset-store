@@ -20,9 +20,9 @@ use Entities\Review;
 	<main>
 		<section>
 			<div class="p-2 rounded-xl shadow-lg bg-secondary-bg-color/50 mx-auto">
-				<h1>reviews</h1>
+				<h1 class="overflow-x-scroll">reviews</h1>
 				<div class="bg-secondary-bg-color/50 p-2 rounded-xl shadow-lg">
-					<div>
+					<div class="overflow-x-scroll">
 						<?php if (count($reviews) > 0): ?>
 							<table class="table-auto w-full divide-y-2 divide-font-color/20">
 								<thead>
@@ -58,9 +58,9 @@ use Entities\Review;
 										<tr>
 											<td class="p-4"><a class="link whitespace-nowrap" href="/assets/<?= $review->asset_id ?>">View asset</a></td>
 											<td class="p-4"><?= $review->title ?></td>
-											<td class="p-4"><?= $review->review ?></td>
-											<td class="p-4"><?= $review->positive ?></td>
-											<td class="p-4"><?= $review->negative ?></td>
+											<td class="p-4 whitespace-normal"><?= $review->review ?></td>
+											<td class="p-4 whitespace-normal"><?= $review->positive ?></td>
+											<td class="p-4 whitespace-normal"><?= $review->negative ?></td>
 											<?php if ($review->is_positive): ?>
 												<td class="p-4 text-green-500/70">positive</td>
 											<?php else: ?>
@@ -73,7 +73,7 @@ use Entities\Review;
 													<input type="hidden" name="_method" value="DELETE">
 													<button type="submit" class="link text-red-500/80"">Delete</button>
 												</form>
-												<a class="link" href="/assets/<?= $review->asset_id ?>">View</a>
+												<a class="link" href="/assets/<?= $review->asset_id ?>/#reviews">View</a>
 											</td>
 										</tr>
 									<?php endforeach; ?>

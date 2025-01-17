@@ -24,7 +24,7 @@ use Entities\Category;
 		<?php renderComponent('navbar', ['categories' => $categories]); ?>
 	</header>
 	<main class="flex flex-col items-center justify-center">
-		<form id="sign-in-form" method="post" action="/signin" class="text-center w-[20rem] bg-secondary-bg-color/50 p-4 rounded-xl shadow-lg">
+		<form id="sign-in-form" method="post" action="/signin" class="text-center w-[20rem] lg:bg-secondary-bg-color/50 p-4 rounded-xl shadow-lg">
 			<h1>sign in</h1>
 
 			<label for="emali" class="label mt-4">Email</label>

@@ -27,5 +27,6 @@ try {
 } catch (Throwable $e) {
     // TODO: log error and not show it to user
     renderView('error', ['error' => $e->getMessage()]);
+    // throw $e;
 }
 restore_error_handler();

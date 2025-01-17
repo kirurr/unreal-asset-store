@@ -49,7 +49,7 @@ $trendingCategories = array_slice($categories, 0, 4);
 	</section>
 	<section class="p-2 rounded-xl shadow-lg bg-secondary-bg-color/50 mb-8">
 		<?php renderComponent('assets/filters', ['categories' => $categories, 'filters' => $filters, 'prices' => $prices, 'pages' => $pages]) ?>
-		<ul class="grid grid-cols-4 gap-4">
+		<ul class="grid grid-cols-1 lg:grid-cols-4 gap-4">
 			<?php if (!$assets): ?>
 				<li>No assets found</li>
 			<?php endif; ?>

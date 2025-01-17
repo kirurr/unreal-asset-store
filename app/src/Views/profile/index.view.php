@@ -35,9 +35,9 @@ $currentLink = $_GET['assets'] ?? 'created';
 		<?php renderComponent('navbar', ['categories' => $trendingCategories]); ?>
 	</header>
 	<main>
-		<section class="flex">
-			<h1 class="mb-4">Profile</h1>
-			<div class="ml-auto">
+		<section class="flex flex-col lg:flex-row pb-0 lg:pb-8">
+			<h1 class="mb-4 text-center lg:text-start">Profile</h1>
+			<div class="lg:ml-auto">
 				<div class="bg-secondary-bg-color/50 p-2 rounded-xl shadow-lg">
 					<ul class="flex flex-col gap-4 list-none mb-4">
 						<li class="flex gap-4">
@@ -56,30 +56,27 @@ $currentLink = $_GET['assets'] ?? 'created';
 			</div>
 		</section>
 		<section id="assets">
-			<h2>Your Assets</h2>
+			<h2 class="text-center lg:text-start">Your Assets</h2>
 			<div>
 				<div class="bg-secondary-bg-color/50 p-2 rounded-xl shadow-lg">
-					<ul class="flex gap-4 list-none mb-4">
+					<ul class="flex flex-col lg:flex-row gap-4 list-none mb-4">
 						<?php foreach ($links as $key => $value): ?>
-							<li class="more-assets-list <?= $key === $currentLink ? 'active' : '' ?>">
+							<li class="w-fit more-assets-list <?= $key === $currentLink ? 'active' : '' ?>">
 								<a class="p-2 block" href="/profile?assets=<?= $key ?>#assets">
 									<?= $value ?>
 								</a>
 							</li>
 						<?php endforeach; ?>
-						<li class="ml-auto">
-							<a class="p-2 block button accent" href="/profile/assets/create">
+						<li class="lg:ml-auto">
+							<a class="p-2 block link" href="/profile/assets/create">
 								Create asset
 							</a>
 						</li>
 					</ul>
-					<div>
+					<div class="overflow-x-scroll">
 						<table class="table-auto w-full divide-y-2 divide-font-color/20">
 							<thead>
 								<tr>
-									<th class="p-4 text-start">
-
-									</th>
 									<th class="p-4 text-start">
 										name
 									</th>
@@ -111,14 +108,8 @@ $currentLink = $_GET['assets'] ?? 'created';
 							<tbody class="divide-y-2 divide-font-color/5">
 								<?php foreach ($assets as $asset): ?>
 									<tr>
-										<td>
-											<div>
-												<!-- TODO: add image -->
-												<!-- <img src="<?= $asset->preview_image ?>" alt="<?= $asset->name ?>" class="w-16 h-16 rounded-full"> -->
-											</div>
-										</td>
 										<td class="p-4"><?= $asset->name ?></td>
-										<td class="p-4"><?= $asset->info ?></td>
+										<td class="p-4 whitespace-normal"><?= $asset->info ?></td>
 										<td class="p-4">
 											<?= $asset->purchase_count ?>
 										</td>
@@ -157,10 +148,10 @@ $currentLink = $_GET['assets'] ?? 'created';
 			</div>
 		</section>
 		<section id="reviews">
-			<h2>Your reviews</h2>
+			<h2 class="text-center lg:text-start">Your reviews</h2>
 			<div>
 				<div class="bg-secondary-bg-color/50 p-2 rounded-xl shadow-lg">
-					<div>
+					<div class="overflow-x-scroll">
 						<?php if (count($reviews) > 0): ?>
 							<table class="table-auto w-full divide-y-2 divide-font-color/20">
 								<thead>
@@ -199,9 +190,9 @@ $currentLink = $_GET['assets'] ?? 'created';
 										<tr>
 											<td class="p-4"><?= $asset->name ?></td>
 											<td class="p-4"><?= $review->title ?></td>
-											<td class="p-4"><?= $review->review ?></td>
-											<td class="p-4"><?= $review->positive ?></td>
-											<td class="p-4"><?= $review->negative ?></td>
+											<td class="p-4 whitespace-normal"><?= $review->review ?></td>
+											<td class="p-4 whitespace-normal"><?= $review->positive ?></td>
+											<td class="p-4 whitespace-normal"><?= $review->negative ?></td>
 											<?php if ($review->is_positive): ?>
 												<td class="p-4 text-green-500/70">positive</td>
 											<?php else: ?>
