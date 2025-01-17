@@ -263,9 +263,9 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         }
     }
 
-	public function getAssetsByUserPurchases(int $user_id): array
-	{
-		$query = "SELECT asset.*,
+    public function getAssetsByUserPurchases(int $user_id): array
+    {
+        $query = "SELECT asset.*,
 		category.id as category_id,
 		category.name as category_name,
 		category.description as category_description,
@@ -277,10 +277,10 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
 		user.role as user_role
 		FROM asset
 		JOIN category ON asset.category_id = category.id JOIN purchase on purchase.asset_id = asset.id JOIN user on asset.user_id = user.id WHERE purchase.user_id = :user_id";
-		$stmt = $this->pdo->prepare($query);
-		$stmt->execute(['user_id' => $user_id]);
-		$assets = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		if (!$assets) {
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['user_id' => $user_id]);
+        $assets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (!$assets) {
             return [];
         }
 
@@ -308,26 +308,28 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
      */
     public function getAssetsByUserReviews(int $user_id): array
     {
-        $query = "SELECT 
-\tasset.*,
-\tcategory.id as category_id,
-\tcategory.name as category_name,
-\tcategory.description as category_description,
-\tcategory.asset_count as category_asset_count,
-\tuser.id as user_id,
-\tuser.name as user_name,
-\tuser.email as user_email,
-\tuser.password as user_password,
-\tuser.role as user_role,
-\treview.id as review_id,
-\treview.is_positive as review_is_positive,
-\treview.negative as review_negative,
-\treview.positive as review_positive,
-\treview.review as review_review,
-\treview.title as review_title,
-\treview.created_at as review_created_at
-\tFROM review
-\tJOIN asset on asset.id = review.asset_id JOIN user on user.id = review.user_id JOIN category on asset.category_id = category.id WHERE review.user_id = :user_id";
+        $query = "SELECT asset.*,
+            category.id as category_id,
+            category.name as category_name,
+            category.description as category_description,
+            category.asset_count as category_asset_count,
+            user.id as user_id,
+            user.name as user_name,
+            user.email as user_email,
+            user.password as user_password,
+            user.role as user_role,
+            review.id as review_id,
+            review.is_positive as review_is_positive,
+            review.negative as review_negative,
+            review.positive as review_positive,
+            review.review as review_review,
+            review.title as review_title,
+            review.created_at as review_created_at
+            FROM review
+            JOIN asset on asset.id = review.asset_id
+            JOIN user on user.id = review.user_id
+            JOIN category on asset.category_id = category.id
+            WHERE review.user_id = :user_id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(['user_id' => $user_id]);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
