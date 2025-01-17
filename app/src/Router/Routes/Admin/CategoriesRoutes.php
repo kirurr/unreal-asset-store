@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Router\Routes\Admin;
 
@@ -30,30 +30,35 @@ class CategoriesRoutes extends Routes implements RoutesInterface
     public function defineRoutes(string $prefix = ''): void
     {
         $this->router->get(
-            $prefix . '/', function (array $slug, ?MiddlewareException $middleware) {
+            $prefix . '/',
+            function (array $slug, ?MiddlewareException $middleware) {
                 if ($middleware) {
                     redirect('/');
                 }
                 try {
-                    $data = $this->categoryController->getCategoryPageData();    
+                    $data = $this->categoryController->getCategoryPageData();
                     renderView('admin/categories/index', $data);
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware()]
+            },
+            [new IsUserAdminMiddleware()]
         );
 
         $this->router->get(
-            $prefix . '/create/', function (array $slug, ?MiddlewareException $middleware) {
+            $prefix . '/create/',
+            function (array $slug, ?MiddlewareException $middleware) {
                 if ($middleware) {
                     redirect('/');
                 }
                 renderView('admin/categories/create');
-            }, [new IsUserAdminMiddleware()]
+            },
+            [new IsUserAdminMiddleware()]
         );
 
         $this->router->post(
-            $prefix . '/create/', function (array $slug, ?MiddlewareException $middleware) {
+            $prefix . '/create/',
+            function (array $slug, ?MiddlewareException $middleware) {
                 if ($middleware) {
                     redirect('/');
                 }
@@ -73,22 +78,25 @@ class CategoriesRoutes extends Routes implements RoutesInterface
                 } catch (DomainException $e) {
                     http_response_code(400);
                     renderView(
-                        'admin/categories/create', [
-                        'errorMessage' => $e->getMessage(),
-                        'errors' => $errors,
-                        'previousData' => [
-                        'name' => $data['name'],
-                        'description' => $data['description'],
-                        ]
+                        'admin/categories/create',
+                        [
+                            'errorMessage' => $e->getMessage(),
+                            'errors' => $errors,
+                            'previousData' => [
+                                'name' => $data['name'],
+                                'description' => $data['description'],
+                            ]
                         ]
                     );
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware()]
+            },
+            [new IsUserAdminMiddleware()]
         );
         $this->router->get(
-            $prefix . '/{id}/', function (array $slug, ?MiddlewareException  $middleware) {
+            $prefix . '/{id}/',
+            function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
                     redirect('/');
                 }
@@ -101,11 +109,13 @@ class CategoriesRoutes extends Routes implements RoutesInterface
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware()]
+            },
+            [new IsUserAdminMiddleware()]
         );
 
         $this->router->put(
-            $prefix . '/{id}/', function (array $slug, ?MiddlewareException  $middleware) {
+            $prefix . '/{id}/',
+            function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
                     redirect('/');
                 }
@@ -122,22 +132,27 @@ class CategoriesRoutes extends Routes implements RoutesInterface
                     $this->categoryController->edit($slug['id'], $data['name'], $data['description']);
                     redirect('/admin/categories/');
                 } catch (DomainException $e) {
+                    $pageData = $this->categoryController->getEditPageData($slug['id']);
                     http_response_code(400);
                     renderView(
-                        'admin/categories/edit', [
-                        'errorMessage' => $e->getMessage(),
-                        'errors' => $errors,
-                        'category' => new Category($slug['id'], $data['name'], $data['description'], 0),
+                        'admin/categories/edit',
+                        [
+                            'errorMessage' => $e->getMessage(),
+                            'previousData' => $data,
+                            'errors' => $errors,
+                            'category' => new Category($slug['id'], $pageData['name'], $pageData['description'], 0),
                         ]
                     );
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware()]
+            },
+            [new IsUserAdminMiddleware()]
         );
 
         $this->router->delete(
-            $prefix . '/{id}/', function (array $slug, ?MiddlewareException  $middleware) {
+            $prefix . '/{id}/',
+            function (array $slug, ?MiddlewareException  $middleware) {
                 if ($middleware) {
                     redirect('/');
                 }
@@ -146,17 +161,20 @@ class CategoriesRoutes extends Routes implements RoutesInterface
                     $this->categoryController->delete($slug['id']);
                     redirect('/admin/categories');
                 } catch (DomainException $e) {
+                    $pageData = $this->categoryController->getEditPageData($slug['id']);
                     http_response_code(400);
                     renderView(
-                        'admin/categories/edit', [
-                        'errorMessage' => $e->getMessage(),
+                        'admin/categories/edit',
+                        [
+                            'errorMessage' => $e->getMessage(),
+                            'category' => $pageData['category']
                         ]
                     );
                 } catch (Exception $e) {
                     $this->handleException($e);
                 }
-            }, [new IsUserAdminMiddleware()]
+            },
+            [new IsUserAdminMiddleware()]
         );
-
     }
 }

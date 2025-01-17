@@ -17,8 +17,7 @@ class CategoryController
         private EditCategoryUseCase $editUseCase,
         private GetCategoryUseCase $getUseCase,
         private DeleteCategoryUseCase $deleteUseCase
-    ) {
-    }
+    ) {}
 
     /**
      * @return array{ categories: Category[]}
@@ -33,12 +32,12 @@ class CategoryController
      */
     public function getEditPageData(int $id): array
     {
-            return ['category' => $this->getUseCase->execute($id)];
+        return ['category' => $this->getUseCase->execute($id)];
     }
 
     public function delete(int $id): void
     {
-            $this->deleteUseCase->execute($id);
+        $this->deleteUseCase->execute($id);
     }
 
     public function edit(int $id, string $name, string $description): void

@@ -5,6 +5,7 @@ namespace UseCases\Category;
 use Repositories\Asset\AssetRepositoryInterface;
 use Repositories\Category\CategoryRepositoryInterface;
 use DomainException;
+use Entities\AssetFilters;
 use Exception;
 use RuntimeException;
 
@@ -23,7 +24,11 @@ class DeleteCategoryUseCase
             if (!$category) {
                 throw new DomainException('Category not found');
             }
-            $assets = $this->assetRepository->getAssets(category_id: $id);
+
+            $filters = new AssetFilters(category_id: $id);
+            $stmt = $this->assetRepository->buildQuery($filters);
+            $assets = $this->assetRepository->getAssets($stmt);
+
             if ($assets) {
                 throw new DomainException('Category has assets');
             }

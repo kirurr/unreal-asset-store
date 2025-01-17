@@ -2,29 +2,63 @@
 
 use Entities\Category;
 
-/**
- * @var Category[] $categories
- */
+/** @var Category[] $categories */
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categories</title>
-</head>
-<body>
-    <h1>Categories</h1>
-    <?php echo renderComponent('admin/navbar') ?>
-    <a href="/admin/categories/create">Create Category</a>
 
-    <?php if (count($categories) > 0) : ?>
-        <?php foreach ($categories as $category): ?>
-        <a href="/admin/categories/<?php echo $category->id ?>"><?php echo $category->name ?></a>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>No categories</p>
-    <?php endif; ?>
+<head>
+    <?php renderComponent('head'); ?>
+    <title>categories</title>
+</head>
+
+<body class="justify-normal">
+    <header>
+        <?= renderComponent('admin/navbar') ?>
+    </header>
+    <main>
+        <section>
+            <div class="p-2 rounded-xl shadow-lg bg-secondary-bg-color/50">
+                <div class="flex items-center">
+                    <h1>categories</h1>
+                    <a class="button accent ml-auto" href="/admin/categories/create">create category</a>
+                </div>
+                <table class="table-auto w-full divide-y-2 divide-font-color/20">
+                    <thead>
+                        <tr>
+                            <th class="p-4 text-start">
+                                name
+                            </th>
+                            <th class="p-4 text-start">
+                                description
+                            </th>
+                            <th class="p-4 text-start">
+                                assets
+                            </th>
+                            <th class="p-4">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y-2 divide-font-color/5">
+                        <?php foreach ($categories as $category): ?>
+                            <tr>
+                                <td class="p-4"><?= $category->name ?></td>
+                                <td class="p-4"><?= $category->description ?></td>
+                                <td class="p-4"><?= $category->asset_count ?></td>
+                                <td class="p-4">
+                                    <a class="link" href="/admin/categories/<?= $category->id ?>">Edit</a>
+                                    <a class="link" href="/assets/?category=<?= $category->id ?>">View</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
 </body>
+
 </html>
