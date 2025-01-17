@@ -57,7 +57,7 @@ class AssetSQLiteRepository implements AssetRepositoryInterface
         $conditions = [];
 
         if ($filters->search) {
-            $conditions[] = 'asset.name LIKE :search OR asset.info LIKE :search OR asset.description LIKE :search';
+            $conditions[] = 'LOWER(asset.name) LIKE LOWER(:search) OR LOWER(asset.info) LIKE LOWER(:search) OR LOWER(asset.description) LIKE LOWER(:search)';
         }
         if ($filters->engine_version) {
             $conditions[] = 'engine_version = :engine_version';
