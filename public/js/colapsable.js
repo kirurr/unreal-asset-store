@@ -6,8 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (target.id === 'mobile-menu-button' || target.parentElement.id === 'mobile-menu-button') {
       menu.classList.toggle("open");
-    } else {
-      menu.classList.remove("open");
     }
 
     if (target.classList.contains("sublist-toggle")) {
