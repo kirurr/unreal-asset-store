@@ -1,38 +1,41 @@
-# Запуск проекта с использованием `Docker`
+# Running the Project with `Docker`
 
-Для запуска проекта необходимо наличие актуальной версии `Docker`, что поддерживает `Docker Compose`.
+To run the project, you need to have an up-to-date version of `Docker` that supports `Docker Compose`.
 
-## Команды для работы
+## Commands for Working
 
-1. **Запуск проекта**:
+1. **Starting the Project**:
    ```bash
    docker compose up -d
    ```
    
-2. **Остановка проекта**:
+2. **Stopping the Project**:
    ```bash
    docker compose down
    ```
    
-Эти команды выполняются в той же папке, где находится файл `docker-compose.yml`.
+These commands should be executed in the same folder where the `docker-compose.yml` file is located.
 
-После успешного запуска проекта он будет доступен по адресу:
+
+After successfully starting the project, it will be accessible at: 
 `http://localhost:8080`
 
-## Развертывание на хостинге (например, VPS сервер)
-Для развертывания проекта на удаленном сервере потребуется дополнительная конфигурация.
+## Deployment on Hosting (e.g., VPS Server)
+For deploying the project on a remote server, additional configuration is required.
 
-### Рекомендуемый способ: перенаправление с порта `80` на порт `8080` через веб-сервер
-Для перенаправления запросов с порта `80` на порт `8080`, используйте веб-сервер, например, `Apache` или `Nginx`. В этом случае файл `docker-compose.yml` изменять не нужно.
+### Recommended Method: Redirecting from `Port 80` to `Port 8080` via Web Server
+To redirect requests from `port 80` to `port 8080`, use a web server such as `Apache` or `Nginx`. In this case, there is no need to modify the `docker-compose.yml` file.
 
-### Альтернативный способ: изменение конфигурации портов в `docker-compose.yml`
+### Alternative Method: Changing Port Configuration in `docker-compose.yml`
 Если вы хотите, чтобы проект работал напрямую через порт `80`, можно изменить параметр `ports` в файле `docker-compose.yml` с `"8080:80"` на `"80:80"`.
 
-В этом случае порт `80` необходимо открыть в настройках сети сервера, и веб-сервер (`Apache` / `Nginx`) не потребуется. 
+If you want the project to run directly on port `80`, you can change the ports parameter in the `docker-compose.yml` file from `"8080:80"` to `"80:80"`.
 
-Скорее всего потребуется запустить проект с `sudo` 
+In this case, port `80` must be opened in the server's network settings, and a web server (`Apache` / `Nginx`) will not be required.
 
-Пример изменения в `docker-compose.yml`:
+You will likely need to run the project with `sudo`.
+
+Example change in `docker-compose.yml`:
 
 ```yaml
 ports:
