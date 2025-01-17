@@ -41,8 +41,8 @@ $assetDate->setTimestamp($asset->created_at);
 		<aside class="lg:col-start-2 lg:row-span-1 row-start-2 lg:w-[20rem] flex flex-col gap-2 lgmy-16 lg:top-0 lg:sticky">
 			<div class="p-4 rounded-xl shadow-lg bg-bg-color/40">
 				<h1><?= $asset->name ?></h1>
-				<p class="text-font-color/70">Category: <a class="link" href="/asset?category_id=<?= $asset->category->id ?>"><?= $asset->category->name ?></a></p>
-				<p class="text-font-color/70">Author: <a class="link" href="/asset?user_id=<?= $asset->user->id ?>"><?= $asset->user->name ?></a></p>
+				<p class="text-font-color/70">Category: <a class="link" href="/assets?category_id=<?= $asset->category->id ?>"><?= $asset->category->name ?></a></p>
+				<p class="text-font-color/70">Author: <a class="link" href="/assets?user_id=<?= $asset->user->id ?>"><?= $asset->user->name ?></a></p>
 				<p class="text-font-color/70">Created: <?= $assetDate->format('d M Y') ?></p>
 
 				<?php if (isset($asset->engine_version) && intval($asset->engine_version) !== 0): ?>
