@@ -30,7 +30,7 @@ $user = $session->getUser();
 						<path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
 					</svg>
 				</a>
-				<ul class="sublist right-0">
+				<ul class="sublist right-0 lg:right-auto">
 					<li><a class="navbar-link my-2 whitespace-nowrap" tabindex="-1" href="/assets">All</a></li>
 					<li><a class="navbar-link my-2 whitespace-nowrap" tabindex="-1" href="/assets?byNew=on">New</a></li>
 					<li><a class="navbar-link my-2 whitespace-nowrap" tabindex="-1" href="/assets?byNew=on&ByPopular=on&interval=30">Trending</a></li>
@@ -45,7 +45,7 @@ $user = $session->getUser();
 						<path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
 					</svg>
 				</a>
-				<ul class="sublist right-0">
+				<ul class="sublist right-0 lg:right-auto">
 					<?php foreach ($categories as $category): ?>
 						<li><a class="navbar-link my-2 whitespace-nowrap" href="/assets/?category_id=<?= $category->id ?>"><?= $category->name ?></a></li>
 					<?php endforeach; ?>
