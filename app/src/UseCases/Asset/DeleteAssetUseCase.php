@@ -29,7 +29,7 @@ class DeleteAssetUseCase
                 throw new DomainException('Asset is purchased by users');
             }
             $this->repository->delete($id);
-            $this->categoryRepository->decrementAssetCount($asset->category_id);
+            $this->categoryRepository->decrementAssetCount($asset->category->id);
         } catch (RuntimeException $e) {
             throw new Exception('Unable to delete asset: ' . $e->getMessage(), 500, $e);
         }

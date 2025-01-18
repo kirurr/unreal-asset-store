@@ -24,7 +24,7 @@ use Entities\Asset;
                     <h1>Assets</h1>
                     <a class="button accent ml-auto" href="/admin/assets/create">Create Asset</a>
                 </div>
-                <div class="overflow-x-scroll">
+                <div class="overflow-x-scroll lg:overflow-x-clip">
                     <table class="table-auto w-full divide-y-2 divide-font-color/20">
                         <thead>
                             <tr>

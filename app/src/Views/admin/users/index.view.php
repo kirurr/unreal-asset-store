@@ -14,7 +14,7 @@
 		<section>
 			<div class="mx-auto max-w-screen-md p-2 bg-secondary-bg-color/50 rounded-lg shadow-md">
 				<h1 class="text-center">Users</h1>
-				<div class="overflow-x-scroll">
+				<div class="overflow-x-scroll lg:overflow-x-clip">
 					<table>
 						<thead>
 							<tr>

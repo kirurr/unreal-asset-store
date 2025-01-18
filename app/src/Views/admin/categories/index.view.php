@@ -24,7 +24,7 @@ use Entities\Category;
                     <h1>categories</h1>
                     <a class="button accent lg:ml-auto" href="/admin/categories/create">create category</a>
                 </div>
-                <div class="overflow-x-scroll">
+                <div class="overflow-x-scroll lg:overflow-x-clip">
                     <table class="table-auto w-full divide-y-2 divide-font-color/20">
                         <thead>
                             <tr>

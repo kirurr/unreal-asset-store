@@ -25,7 +25,7 @@ use Entities\Purchase;
 		<section>
 			<div class="p-2 rounded-xl shadow-lg bg-secondary-bg-color/50 max-w-screen-md mx-auto">
 				<h1 class="text-center lg:text-start">purchases</h1>
-				<div class="overflow-x-scroll">
+				<div class="overflow-x-scroll lg:overflow-x-clip">
 					<table>
 						<thead>
 							<tr>

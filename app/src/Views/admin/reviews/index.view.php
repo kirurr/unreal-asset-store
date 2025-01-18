@@ -20,9 +20,9 @@ use Entities\Review;
 	<main>
 		<section>
 			<div class="p-2 rounded-xl shadow-lg bg-secondary-bg-color/50 mx-auto">
-				<h1 class="overflow-x-scroll">reviews</h1>
+				<h1 class="overflow-x-scroll lg:overflow-x-clip">reviews</h1>
 				<div class="bg-secondary-bg-color/50 p-2 rounded-xl shadow-lg">
-					<div class="overflow-x-scroll">
+					<div class="overflow-x-scroll lg:overflow-x-clip">
 						<?php if (count($reviews) > 0): ?>
 							<table class="table-auto w-full divide-y-2 divide-font-color/20">
 								<thead>
