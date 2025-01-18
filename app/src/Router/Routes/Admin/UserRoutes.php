@@ -125,8 +125,7 @@ class UserRoutes extends Routes implements RoutesInterface
                     $data = $this->userController->getEditPageData($slug['id']);
                     renderView(
                         'admin/users/edit', [
-                        'user' => $data['user'],
-                        'assets' => $data['assets'],
+                        ...$data,
                         'errorMessage' => $e->getMessage()
                         ]
                     );

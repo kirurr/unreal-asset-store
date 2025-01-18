@@ -39,7 +39,7 @@ use Entities\User;
 							<h2><?= $file->name ?></h2>
 							<p class=" text-font-color/70"><?= $file->description ?></p>
 						</div>
-						<div class="lg:w-1/3 lg:px-2 mt-4 lg:mt-0 border-t-2 border-font-color/20 py-4 lg-py-0">
+						<div class="lg:w-1/3 lg:px-2 mt-4 lg:mt-0 border-t-2 border-font-color/20 lg:border-t-0 lg:border-transparent py-4 lg-py-0">
 							<p class=" text-font-color/70">version: <?= $file->version ?></p>
 							<p class=" text-font-color/70">uploaded: <?= $file->GetFormatedCreatedAt() ?></p>
 							<p class=" text-font-color/70">size: <?= $file->getFormatedSize() ?></p>

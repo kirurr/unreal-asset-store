@@ -66,7 +66,7 @@ $previousData =  $previousData ?? [];
                     </div>
                     <button class="button accent" type="submit">submit</button>
                 </form>
-                <?php echo $errorMessage ?? '' ?>
+                <p class="text-center"><?php echo $errorMessage ?? '' ?></p>
                 <div class="flex gap-4 justify-center mt-4">
                     <a class="link" href="/admin/users">back</a>
                     <form action="/admin/users/<?php echo $user->id ?>/" method="post">
@@ -74,7 +74,6 @@ $previousData =  $previousData ?? [];
                         <button class="link text-red-500/80 hover:text-red-500/50" type="submit">delete</button>
                     </form>
                 </div>
-
             </div>
         </section>
     </main>

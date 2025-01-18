@@ -7,6 +7,7 @@ use Repositories\Category\CategoryRepositoryInterface;
 use Repositories\Purchase\PurchaseRepositoryInterface;
 use DomainException;
 use Exception;
+use Repositories\Review\ReviewRepositoryInterface;
 use RuntimeException;
 
 class DeleteAssetUseCase
@@ -14,7 +15,8 @@ class DeleteAssetUseCase
     public function __construct(
         private AssetRepositoryInterface $repository,
         private CategoryRepositoryInterface $categoryRepository,
-        private PurchaseRepositoryInterface $purchaseRepository
+        private PurchaseRepositoryInterface $purchaseRepository,
+        private ReviewRepositoryInterface $reviewRepository
     ) {}
 
     public function execute(string $id): void
@@ -28,6 +30,11 @@ class DeleteAssetUseCase
             if (!empty($purchases)) {
                 throw new DomainException('Asset is purchased by users');
             }
+            $reviews = $this->reviewRepository->getAllByAssetId($id);
+            if (!empty($reviews)) {
+                throw new DomainException('Asset has reviews');
+            }
+
             $this->repository->delete($id);
             $this->categoryRepository->decrementAssetCount($asset->category->id);
         } catch (RuntimeException $e) {

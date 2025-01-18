@@ -25,8 +25,8 @@ try {
     http_response_code(404);
     redirect('/');
 } catch (Throwable $e) {
-    // TODO: log error and not show it to user
-    renderView('error', ['error' => $e->getMessage()]);
+    // renderView('error', ['error' => $e->getMessage()]);
+    renderView('error', ['error' => "500 Internal Server Error"]);
     // throw $e;
 }
 restore_error_handler();

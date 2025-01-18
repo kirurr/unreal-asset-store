@@ -41,7 +41,7 @@ use Entities\Purchase;
 								<tr>
 									<td><?= $purchase->id ?></td>
 									<td><a href="/assets/<?= $purchase->asset_id ?>/" class="lvink">view asset</a></td>
-									<td><a href="/assets?user_id=<?= $purchase->user_id ?>">view assets by user</a></td>
+									<td><a class="link" href="/assets?user_id=<?= $purchase->user_id ?>">view assets by user</a></td>
 									<td><?= $purchase->getFormatedPurchaseDate() ?></td>
 									<td>
 										<form action="/admin/purchases/<?= $purchase->id ?>/" method="post">

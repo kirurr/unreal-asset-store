@@ -43,7 +43,7 @@ class PurchaseAssetUseCase
             }
 
             $this->repository->create($id, $user['id']);
-            $this->assetRepository->incrementPurchasedCount($id);
+            // $this->assetRepository->incrementPurchasedCount($id);
         } catch (RuntimeException $e) {
             throw new Exception('Unable to purchase asset: ' . $e->getMessage(), 500, $e);
         }

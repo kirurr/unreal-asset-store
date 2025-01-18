@@ -31,7 +31,7 @@ $previewImage = $images[$previewImageKey];
 					<p>they are going to be added to the end of the list</p>
 					<input type="hidden" name="_method" value="post">
 					<input type="hidden" name="_last_order" value="<?= $images[array_key_last($images)]->image_order ?>">
-					<input required type="file" class="mx-auto block w-fit" name="images[]" accept="image/*" multiple>
+					<input required type="file" class="mx-auto block lg:!w-fit" name="images[]" accept="image/*" multiple>
 					<button class="button mt-2 mx-auto" type="submit">add images</button>
 				</form>
 				<a href="/profile/assets/<?= $asset->id ?>" class="link">back to asset</a>

@@ -1,6 +1,7 @@
 <?php
 
 namespace Core\Dependencies;
+
 use Controllers\UserController;
 use Core\ContainerInterface;
 use Repositories\User\UserSQLiteRepository;
@@ -11,41 +12,48 @@ use UseCases\User\DeleteUserUseCase;
 use UseCases\User\GetAllUserUseCase;
 use UseCases\User\GetUserUseCase;
 use UseCases\User\UpdateUserUseCase;
+use UseCases\Review\GetReviewsByUserIdUseCase;
 
 class UserContainer extends ServiceContainer implements ContainerInterface
 {
     public function initDependencies(): void
     {
         $this->set(
-            UserValidationService::class, function () {
+            UserValidationService::class,
+            function () {
                 return new UserValidationService();
             }
         );
 
         $this->set(
-            GetAllUserUseCase::class, function () {
+            GetAllUserUseCase::class,
+            function () {
                 return new GetAllUserUseCase($this::get(UserSQLiteRepository::class));
             }
         );
         $this->set(
-            DeleteUserUseCase::class, function () {
-                return new DeleteUserUseCase($this::get(UserSQLiteRepository::class), $this::get(GetAllAssetUseCase::class));
+            DeleteUserUseCase::class,
+            function () {
+                return new DeleteUserUseCase($this::get(UserSQLiteRepository::class), $this::get(GetAllAssetUseCase::class), $this::get(GetReviewsByUserIdUseCase::class));
             }
         );
         $this->set(
-            UpdateUserUseCase::class, function () {
+            UpdateUserUseCase::class,
+            function () {
                 return new UpdateUserUseCase($this::get(UserSQLiteRepository::class));
             }
         );
 
         $this->set(
-            GetUserUseCase::class, function () {
+            GetUserUseCase::class,
+            function () {
                 return new GetUserUseCase($this::get(UserSQLiteRepository::class));
             }
         );
 
         $this->set(
-            UserController::class, function () {
+            UserController::class,
+            function () {
                 return new UserController(
                     $this::get(GetAllUserUseCase::class),
                     $this::get(GetUserUseCase::class),

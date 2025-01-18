@@ -9,6 +9,7 @@ use Repositories\Asset\AssetSQLiteRepository;
 use Repositories\Category\CategorySQLiteRepository;
 use Repositories\Image\SQLiteImageRepository;
 use Repositories\Purchase\SQLitePurchaseRepository;
+use Repositories\Review\SQLiteReviewRepository;
 use Services\Validation\AssetValidationService;
 use UseCases\Asset\ChangeAssetPurchaseCountUseCase;
 use UseCases\Asset\CreateAssetUseCase;
@@ -70,6 +71,7 @@ class AssetContainer extends ServiceContainer implements ContainerInterface
                     $this::get(AssetSQLiteRepository::class),
                     $this::get(CategorySQLiteRepository::class),
                     $this::get(SQLitePurchaseRepository::class),
+                    $this::get(SQLiteReviewRepository::class)
                 );
             }
         );
