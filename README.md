@@ -20,6 +20,9 @@ These commands should be executed in the same folder where the `docker-compose.y
 After successfully starting the project, it will be accessible at: 
 `http://localhost:8080`
 
+You can acces the admin page by login in with these credentials:
+email: `admin@example.com`, password: `admin`
+
 ## Deployment on Hosting (e.g., VPS Server)
 For deploying the project on a remote server, additional configuration is required.
 
