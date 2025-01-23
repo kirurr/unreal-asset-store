@@ -6,14 +6,13 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./app:/var/www/html
       - ./public:/var/www/public
       - ./apache-vhost.conf:/etc/apache2/sites-available/000-default.conf
       - ./storage:/var/www/storage
     environment:
       - APACHE_RUN_USER=www-data
       - APACHE_RUN_GROUP=www-data
-    entrypoint: /bin/bash -c "/var/www/database.sh && /var/www/tailwind.sh && /var/www/composer.sh && apache2-foreground"
+    entrypoint: /bin/bash -c "/var/www/database.sh && /var/www/tailwind.sh && apache2-foreground"
 
   nginx:
     image: nginx

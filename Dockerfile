@@ -6,6 +6,7 @@ COPY custom-php.ini /usr/local/etc/php/conf.d/
 
 COPY ./apache-vhost.conf /etc/apache2/sites-available/000-default.conf
 
+COPY ./app /var/www/html
 # устанавливаем composer
 
 RUN apt-get update && apt-get install -y \
@@ -21,7 +22,11 @@ RUN a2enmod rewrite
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Делаем папку доступной для веб-сервера Apache
+WORKDIR /var/www/html
+
+RUN composer install
+RUN composer dump-autoload
+
 RUN chown -R www-data:www-data /var/www 
 
 COPY ./tailwind.config.js /var/www/tailwind.config.js
@@ -34,10 +39,6 @@ RUN chmod +x tailwindcss-linux-x64
 COPY ./tailwind.sh /var/www/tailwind.sh
 
 RUN chmod +x tailwind.sh
-
-COPY ./composer.sh /var/www/composer.sh
-
-RUN chmod +x composer.sh
 
 COPY ./database.sh /var/www/database.sh
 
