@@ -214,7 +214,6 @@ td {
       transform 0.2s ease-in-out;
   }
 
-
   .mobile-menu.open {
     pointer-events: auto;
     transform: translateY(0);
@@ -245,7 +244,7 @@ td {
     @apply outline-accent-color outline-2 outline-offset-2;
   }
 
-  .filters-details>div {
+  .filters-details > div {
     padding-block: 1rem;
   }
 
@@ -260,3 +259,4 @@ td {
     gap: 1rem;
   }
 }
+
