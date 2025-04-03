@@ -45,7 +45,7 @@ $user = $session->getUser();
 			<?php else: ?>
 				<h3>Account</h3>
 				<ul>
-					<li><a class="hover:text-font-color/50 transition-colors" href="/login">Login</a></li>
+					<li><a class="hover:text-font-color/50 transition-colors" href="/signin">Login</a></li>
 					<li><a class="hover:text-font-color/50 transition-colors" href="/signup">Register</a></li>
 				</ul>
 			<?php endif; ?>

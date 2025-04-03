@@ -43,7 +43,7 @@ use Entities\Category;
 					<h2 class="lg:text-start text-center">Join our growing community</h2>
 					<div class="flex flex-col gap-4 items-center mt-2 lg:mt-0">
 						<a href="/signup" class="button lg:text-[1.7rem] lg:p-4 accent">Register</a>
-						<p class="text-center lg:text-start lg:text-xl">Already have an account? <a class="link" href="/login">Login</a></p>
+						<p class="text-center lg:text-start lg:text-xl">Already have an account? <a class="link" href="/signin">Login</a></p>
 					</div>
 				</div>
 			</section>

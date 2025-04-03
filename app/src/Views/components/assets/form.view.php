@@ -67,23 +67,27 @@ use Entities\Category;
 
 		<div class="col-span-2 lg:col-span-1">
 			<label class="label" for="category_id">category</label>
-			<select required class="w-fit select" name="category_id" id="category_id">
-				<?php foreach ($categories as $category): ?>
-					<option
-						<?php if ($isEdit): ?>
-						<?php if (isset($previousData['category_id']) && $previousData['category_id'] === $category->id): ?>
-						selected
-						<?php elseif ($category->id === $asset->category->id): ?>
-						selected
-						<?php endif; ?>
-						<?php else: ?>
-						<?php if (isset($previousData['category_id']) && $previousData['category_id'] === $category->id): ?>
-						selected
-						<?php endif; ?>
-						<?php endif; ?>
-						value="<?php echo $category->id ?>"><?php echo $category->name ?></option>
-				<?php endforeach; ?>
-			</select>
+			<?php if ($categories): ?>
+				<select required class="w-fit select" name="category_id" id="category_id">
+					<?php foreach ($categories as $category): ?>
+						<option
+							<?php if ($isEdit): ?>
+							<?php if (isset($previousData['category_id']) && $previousData['category_id'] === $category->id): ?>
+							selected
+							<?php elseif ($category->id === $asset->category->id): ?>
+							selected
+							<?php endif; ?>
+							<?php else: ?>
+							<?php if (isset($previousData['category_id']) && $previousData['category_id'] === $category->id): ?>
+							selected
+							<?php endif; ?>
+							<?php endif; ?>
+							value="<?php echo $category->id ?>"><?php echo $category->name ?></option>
+					<?php endforeach; ?>
+				</select>
+			<?php else: ?>
+				<span>No categories found, <a href="/admin/categories/create" class="link">create new</a></span>
+			<?php endif; ?>
 			<span><?= $errors['category_id'] ?? '' ?></span>
 		</div>
 	</div>
